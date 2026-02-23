@@ -165,6 +165,7 @@
     <a href="/atrasanas_vieta">Atrašanās vietas</a>
     <a href="/inventara_kustiba">Kustības</a>
     <a href="/inventars">Inventārs</a>
+    <a href="/telpa">Telpas</a>
     <a href="/lietotajs">Lietotāji</a>
     <a href="/contact">Contact</a>
   </nav>

@@ -6,6 +6,7 @@ use App\Http\Controllers\AtrasanasVietaController;
 use App\Http\Controllers\InventaraKustibaController;
 use App\Http\Controllers\InventarsController;
 use App\Http\Controllers\LietotajsController;
+use App\Http\Controllers\TelpaController;
 
 
 Route::get('/', function () {
@@ -65,3 +66,12 @@ Route::get('/inventars/{id}/details', [InventarsController::class,'InventarDetai
 Route::get('/inventars/{id}/edit', [InventarsController::class,'InventarEdit'])->name('inventars.edit');
 Route::post('/inventars/{id}/editSubmit', [InventarsController::class,'editSubmit'])->name('inventars.update');
 Route::get('/inventars/{id}/delete', [InventarsController::class,'InventarDelete'])->name('inventars.delete');
+
+// telpa routes
+Route::get('/telpa', [TelpaController::class, 'showAllTelpa'])->name('telpa.lapa');
+Route::get('/telpa/create', [TelpaController::class, 'createTelpa'])->name('telpa.create');
+Route::post('/telpa', [TelpaController::class, 'TelpaSubmit'])->name('telpa.store');
+Route::get('/telpa/{id}/details', [TelpaController::class, 'TelpaDetails'])->name('telpa.details');
+Route::get('/telpa/{id}/edit', [TelpaController::class, 'TelpaEdit'])->name('telpa.edit');
+Route::post('/telpa/{id}/editSubmit', [TelpaController::class, 'editSubmit'])->name('telpa.update');
+Route::get('/telpa/{id}/delete', [TelpaController::class, 'TelpaDelete'])->name('telpa.delete');
