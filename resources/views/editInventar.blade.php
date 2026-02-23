@@ -25,11 +25,21 @@
         </div>
         <div class="mb-3">
             <label for="kategorija_id" class="form-label">Kategorijas ID</label>
-            <input type="number" class="form-control" id="kategorija_id" name="kategorija_id" value="{{ $inventar->kategorija_id }}" required>
+            <select class="form-control" id="kategorija_id" name="kategorija_id" required>
+                <option value="">-- Izvēlieties kategoriju --</option>
+                @foreach($kategorijas as $k)
+                    <option value="{{ $k->kategorija_id }}" @if($inventar->kategorija_id == $k->kategorija_id) selected @endif>{{ $k->nosaukums }} (ID: {{ $k->kategorija_id }})</option>
+                @endforeach
+            </select>
         </div>
         <div class="mb-3">
             <label for="atrasanas_vieta_id" class="form-label">Atrašanās vietas ID</label>
-            <input type="number" class="form-control" id="atrasanas_vieta_id" name="atrasanas_vieta_id" value="{{ $inventar->atrasanas_vieta_id }}" required>
+            <select class="form-control" id="atrasanas_vieta_id" name="atrasanas_vieta_id" required>
+                <option value="">-- Izvēlieties atrašanās vietu --</option>
+                @foreach($vietas as $v)
+                    <option value="{{ $v->atrasanas_vieta_id }}" @if($inventar->atrasanas_vieta_id == $v->atrasanas_vieta_id) selected @endif>{{ $v->nodala }} (ID: {{ $v->atrasanas_vieta_id }})</option>
+                @endforeach
+            </select>
         </div>
         <button type="submit" class="btn btn-primary">Atjaunināt</button>
     </form>
