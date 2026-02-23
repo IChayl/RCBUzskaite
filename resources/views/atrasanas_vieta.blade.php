@@ -15,8 +15,8 @@
         <div style="background: #490700; color: white; width: 340px;" class="card mt-3">
             <div class="card-body">
                 <p class="card-text">Nodaļa: {{$item->nodala}}</p>
-                <p class="card-text">Telpas ID: {{$item->telpas_id ?? '-'}}</p>
-                <p class="card-text">Stāvoklis: {{$item->stavs ?? '-'}}</p>
+                <p class="card-text">Telpa: {{ $item->telpa->nosaukums ?? ('ID: '.$item->telpas_id ?? '-') }}</p>
+                <p class="card-text">Stāvs: {{$item->stavs ?? '-'}}</p>
                 <div  class="auth-links">
                     <a href="#" class="delete-btn" data-id="{{ $item->atrasanas_vieta_id }}">Dzēst</a>
                     <a href="/atrasanas_vieta/{{ $item->atrasanas_vieta_id }}/details">Detalizēta</a>
