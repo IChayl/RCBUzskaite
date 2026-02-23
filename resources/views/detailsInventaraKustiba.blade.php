@@ -11,12 +11,12 @@
 <h2 style="color: #ffffff;">Detalizēta informācija</h2>          
              <div style="background: #490700; color: white; width: 200px;" class="card mt-3">
         <div class="card-body">
-            <h5  class="card-title">ID: {{$kustiba->kustiba_id}}</h5>
+            <h5  class="card-title">Kustība: {{$kustiba->kustiba_id}}</h5>
             <p class="card-text">Datums: {{$kustiba->datums }}</p>
-            <p class="card-text">Inventārs ID: {{$kustiba->inventars_id }}</p>
-            <p class="card-text">No vietas ID: {{$kustiba->no_atrasanas_vietas_id }}</p>
-            <p class="card-text">Uz vietas ID: {{$kustiba->uz_atrasanas_vietas_id }}</p>
-            <p class="card-text">Atbildīgais lietotājs ID: {{$kustiba->atbildigais_lietotajs_id }}</p>
+            <p class="card-text">Inventārs: {{ $kustiba->inventars->nosaukums ?? ('ID: '.$kustiba->inventars_id) }}</p>
+            <p class="card-text">No vietas: {{ $kustiba->noVieta->nodala ?? ('ID: '.$kustiba->no_atrasanas_vietas_id) }}</p>
+            <p class="card-text">Uz vietu: {{ $kustiba->uzVieta->nodala ?? ('ID: '.$kustiba->uz_atrasanas_vietas_id) }}</p>
+            <p class="card-text">Atbildīgais lietotājs: {{ $kustiba->lietotajs->lietotajvards ?? ('ID: '.$kustiba->atbildigais_lietotajs_id) }}</p>
         </div>
     </div>
 

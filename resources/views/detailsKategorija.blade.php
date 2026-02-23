@@ -11,7 +11,7 @@
 <h2 style="color: #ffffff;">Detalizēta informācija</h2>          
              <div style="background: #490700; color: white; width: 200px;" class="card mt-3">
         <div class="card-body">
-            <h5  class="card-title">ID: {{$kategorija->kategorija_id}}</h5>
+            <h5  class="card-title">Kategorija: {{$kategorija->nosaukums}}</h5>
             <p class="card-text">Nosaukums: {{$kategorija->nosaukums }}</p>
             <p class="card-text">Apraksts: {{$kategorija->apraksts }}</p>
 

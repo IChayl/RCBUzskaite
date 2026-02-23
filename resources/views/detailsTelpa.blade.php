@@ -11,7 +11,7 @@
 <h2 style="color: #ffffff;">Detalizēta informācija</h2>          
              <div style="background: #490700; color: white; width: 200px;" class="card mt-3">
         <div class="card-body">
-            <h5  class="card-title">ID: {{$telpa->telpas_id}}</h5>
+            <h5  class="card-title">Telpa: {{$telpa->nosaukums}}</h5>
             <p class="card-text">Nosaukums: {{$telpa->nosaukums }}</p>
             <p class="card-text">Izmēri: {{$telpa->izmeri }}</p>
             <p class="card-text">Numurs: {{$telpa->numurs }}</p>

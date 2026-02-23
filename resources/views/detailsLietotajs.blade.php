@@ -11,7 +11,7 @@
 <h2 style="color: #ffffff;">Detalizēta informācija</h2>          
              <div style="background: #490700; color: white; width: 200px;" class="card mt-3">
         <div class="card-body">
-            <h5  class="card-title">ID: {{$lietotajs->lietotajs_id}}</h5>
+            <h5  class="card-title">Lietotājs: {{$lietotajs->lietotajvards}}</h5>
             <p class="card-text">Lietotājvārds: {{$lietotajs->lietotajvards }}</p>
             <p class="card-text">Parole: {{$lietotajs->parole }}</p>
             <p class="card-text">Admina tiesības: {{$lietotajs->admina_tiesibas ? 'Jā' : 'Nē' }}</p>

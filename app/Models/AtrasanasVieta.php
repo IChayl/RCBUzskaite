@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Telpa;
 
 class AtrasanasVieta extends Model
 {
@@ -14,4 +15,9 @@ class AtrasanasVieta extends Model
 
     // allow mass assignment for these columns
     protected $fillable = ['nodala', 'telpas_id', 'stavs'];
+
+    public function telpa()
+    {
+        return $this->belongsTo(Telpa::class, 'telpas_id', 'telpas_id');
+    }
 }
