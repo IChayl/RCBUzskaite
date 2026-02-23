@@ -12,8 +12,8 @@ class InventarsController extends Controller
 {
     public function showAllInventars()
     {
-        $i = new Inventar();
-        return view('inventars', ['inventari' => $i->orderBy('inventars_id','asc')->get()]);
+        $inventari = Inventar::with(['kategorija','vieta'])->orderBy('inventars_id','asc')->get();
+        return view('inventars', ['inventari' => $inventari]);
     }
 
     public function createInventar()

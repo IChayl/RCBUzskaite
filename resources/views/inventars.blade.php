@@ -18,8 +18,8 @@
                 <p class="card-text">Apraksts: {{$item->apraksts ?? '-'}}</p>
                 <p class="card-text">Nolietojums: {{$item->nolietojums ?? '-'}}</p>
                 <p class="card-text">Statuss: {{$item->statuss ?? '-'}}</p>
-                <p class="card-text">Kategorija ID: {{$item->kategorija_id}}</p>
-                <p class="card-text">Atrašanās vieta ID: {{$item->atrasanas_vieta_id}}</p>
+                <p class="card-text">Kategorija: {{ $item->kategorija->nosaukums ?? ('ID: '.$item->kategorija_id) }}</p>
+                <p class="card-text">Atrašanās vieta: {{ $item->vieta->nodala ?? ('ID: '.$item->atrasanas_vieta_id) }}</p>
                 <div  class="auth-links">
                     <a href="#" class="delete-btn" data-id="{{ $item->inventars_id }}">Dzēst</a>
                     <a href="/inventars/{{ $item->inventars_id }}/details">Detalizēta</a>
