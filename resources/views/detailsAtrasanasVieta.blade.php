@@ -11,10 +11,10 @@
 <h2 style="color: #ffffff;">Detalizēta informācija</h2>          
              <div style="background: #490700; color: white; width: 200px;" class="card mt-3">
         <div class="card-body">
-            <h5  class="card-title">Vieta: {{$vieta->nodala}}</h5>
+            <h5 class="card-title">Vieta: {{$vieta->atrasanas_vieta_id}}</h5>
             <p class="card-text">Nodaļa: {{$vieta->nodala }}</p>
             <p class="card-text">Telpa: {{ $vieta->telpa->nosaukums ?? ('ID: '.$vieta->telpas_id) }}</p>
-            <p class="card-text">Stāvoklis: {{$vieta->stavs }}</p>
+            <p class="card-text">Stāvs: {{$vieta->stavs }}</p>
         </div>
     </div>
 
