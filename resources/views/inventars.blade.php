@@ -16,7 +16,6 @@
             <div class="card-body">
                 <p class="card-text">Nosaukums: {{$item->nosaukums}}</p>
                 <p class="card-text">Apraksts: {{$item->apraksts ?? '-'}}</p>
-                <p class="card-text">Nolietojums: {{$item->nolietojums ?? '-'}}</p>
                 <p class="card-text">Statuss: {{$item->statuss ?? '-'}}</p>
                 <p class="card-text">Kategorija: {{ $item->kategorija->nosaukums ?? ('ID: '.$item->kategorija_id) }}</p>
                 <p class="card-text">Telpa: {{ optional($item->telpa)->nosaukums ?? ('ID: '.$item->telpas_id) }}</p>

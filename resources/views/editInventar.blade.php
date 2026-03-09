@@ -16,10 +16,6 @@
             <textarea class="form-control" id="apraksts" name="apraksts">{{ $inventar->apraksts }}</textarea>
         </div>
         <div class="mb-3">
-            <label for="nolietojums" class="form-label">Nolietojums</label>
-            <input type="text" class="form-control" id="nolietojums" name="nolietojums" value="{{ $inventar->nolietojums }}">
-        </div>
-        <div class="mb-3">
             <label for="statuss" class="form-label">Statuss</label>
             <input type="text" class="form-control" id="statuss" name="statuss" value="{{ $inventar->statuss }}">
         </div>

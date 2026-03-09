@@ -14,7 +14,6 @@
             <h5  class="card-title">ID: {{$inventar->inventars_id}}</h5>
             <p class="card-text">Nosaukums: {{$inventar->nosaukums }}</p>
             <p class="card-text">Apraksts: {{$inventar->apraksts }}</p>
-            <p class="card-text">Nolietojums: {{$inventar->nolietojums }}</p>
             <p class="card-text">Statuss: {{$inventar->statuss }}</p>
             <p class="card-text">Kategorija: {{ $inventar->kategorija->nosaukums ?? ('ID: '.$inventar->kategorija_id) }}</p>
             <p class="card-text">Telpa: {{ optional($inventar->telpa)->nosaukums ?? ('ID: '.$inventar->telpas_id) }}</p>
