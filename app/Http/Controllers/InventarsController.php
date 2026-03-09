@@ -30,7 +30,6 @@ class InventarsController extends Controller
         $data = $req->validate([
             'nosaukums' => 'required|string|max:30',
             'apraksts' => 'nullable|string|max:200',
-            'nolietojums' => 'nullable|string|max:25',
             'statuss' => 'nullable|string|max:25',
             'kategorija_id' => 'required|integer|exists:kategorija,kategorija_id',
             'telpas_id' => 'required|integer|exists:telpa,telpas_id',
@@ -41,7 +40,6 @@ class InventarsController extends Controller
         $i = new Inventar();
         $i->nosaukums = $data['nosaukums'];
         $i->apraksts = $data['apraksts'] ?? null;
-        $i->nolietojums = $data['nolietojums'] ?? null;
         $i->statuss = $data['statuss'] ?? null;
         $i->kategorija_id = $data['kategorija_id'];
         $i->telpas_id = $data['telpas_id'];
@@ -71,7 +69,6 @@ class InventarsController extends Controller
         $data = $req->validate([
             'nosaukums' => 'required|string|max:30',
             'apraksts' => 'nullable|string|max:200',
-            'nolietojums' => 'nullable|string|max:25',
             'statuss' => 'nullable|string|max:25',
             'kategorija_id' => 'required|integer|exists:kategorija,kategorija_id',
             'telpas_id' => 'required|integer|exists:telpa,telpas_id',
@@ -81,7 +78,6 @@ class InventarsController extends Controller
         DB::table('inventars')->where('inventars_id',$id)->update([
             'nosaukums' => $data['nosaukums'],
             'apraksts' => $data['apraksts'] ?? null,
-            'nolietojums' => $data['nolietojums'] ?? null,
             'statuss' => $data['statuss'] ?? null,
             'kategorija_id' => $data['kategorija_id'],
             'telpas_id' => $data['telpas_id'],
