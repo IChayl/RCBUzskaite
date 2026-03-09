@@ -14,9 +14,8 @@
             <h5  class="card-title">Kustība: {{$kustiba->kustiba_id}}</h5>
             <p class="card-text">Datums: {{$kustiba->datums }}</p>
             <p class="card-text">Inventārs: {{ $kustiba->inventars->nosaukums ?? ('ID: '.$kustiba->inventars_id) }}</p>
-            <p class="card-text">No vietas: {{ $kustiba->noVieta->nodala ?? ('ID: '.$kustiba->no_atrasanas_vietas_id) }}</p>
-            <p class="card-text">Uz vietu: {{ $kustiba->uzVieta->nodala ?? ('ID: '.$kustiba->uz_atrasanas_vietas_id) }}</p>
-            <p class="card-text">Atbildīgais lietotājs: {{ $kustiba->lietotajs->lietotajvards ?? ('ID: '.$kustiba->atbildigais_lietotajs_id) }}</p>
+            <p class="card-text">Kustības veids: {{ optional($kustiba->kustibasVeids)->nosaukums ?? ('ID: '.$kustiba->kustibas_veids_id) }}</p>
+            <p class="card-text">Atbildīgais lietotājs: {{ optional($kustiba->lietotajs)->lietotajvards ?? ('ID: '.$kustiba->atbildigais_lietotajs_id) }}</p>
         </div>
     </div>
 

@@ -13,5 +13,5 @@ class Telpa extends Model
     public $timestamps = false;
 
     // allow mass assignment for these columns
-    protected $fillable = ['nosaukums', 'izmeri', 'numurs'];
+    protected $fillable = ['nosaukums', 'izmeri', 'numurs', 'stavs'];
 }

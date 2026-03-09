@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Inventar;
-use App\Models\AtrasanasVieta;
+use App\Models\KustibasVeidi;
 use App\Models\Lietotajs;
 
 class InventaraKustiba extends Model
@@ -13,21 +13,16 @@ class InventaraKustiba extends Model
     protected $primaryKey = 'kustiba_id';
     public $timestamps = false;
 
-    protected $fillable = ['datums', 'inventars_id', 'no_atrasanas_vietas_id', 'uz_atrasanas_vietas_id', 'atbildigais_lietotajs_id'];
+    protected $fillable = ['datums', 'inventars_id', 'atbildigais_lietotajs_id', 'kustibas_veids_id'];
 
     public function inventars()
     {
         return $this->belongsTo(Inventar::class, 'inventars_id', 'inventars_id');
     }
 
-    public function noVieta()
+    public function kustibasVeids()
     {
-        return $this->belongsTo(AtrasanasVieta::class, 'no_atrasanas_vietas_id', 'atrasanas_vieta_id');
-    }
-
-    public function uzVieta()
-    {
-        return $this->belongsTo(AtrasanasVieta::class, 'uz_atrasanas_vietas_id', 'atrasanas_vieta_id');
+        return $this->belongsTo(KustibasVeidi::class, 'kustibas_veids_id', 'kustibas_veids_id');
     }
 
     public function lietotajs()

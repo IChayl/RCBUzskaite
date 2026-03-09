@@ -2,9 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KategorijaController;
-use App\Http\Controllers\AtrasanasVietaController;
 use App\Http\Controllers\InventaraKustibaController;
 use App\Http\Controllers\InventarsController;
+use App\Http\Controllers\KustibasVeidiController;
 use App\Http\Controllers\LietotajsController;
 use App\Http\Controllers\TelpaController;
 
@@ -31,15 +31,6 @@ Route::post('/kategorija/{id}/editSubmit', [KategorijaController::class, 'editSu
 //delete handler for a kategorija
 Route::get('/kategorija/{id}/delete', [KategorijaController::class, 'KatDelete'])->name('kategorijas.delete');
 
-// atrasanas vieta routes
-Route::get('/atrasanas_vieta', [AtrasanasVietaController::class, 'showAllVieta'])->name('atrasanas_vieta.lapa');
-Route::get('/atrasanas_vieta/create', [AtrasanasVietaController::class, 'createVieta'])->name('atrasanas_vieta.create');
-Route::post('/atrasanas_vieta', [AtrasanasVietaController::class, 'VietaSubmit'])->name('atrasanas_vieta.store');
-Route::get('/atrasanas_vieta/{id}/details', [AtrasanasVietaController::class, 'VietaDetails'])->name('atrasanas_vieta.details');
-Route::get('/atrasanas_vieta/{id}/edit', [AtrasanasVietaController::class, 'VietaEdit'])->name('atrasanas_vieta.edit');
-Route::post('/atrasanas_vieta/{id}/editSubmit', [AtrasanasVietaController::class, 'editSubmit'])->name('atrasanas_vieta.update');
-Route::get('/atrasanas_vieta/{id}/delete', [AtrasanasVietaController::class, 'VietaDelete'])->name('atrasanas_vieta.delete');
-
 // inventara kustiba routes
 Route::get('/inventara_kustiba', [InventaraKustibaController::class,'showAllKustiba'])->name('inventara_kustiba.lapa');
 Route::get('/inventara_kustiba/create', [InventaraKustibaController::class,'createKustiba'])->name('inventara_kustiba.create');
@@ -48,6 +39,15 @@ Route::get('/inventara_kustiba/{id}/details', [InventaraKustibaController::class
 Route::get('/inventara_kustiba/{id}/edit', [InventaraKustibaController::class,'KustibaEdit'])->name('inventara_kustiba.edit');
 Route::post('/inventara_kustiba/{id}/editSubmit', [InventaraKustibaController::class,'editSubmit'])->name('inventara_kustiba.update');
 Route::get('/inventara_kustiba/{id}/delete', [InventaraKustibaController::class,'KustibaDelete'])->name('inventara_kustiba.delete');
+
+// kustibas veidi routes
+Route::get('/kustibas_veidi', [KustibasVeidiController::class,'showAll'])->name('kustibas_veidi.lapa');
+Route::get('/kustibas_veidi/create', [KustibasVeidiController::class,'create'])->name('kustibas_veidi.create');
+Route::post('/kustibas_veidi', [KustibasVeidiController::class,'store'])->name('kustibas_veidi.store');
+Route::get('/kustibas_veidi/{id}/details', [KustibasVeidiController::class,'details'])->name('kustibas_veidi.details');
+Route::get('/kustibas_veidi/{id}/edit', [KustibasVeidiController::class,'edit'])->name('kustibas_veidi.edit');
+Route::post('/kustibas_veidi/{id}/editSubmit', [KustibasVeidiController::class,'update'])->name('kustibas_veidi.update');
+Route::get('/kustibas_veidi/{id}/delete', [KustibasVeidiController::class,'delete'])->name('kustibas_veidi.delete');
 
 // inventars routes
 Route::get('/inventars', [InventarsController::class,'showAllInventars'])->name('inventars.lapa');

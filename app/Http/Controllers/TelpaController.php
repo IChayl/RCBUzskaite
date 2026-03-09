@@ -24,10 +24,18 @@ class TelpaController extends Controller
     // saglabā jaunu ierakstu
     public function TelpaSubmit(Request $req)
     {
+        $data = $req->validate([
+            'nosaukums' => 'required|string|max:50',
+            'izmeri' => 'nullable|string|max:10',
+            'numurs' => 'nullable|integer',
+            'stavs' => 'required|integer',
+        ]);
+
         $t = new Telpa();
-        $t->nosaukums = $req->input('nosaukums');
-        $t->izmeri = $req->input('izmeri');
-        $t->numurs = $req->input('numurs');
+        $t->nosaukums = $data['nosaukums'];
+        $t->izmeri = $data['izmeri'] ?? null;
+        $t->numurs = $data['numurs'] ?? null;
+        $t->stavs = $data['stavs'];
         $t->save();
 
         return redirect()->to('/telpa')->with('success','Ieraksts pievienots');
@@ -48,12 +56,20 @@ class TelpaController extends Controller
 
     public function editSubmit(Request $req, $id)
     {
+        $data = $req->validate([
+            'nosaukums' => 'required|string|max:50',
+            'izmeri' => 'nullable|string|max:10',
+            'numurs' => 'nullable|integer',
+            'stavs' => 'required|integer',
+        ]);
+
         DB::table('telpa')
             ->where('telpas_id',$id)
             ->update([
-                'nosaukums' => $req->input('nosaukums'),
-                'izmeri' => $req->input('izmeri'),
-                'numurs' => $req->input('numurs'),
+                'nosaukums' => $data['nosaukums'],
+                'izmeri' => $data['izmeri'] ?? null,
+                'numurs' => $data['numurs'] ?? null,
+                'stavs' => $data['stavs'],
             ]);
 
         return redirect()->to('/telpa')->with('success','Ieraksts atjaunināts');

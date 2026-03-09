@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\KategorijaModel;
-use App\Models\AtrasanasVieta;
+use App\Models\Telpa;
+use App\Models\Lietotajs;
 
 class Inventar extends Model
 {
@@ -12,15 +13,20 @@ class Inventar extends Model
     protected $primaryKey = 'inventars_id';
     public $timestamps = false;
 
-    protected $fillable = ['nosaukums', 'apraksts', 'nolietojums', 'statuss', 'kategorija_id', 'atrasanas_vieta_id'];
+    protected $fillable = ['nosaukums', 'apraksts', 'nolietojums', 'statuss', 'kategorija_id', 'telpas_id', 'atbildigais_id'];
 
     public function kategorija()
     {
         return $this->belongsTo(KategorijaModel::class, 'kategorija_id', 'kategorija_id');
     }
 
-    public function vieta()
+    public function telpa()
     {
-        return $this->belongsTo(AtrasanasVieta::class, 'atrasanas_vieta_id', 'atrasanas_vieta_id');
+        return $this->belongsTo(Telpa::class, 'telpas_id', 'telpas_id');
+    }
+
+    public function atbildigais()
+    {
+        return $this->belongsTo(Lietotajs::class, 'atbildigais_id', 'lietotajs_id');
     }
 }

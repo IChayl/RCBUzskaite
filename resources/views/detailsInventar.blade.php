@@ -17,7 +17,8 @@
             <p class="card-text">Nolietojums: {{$inventar->nolietojums }}</p>
             <p class="card-text">Statuss: {{$inventar->statuss }}</p>
             <p class="card-text">Kategorija: {{ $inventar->kategorija->nosaukums ?? ('ID: '.$inventar->kategorija_id) }}</p>
-            <p class="card-text">Atrašanās vieta: {{ $inventar->vieta->nodala ?? ('ID: '.$inventar->atrasanas_vieta_id) }}</p>
+            <p class="card-text">Telpa: {{ optional($inventar->telpa)->nosaukums ?? ('ID: '.$inventar->telpas_id) }}</p>
+            <p class="card-text">Atbildīgais: {{ optional($inventar->atbildigais)->lietotajvards ?? ('ID: '.$inventar->atbildigais_id) }}</p>
         </div>
     </div>
 

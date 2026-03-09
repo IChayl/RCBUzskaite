@@ -16,9 +16,8 @@
             <div class="card-body">
                 <p class="card-text">Datums: {{$item->datums}}</p>
                 <p class="card-text">Inventārs: {{ $item->inventars->nosaukums ?? ('ID: '.$item->inventars_id) }}</p>
-                <p class="card-text">No vietas: {{ $item->noVieta->nodala ?? ('ID: '.$item->no_atrasanas_vietas_id) }}</p>
-                <p class="card-text">Uz vietu: {{ $item->uzVieta->nodala ?? ('ID: '.$item->uz_atrasanas_vietas_id) }}</p>
-                <p class="card-text">Atbildīgais: {{ $item->lietotajs->lietotajvards ?? ('ID: '.$item->atbildigais_lietotajs_id) }}</p>
+                <p class="card-text">Kustības veids: {{ optional($item->kustibasVeids)->nosaukums ?? ('ID: '.$item->kustibas_veids_id) }}</p>
+                <p class="card-text">Atbildīgais: {{ optional($item->lietotajs)->lietotajvards ?? ('ID: '.$item->atbildigais_lietotajs_id) }}</p>
                 <div  class="auth-links">
                     <a href="#" class="delete-btn" data-id="{{ $item->kustiba_id }}">Dzēst</a>
                     <a href="/inventara_kustiba/{{ $item->kustiba_id }}/details">Detalizēta</a>

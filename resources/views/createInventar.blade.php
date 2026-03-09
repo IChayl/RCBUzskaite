@@ -42,11 +42,20 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="atrasanas_vieta_id" class="form-label">Atrašanās vietas ID</label>
-            <select class="form-control" id="atrasanas_vieta_id" name="atrasanas_vieta_id" required>
-                <option value="">-- Izvēlieties atrašanās vietu --</option>
-                @foreach($vietas as $v)
-                    <option value="{{ $v->atrasanas_vieta_id }}">{{ $v->nodala }} (ID: {{ $v->atrasanas_vieta_id }})</option>
+            <label for="telpas_id" class="form-label">Telpa</label>
+            <select class="form-control" id="telpas_id" name="telpas_id" required>
+                <option value="">-- Izvēlieties telpu --</option>
+                @foreach($telpas as $t)
+                    <option value="{{ $t->telpas_id }}">{{ $t->nosaukums }} (ID: {{ $t->telpas_id }})</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="atbildigais_id" class="form-label">Atbildīgais lietotājs</label>
+            <select class="form-control" id="atbildigais_id" name="atbildigais_id">
+                <option value="">-- Izvēlieties lietotāju (pēc izvēles) --</option>
+                @foreach($lietotaji as $lt)
+                    <option value="{{ $lt->lietotajs_id }}">{{ $lt->lietotajvards }} (ID: {{ $lt->lietotajs_id }})</option>
                 @endforeach
             </select>
         </div>

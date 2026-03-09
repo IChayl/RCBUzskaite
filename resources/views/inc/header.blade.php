@@ -162,8 +162,8 @@
   <nav>
     <a href="/">Sākums</a>
     <a href="/kategorija">Kategorijas tabula</a>
-    <a href="/atrasanas_vieta">Atrašanās vietas</a>
     <a href="/inventara_kustiba">Kustības</a>
+    <a href="/kustibas_veidi">Kustības veidi</a>
     <a href="/inventars">Inventārs</a>
     <a href="/telpa">Telpas</a>
     <a href="/lietotajs">Lietotāji</a>

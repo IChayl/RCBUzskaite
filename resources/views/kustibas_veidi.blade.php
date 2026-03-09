@@ -1,31 +1,30 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #ffffff;">Visas atrašanās vietas</p>
+    <p style="color: #ffffff;">Visi kustību veidi</p>
 
     <div class="auth-links">
         <a href="/">Atpakaļ uz sākumlapu</a>
-        <a href="/atrasanas_vieta/create">Jauna vieta</a>
+        <a href="/kustibas_veidi/create">Jauns kustības veids</a>
     </div>
 
     <hr>
-    <h2 style="color: #ffffff;">Atrašanās vietas</h2>
+    <h2 style="color: #ffffff;">Kustību veidi</h2>
     <div style="display: flex; flex-wrap: wrap; gap: 16px;">
-    @forelse ($vietas as $item)
+    @forelse ($veidi as $item)
         <div style="background: #490700; color: white; width: 340px;" class="card mt-3">
             <div class="card-body">
-                <p class="card-text">Nodaļa: {{$item->nodala}}</p>
-                <p class="card-text">Telpa: {{ $item->telpa->nosaukums ?? ('ID: '.$item->telpas_id ?? '-') }}</p>
-                <p class="card-text">Stāvs: {{$item->stavs ?? '-'}}</p>
+                <p class="card-text">Nosaukums: {{$item->nosaukums}}</p>
+                <p class="card-text">Apraksts: {{$item->apraksts ?? '-'}}</p>
                 <div  class="auth-links">
-                    <a href="#" class="delete-btn" data-id="{{ $item->atrasanas_vieta_id }}">Dzēst</a>
-                    <a href="/atrasanas_vieta/{{ $item->atrasanas_vieta_id }}/details">Detalizēta</a>
-                    <a href="/atrasanas_vieta/{{ $item->atrasanas_vieta_id }}/edit">Rediģēt</a>
+                    <a href="#" class="delete-btn" data-id="{{ $item->kustibas_veids_id }}">Dzēst</a>
+                    <a href="/kustibas_veidi/{{ $item->kustibas_veids_id }}/details">Detalizēta</a>
+                    <a href="/kustibas_veidi/{{ $item->kustibas_veids_id }}/edit">Rediģēt</a>
                 </div>
             </div>
         </div>
     @empty
-        <p>Nav vietu.</p>
+        <p>Nav ierakstu.</p>
     @endforelse
     </div>
 
@@ -45,7 +44,7 @@
                 e.preventDefault();
                 const id = this.getAttribute('data-id');
                 if (confirm('Vai vēlaties dzēst šo ierakstu ?')) {
-                    window.location.href = `/atrasanas_vieta/${id}/delete`;
+                    window.location.href = `/kustibas_veidi/${id}/delete`;
                 }
             });
         });

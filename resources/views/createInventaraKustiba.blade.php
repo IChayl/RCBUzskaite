@@ -21,20 +21,11 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="no_atrasanas_vietas_id" class="form-label">No vietas</label>
-            <select class="form-control" id="no_atrasanas_vietas_id" name="no_atrasanas_vietas_id" required>
-                <option value="">-- Izvēlieties vietu --</option>
-                @foreach($vietas as $v)
-                    <option value="{{ $v->atrasanas_vieta_id }}">{{ $v->nodala }} (ID: {{ $v->atrasanas_vieta_id }})</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="uz_atrasanas_vietas_id" class="form-label">Uz vietas</label>
-            <select class="form-control" id="uz_atrasanas_vietas_id" name="uz_atrasanas_vietas_id" required>
-                <option value="">-- Izvēlieties vietu --</option>
-                @foreach($vietas as $v)
-                    <option value="{{ $v->atrasanas_vieta_id }}">{{ $v->nodala }} (ID: {{ $v->atrasanas_vieta_id }})</option>
+            <label for="kustibas_veids_id" class="form-label">Kustības veids</label>
+            <select class="form-control" id="kustibas_veids_id" name="kustibas_veids_id">
+                <option value="">-- Izvēlieties kustības veidu --</option>
+                @foreach($kustibasVeidi as $kv)
+                    <option value="{{ $kv->kustibas_veids_id }}">{{ $kv->nosaukums }} (ID: {{ $kv->kustibas_veids_id }})</option>
                 @endforeach
             </select>
         </div>

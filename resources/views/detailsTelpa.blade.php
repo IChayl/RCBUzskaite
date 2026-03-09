@@ -15,6 +15,7 @@
             <p class="card-text">Nosaukums: {{$telpa->nosaukums }}</p>
             <p class="card-text">Izmēri: {{$telpa->izmeri }}</p>
             <p class="card-text">Numurs: {{$telpa->numurs }}</p>
+            <p class="card-text">Stāvs: {{$telpa->stavs }}</p>
         </div>
     </div>
 

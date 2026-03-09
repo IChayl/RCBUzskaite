@@ -17,6 +17,7 @@
                 <p class="card-text">Nosaukums: {{$item->nosaukums}}</p>
                 <p class="card-text">Izmēri: {{$item->izmeri ?? '-'}}</p>
                 <p class="card-text">Numurs: {{$item->numurs ?? '-'}}</p>
+                <p class="card-text">Stāvs: {{$item->stavs ?? '-'}}</p>
                 <div  class="auth-links">
                     <a href="#" class="delete-btn" data-id="{{ $item->telpas_id }}">Dzēst</a>
                     <a href="/telpa/{{ $item->telpas_id }}/details">Detalizēta</a>
