@@ -160,13 +160,18 @@
     }
   </style>
   <nav>
-    <a href="/">Sākums</a>
+   
+       @if(Auth::check())
+        <a href="/">Sākums</a>
     <a href="/kategorija">Kategorijas tabula</a>
     <a href="/inventara_kustiba">Kustības</a>
     <a href="/kustibas_veidi">Kustības veidi</a>
     <a href="/inventars">Inventārs</a>
     <a href="/telpa">Telpas</a>
     <a href="/lietotajs">Lietotāji</a>
+      @else
+       <a href="/">Sākums</a>
+         @endif
   </nav>
 
   <div class="auth-links">
