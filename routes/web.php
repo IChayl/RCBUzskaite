@@ -16,7 +16,7 @@ Route::get('/', function () {
 
 // Guest-only routes (redirect logged-in users away)
 Route::middleware('guest')->group(function () {
-    Route::get('/Login', [LoginController::class, 'showLogin'])->name('login.form');
+    Route::get('/Login', [LoginController::class, 'showLogin'])->name('login');
     Route::post('/Login/submit', [LoginController::class, 'submit'])->name('login.submit');
 
     Route::get('/register', [LoginController::class, 'showRegister'])->name('register.form');
