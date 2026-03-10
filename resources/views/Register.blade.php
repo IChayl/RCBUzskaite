@@ -7,9 +7,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root{
-            --navy: #071632;
-            --maroon: #6b0f14;
-            --accent: #b94b4b;
+            --navy: #490700;
+            --navy-2: #75150b;
+            --maroon: #5400A8;
+            --maroon-2: #7528c3;
+            --accent: #f3c6c9;
             --card-bg: rgba(255,255,255,0.06);
             --muted-white: rgba(255,255,255,0.9);
         }
@@ -18,7 +20,9 @@
             height: 100%;
             margin: 0;
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            background: linear-gradient(135deg, var(--navy) 0%, var(--maroon) 100%);
+            background: radial-gradient(1200px 800px at 10% 20%, rgba(131, 43, 155, 0.12), transparent 8%),
+                        radial-gradient(1000px 600px at 90% 80%, rgba(9, 51, 7, 0.12), transparent 10%),
+                        linear-gradient(180deg, var(--navy) 0%, var(--maroon) 100%);
             color: var(--muted-white);
         }
 
@@ -68,7 +72,7 @@
             position: relative;
             overflow: hidden;
             color: #fff;
-            background: linear-gradient(90deg, var(--accent) 0%, #7a1c23 50%, var(--navy) 100%);
+            background: linear-gradient(90deg, var(--maroon) 0%, var(--maroon-2) 50%, var(--navy-2) 100%);
             border: none;
             transition: transform 180ms ease, box-shadow 180ms ease;
             z-index: 0;
