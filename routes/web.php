@@ -6,6 +6,7 @@ use App\Http\Controllers\InventaraKustibaController;
 use App\Http\Controllers\InventarsController;
 use App\Http\Controllers\KustibasVeidiController;
 use App\Http\Controllers\LietotajsController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TelpaController;
 
 
@@ -75,3 +76,12 @@ Route::get('/telpa/{id}/details', [TelpaController::class, 'TelpaDetails'])->nam
 Route::get('/telpa/{id}/edit', [TelpaController::class, 'TelpaEdit'])->name('telpa.edit');
 Route::post('/telpa/{id}/editSubmit', [TelpaController::class, 'editSubmit'])->name('telpa.update');
 Route::get('/telpa/{id}/delete', [TelpaController::class, 'TelpaDelete'])->name('telpa.delete');
+
+// login routes
+Route::get('/Login', [LoginController::class, 'showLogin'])->name('login.form');
+Route::post('/Login/submit', [LoginController::class, 'submit'])->name('login.submit');
+Route::get('/Logout', [LoginController::class, 'logout'])->name('logout');
+
+// registration routes
+Route::get('/register', [LoginController::class, 'showRegister'])->name('register.form');
+Route::post('/register', [LoginController::class, 'register'])->name('register.submit');
