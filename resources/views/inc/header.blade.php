@@ -167,16 +167,15 @@
     <a href="/inventars">Inventārs</a>
     <a href="/telpa">Telpas</a>
     <a href="/lietotajs">Lietotāji</a>
-    <a href="/contact">Contact</a>
   </nav>
 
   <div class="auth-links">
     @if(Auth::check())
-      <a href="/logout">Logout</a>
+      <a href="/logout">Izlogoties</a>
     @else
-    <a href="/Login">Login</a>
+    <a href="/Login">Ielogoties</a>
     
-    <a href="/register">Register</a>
+    <a href="/register">Reģistrēties</a>
     
     @endif
   </div>
