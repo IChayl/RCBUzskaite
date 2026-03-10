@@ -36,6 +36,7 @@ class LoginController extends Controller
         }
 
         Auth::login($user);
+        $request->session()->regenerate();
 
         // Still keep a small session helper for any non-Auth uses.
         Session::put('user_name', $user->lietotajvards);
@@ -76,10 +77,16 @@ class LoginController extends Controller
     /**
      * Log the user out.
      */
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
+
+        // Invalidate session and regenerate CSRF token to prevent reuse.
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         Session::forget(['user_id', 'user_name']);
-        return redirect('/')->with('success', 'Jūs esat atvienots');
+
+        return redirect('/Login')->with('success', 'Jūs esat atvienots');
     }
 }
