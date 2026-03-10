@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Login extends Model
+class Login extends Authenticatable
 {
+    use HasFactory, Notifiable;
+
     /**
      * Use the existing Lietotajs table so login uses the same user store.
      */
@@ -23,4 +27,12 @@ class Login extends Model
         'parole',
         'admina_tiesibas',
     ];
+
+    /**
+     * Disable the default remember token column since it doesn't exist.
+     */
+    public function getRememberTokenName()
+    {
+        return null;
+    }
 }
