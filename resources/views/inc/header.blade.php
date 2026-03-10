@@ -171,7 +171,7 @@
 
   <div class="auth-links">
     @if(Auth::check())
-      <a href="/logout">Izlogoties</a>
+      <a href="/Logout">Izlogoties</a>
     @else
     <a href="/Login">Ielogoties</a>
     
