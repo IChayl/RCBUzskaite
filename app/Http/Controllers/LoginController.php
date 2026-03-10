@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Models\Login;
 
@@ -34,7 +35,9 @@ class LoginController extends Controller
             return back()->withErrors(['name' => 'Nekorekts lietotājvārds vai parole'])->withInput();
         }
 
-        Session::put('user_id', $user->lietotajs_id);
+        Auth::login($user);
+
+        // Still keep a small session helper for any non-Auth uses.
         Session::put('user_name', $user->lietotajvards);
 
         return redirect('/')->with('success', 'Pieteikšanās veiksmīga');
@@ -75,6 +78,7 @@ class LoginController extends Controller
      */
     public function logout()
     {
+        Auth::logout();
         Session::forget(['user_id', 'user_name']);
         return redirect('/')->with('success', 'Jūs esat atvienots');
     }
