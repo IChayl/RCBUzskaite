@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use App\Models\Login;
+use App\Models\Lietotajs;
 
 class LoginController extends Controller
 {
@@ -27,7 +27,7 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
 
-        $user = Login::where('lietotajvards', $request->input('name'))
+        $user = Lietotajs::where('lietotajvards', $request->input('name'))
             ->where('parole', $request->input('password'))
             ->first();
 
@@ -61,7 +61,7 @@ class LoginController extends Controller
             'password' => 'required|string|min:4',
         ]);
 
-        $user = Login::create([
+        $user = Lietotajs::create([
             'lietotajvards' => $request->input('name'),
             'parole' => $request->input('password'),
             'admina_tiesibas' => 0,
