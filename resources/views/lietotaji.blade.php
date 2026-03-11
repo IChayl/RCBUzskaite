@@ -9,32 +9,46 @@
     </div>
 
     <hr>
-    <h2 style="color: #ffffff;">Lietotāji</h2>
-    <div style="display: flex; flex-wrap: wrap; gap: 16px;">
-    @forelse ($lietotaji as $item)
-        <div style="background: #490700; color: white; width: 340px;" class="card mt-3">
-            <div class="card-body">
-                <p class="card-text">Vārds: {{$item->lietotajvards}}</p>
-                <p class="card-text">Admina tiesības: {{$item->admina_tiesibas? 'Jā':'Nē'}}</p>
-                <div  class="auth-links">
-                    <a href="#" class="delete-btn" data-id="{{ $item->lietotajs_id }}">Dzēst</a>
-                    <a href="/lietotajs/{{ $item->lietotajs_id }}/details">Detalizēta</a>
-                    <a href="/lietotajs/{{ $item->lietotajs_id }}/edit">Rediģēt</a>
-                </div>
+
+    <div style="color: #ffffff; margin-top: 20px;">
+        @if(session('success'))
+            <div id="flash-message" style="background: #490700; color: #90EE90; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #90EE90; cursor: pointer;">
+                {{ session('success') }}
             </div>
-        </div>
-    @empty
-        <p>Nav lietotāju.</p>
-    @endforelse
+        @endif
     </div>
+
+    <h2 style="color: #ffffff;">Lietotāji</h2>
+
+    @if($lietotaji->isEmpty())
+        <p style="color: #ffffff;">Nav lietotāju.</p>
+    @else
+        <div class="card-table">
+            <div class="card-table-header">
+                <span>Vārds</span>
+                <span>Admina tiesības</span>
+                <span>Darbības</span>
+            </div>
+            @foreach ($lietotaji as $item)
+                <div class="card-table-row">
+                    <span>{{ $item->lietotajvards }}</span>
+                    <span>{{ $item->admina_tiesibas ? 'Jā' : 'Nē' }}</span>
+                    <div class="actions">
+                        <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->lietotajs_id }}">Dzēst</a>
+                        <a href="/lietotajs/{{ $item->lietotajs_id }}/details" class="bloom-button sm">Detalizēta</a>
+                        <a href="/lietotajs/{{ $item->lietotajs_id }}/edit" class="bloom-button sm">Rediģēt</a>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
 
 @endsection
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const alert = document.querySelector('div[style*="background: #490700"]');
-        if (alert) {
-            alert.style.cursor = 'pointer';
-            alert.addEventListener('click', function() {
+        const flash = document.getElementById('flash-message');
+        if (flash) {
+            flash.addEventListener('click', function() {
                 this.remove();
             });
         }
@@ -50,10 +64,3 @@
         });
     });
 </script>
-<div style="color: #ffffff; margin-top: 20px;">
-    @if(session('success'))
-        <div style="background: #490700; color: #90EE90; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #90EE90;">
-            {{ session('success') }}
-        </div>
-    @endif
-</div>

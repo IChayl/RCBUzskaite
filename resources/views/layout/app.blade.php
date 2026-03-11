@@ -191,6 +191,41 @@
             align-items: center;
         }
 
+        /* Card-based list styling (table-like cards) */
+        .card-table {
+            display: grid;
+            gap: 10px;
+        }
+        .card-table-header,
+        .card-table-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1.5fr;
+            align-items: center;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(73, 7, 0, 0.45);
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .card-table-header {
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.9);
+            border-bottom: 2px solid rgba(144, 238, 144, 0.8);
+            background: rgba(73, 7, 0, 0.3);
+        }
+        .card-table-row:hover {
+            background: rgba(131, 43, 155, 0.35);
+            transform: translateY(-1px);
+        }
+        .card-table-row .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
         /* Small bloom button variant */
         .bloom-button.sm {
             padding: 0.45rem 0.8rem;
@@ -201,6 +236,10 @@
         @media (max-width: 768px){
             header h1{ font-size:1.25rem; }
             .card-surface{ padding:1rem; border-radius:12px; }
+            .card-table-header,
+            .card-table-row {
+                grid-template-columns: 1.5fr 1fr;
+            }
         }
     </style>
 </head>
