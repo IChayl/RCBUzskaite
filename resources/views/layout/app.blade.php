@@ -226,6 +226,32 @@
             justify-content: flex-end;
         }
 
+        /* Card list rows styled like table rows */
+        .table-card {
+            background: rgba(73, 7, 0, 0.45);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .table-card:hover {
+            background: rgba(131, 43, 155, 0.35);
+            transform: translateY(-1px);
+        }
+        .table-card .card-body {
+            padding: 14px 16px;
+            display: grid;
+            grid-template-columns: 1.6fr 1fr 1.5fr;
+            gap: 12px;
+            align-items: center;
+        }
+        .table-card .card-text:first-child {
+            font-weight: 600;
+        }
+        .table-card .card-text + .card-text {
+            opacity: 0.75;
+            font-size: 0.9rem;
+        }
+
         /* Small bloom button variant */
         .bloom-button.sm {
             padding: 0.45rem 0.8rem;
