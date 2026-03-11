@@ -64,6 +64,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/inventars/{id}/editSubmit', [InventarsController::class,'editSubmit'])->name('inventars.update');
     Route::get('/inventars/{id}/delete', [InventarsController::class,'InventarDelete'])->name('inventars.delete');
 
+    // lietotaji
+    Route::get('/lietotajs', [LietotajsController::class,'showAllLietotaji'])->name('lietotaji.lapa');
+    Route::get('/lietotajs/create', [LietotajsController::class,'createLietotajs'])->name('lietotajs.create');
+    Route::post('/lietotajs', [LietotajsController::class,'LietotajsSubmit'])->name('lietotajs.store');
+    Route::get('/lietotajs/{id}/details', [LietotajsController::class,'LietotajsDetails'])->name('lietotajs.details');
+    Route::get('/lietotajs/{id}/edit', [LietotajsController::class,'LietotajsEdit'])->name('lietotajs.edit');
+    Route::post('/lietotajs/{id}/editSubmit', [LietotajsController::class,'editSubmit'])->name('lietotajs.update');
+    Route::get('/lietotajs/{id}/delete', [LietotajsController::class,'LietotajsDelete'])->name('lietotajs.delete');
+
     // telpa
     Route::get('/telpa', [TelpaController::class, 'showAllTelpa'])->name('telpa.lapa');
     Route::get('/telpa/create', [TelpaController::class, 'createTelpa'])->name('telpa.create');
