@@ -24,23 +24,25 @@
         <p style="color: #ffffff;">Nav ierakstu.</p>
     @else
         <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; color: white;">
+            <table class="data-table">
                 <thead>
                     <tr>
-                        <th style="border-bottom: 2px solid #90EE90; padding: 8px; text-align: left;">Nosaukums</th>
-                        <th style="border-bottom: 2px solid #90EE90; padding: 8px; text-align: left;">Apraksts</th>
-                        <th style="border-bottom: 2px solid #90EE90; padding: 8px; text-align: left;">Darbības</th>
+                        <th>Nosaukums</th>
+                        <th>Apraksts</th>
+                        <th>Darbības</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($veidi as $item)
-                        <tr style="background: rgba(73, 7, 0, 0.7);">
-                            <td style="padding: 10px;">{{ $item->nosaukums }}</td>
-                            <td style="padding: 10px;">{{ $item->apraksts ?? '-' }}</td>
-                            <td style="padding: 10px;">
-                                <a href="#" class="delete-btn" data-id="{{ $item->kustibas_veids_id }}" style="margin-right: 12px;">Dzēst</a>
-                                <a href="/kustibas_veidi/{{ $item->kustibas_veids_id }}/details" style="margin-right: 12px;">Detalizēta</a>
-                                <a href="/kustibas_veidi/{{ $item->kustibas_veids_id }}/edit">Rediģēt</a>
+                        <tr>
+                            <td>{{ $item->nosaukums }}</td>
+                            <td>{{ $item->apraksts ?? '-' }}</td>
+                            <td>
+                                <div class="actions">
+                                    <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->kustibas_veids_id }}">Dzēst</a>
+                                    <a href="/kustibas_veidi/{{ $item->kustibas_veids_id }}/details" class="bloom-button sm">Detalizēta</a>
+                                    <a href="/kustibas_veidi/{{ $item->kustibas_veids_id }}/edit" class="bloom-button sm">Rediģēt</a>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

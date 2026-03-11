@@ -24,27 +24,29 @@
         <p style="color: #ffffff;">Nav telpu.</p>
     @else
         <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; color: white;">
+            <table class="data-table">
                 <thead>
                     <tr>
-                        <th style="border-bottom: 2px solid #90EE90; padding: 8px; text-align: left;">Nosaukums</th>
-                        <th style="border-bottom: 2px solid #90EE90; padding: 8px; text-align: left;">Izmēri</th>
-                        <th style="border-bottom: 2px solid #90EE90; padding: 8px; text-align: left;">Numurs</th>
-                        <th style="border-bottom: 2px solid #90EE90; padding: 8px; text-align: left;">Stāvs</th>
-                        <th style="border-bottom: 2px solid #90EE90; padding: 8px; text-align: left;">Darbības</th>
+                        <th>Nosaukums</th>
+                        <th>Izmēri</th>
+                        <th>Numurs</th>
+                        <th>Stāvs</th>
+                        <th>Darbības</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($telpas as $item)
-                        <tr style="background: rgba(73, 7, 0, 0.7);">
-                            <td style="padding: 10px;">{{ $item->nosaukums }}</td>
-                            <td style="padding: 10px;">{{ $item->izmeri ?? '-' }}</td>
-                            <td style="padding: 10px;">{{ $item->numurs ?? '-' }}</td>
-                            <td style="padding: 10px;">{{ $item->stavs ?? '-' }}</td>
-                            <td style="padding: 10px;">
-                                <a href="#" class="delete-btn" data-id="{{ $item->telpas_id }}" style="margin-right: 12px;">Dzēst</a>
-                                <a href="/telpa/{{ $item->telpas_id }}/details" style="margin-right: 12px;">Detalizēta</a>
-                                <a href="/telpa/{{ $item->telpas_id }}/edit">Rediģēt</a>
+                        <tr>
+                            <td>{{ $item->nosaukums }}</td>
+                            <td>{{ $item->izmeri ?? '-' }}</td>
+                            <td>{{ $item->numurs ?? '-' }}</td>
+                            <td>{{ $item->stavs ?? '-' }}</td>
+                            <td>
+                                <div class="actions">
+                                    <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->telpas_id }}">Dzēst</a>
+                                    <a href="/telpa/{{ $item->telpas_id }}/details" class="bloom-button sm">Detalizēta</a>
+                                    <a href="/telpa/{{ $item->telpas_id }}/edit" class="bloom-button sm">Rediģēt</a>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

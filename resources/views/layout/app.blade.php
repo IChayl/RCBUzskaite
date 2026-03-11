@@ -160,6 +160,43 @@
             align-items:center;
         }
 
+        /* Table styling for list pages */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #ffffff;
+        }
+        .data-table th,
+        .data-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+        }
+        .data-table th {
+            font-weight: 600;
+            border-bottom: 2px solid rgba(144, 238, 144, 0.8);
+            text-align: left;
+            letter-spacing: 0.02em;
+        }
+        .data-table tbody tr {
+            background: rgba(73, 7, 0, 0.45);
+            transition: background 0.2s ease;
+        }
+        .data-table tbody tr:hover {
+            background: rgba(131, 43, 155, 0.35);
+        }
+        .data-table .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* Small bloom button variant */
+        .bloom-button.sm {
+            padding: 0.45rem 0.8rem;
+            font-size: 0.9rem;
+        }
+
         /* Responsive tweaks */
         @media (max-width: 768px){
             header h1{ font-size:1.25rem; }

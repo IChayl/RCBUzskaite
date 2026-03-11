@@ -10,32 +10,52 @@
 
     <hr>
     <h2 style="color: #ffffff;">Kategorijas</h2>
-    <div style="display: flex; flex-wrap: wrap; gap: 16px;">
-    @forelse ($kategorija as $item)
-        <div style="background: #490700; color: white; width: 340px;" class="card mt-3">
-            <div class="card-body">
-          
-                <p class="card-text">Nosaukums: {{$item->nosaukums}}</p>
-                <p class="card-text">Apraksts: {{$item->apraksts ?? '-'}}</p>
-                <div  class="auth-links">
-                    <a href="#" class="delete-btn" data-id="{{ $item->kategorija_id }}">Dzēst</a>
-                    <a href="/kategorija/{{ $item->kategorija_id }}/details">Detalizēta</a>
-                    <a href="/kategorija/{{ $item->kategorija_id }}/edit">Rediģēt</a>
-                </div>
+
+    <div style="color: #ffffff; margin-top: 20px;">
+        @if(session('success'))
+            <div id="flash-message" style="background: #490700; color: #90EE90; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #90EE90; cursor: pointer;">
+                {{ session('success') }}
             </div>
-        </div>
-    @empty
-        <p>Nav kategoriju.</p>
-    @endforelse
+        @endif
     </div>
+
+    @if($kategorija->isEmpty())
+        <p style="color: #ffffff;">Nav kategoriju.</p>
+    @else
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nosaukums</th>
+                        <th>Apraksts</th>
+                        <th>Darbības</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($kategorija as $item)
+                        <tr>
+                            <td>{{ $item->nosaukums }}</td>
+                            <td>{{ $item->apraksts ?? '-' }}</td>
+                            <td>
+                                <div class="actions">
+                                    <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->kategorija_id }}">Dzēst</a>
+                                    <a href="/kategorija/{{ $item->kategorija_id }}/details" class="bloom-button sm">Detalizēta</a>
+                                    <a href="/kategorija/{{ $item->kategorija_id }}/edit" class="bloom-button sm">Rediģēt</a>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
 
 @endsection
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const alert = document.querySelector('div[style*="background: #490700"]');
-        if (alert) {
-            alert.style.cursor = 'pointer';
-            alert.addEventListener('click', function() {
+        const flash = document.getElementById('flash-message');
+        if (flash) {
+            flash.addEventListener('click', function() {
                 this.remove();
             });
         }
@@ -52,10 +72,3 @@
         });
     });
 </script>
-<div style="color: #ffffff; margin-top: 20px;">
-    @if(session('success'))
-        <div style="background: #490700; color: #90EE90; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #90EE90;">
-            {{ session('success') }}
-        </div>
-    @endif
-</div>
