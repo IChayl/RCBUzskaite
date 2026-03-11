@@ -23,23 +23,28 @@
     @if($lietotaji->isEmpty())
         <p style="color: #ffffff;">Nav lietotāju.</p>
     @else
-        <div class="card-table">
-            <div class="card-table-header">
-                <span>Vārds</span>
-                <span>Admina tiesības</span>
-                <span>Darbības</span>
-            </div>
-            @foreach ($lietotaji as $item)
-                <div class="card-table-row">
-                    <span>{{ $item->lietotajvards }}</span>
-                    <span>{{ $item->admina_tiesibas ? 'Jā' : 'Nē' }}</span>
-                    <div class="actions">
+        <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+        @foreach ($lietotaji as $item)
+            <div class="card table-card">
+                <div class="card-body" style="display: grid; grid-template-columns: 1.6fr 1fr 1.5fr; gap: 12px; align-items: center;">
+                    <div>
+                        <div class="card-text" style="font-weight:600;">{{ $item->lietotajvards }}</div>
+                        <div class="card-text" style="opacity: 0.75; font-size: 0.9rem;">Vārds</div>
+                    </div>
+
+                    <div>
+                        <div class="card-text" style="font-weight:600;">{{ $item->admina_tiesibas ? 'Jā' : 'Nē' }}</div>
+                        <div class="card-text" style="opacity: 0.75; font-size: 0.9rem;">Admina tiesības</div>
+                    </div>
+
+                    <div class="actions" style="justify-content: flex-end;">
                         <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->lietotajs_id }}">Dzēst</a>
                         <a href="/lietotajs/{{ $item->lietotajs_id }}/details" class="bloom-button sm">Detalizēta</a>
                         <a href="/lietotajs/{{ $item->lietotajs_id }}/edit" class="bloom-button sm">Rediģēt</a>
                     </div>
                 </div>
-            @endforeach
+            </div>
+        @endforeach
         </div>
     @endif
 
