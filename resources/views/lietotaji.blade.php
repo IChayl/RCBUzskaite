@@ -25,19 +25,11 @@
     @else
         <div style="display: flex; flex-wrap: wrap; gap: 16px;">
         @foreach ($lietotaji as $item)
-            <div class="card table-card">
-                <div class="card-body" style="display: grid; grid-template-columns: 1.6fr 1fr 1.5fr; gap: 12px; align-items: center;">
-                    <div>
-                        <div class="card-text" style="font-weight:600;">{{ $item->lietotajvards }}</div>
-                        <div class="card-text" style="opacity: 0.75; font-size: 0.9rem;">Vārds</div>
-                    </div>
-
-                    <div>
-                        <div class="card-text" style="font-weight:600;">{{ $item->admina_tiesibas ? 'Jā' : 'Nē' }}</div>
-                        <div class="card-text" style="opacity: 0.75; font-size: 0.9rem;">Admina tiesības</div>
-                    </div>
-
-                    <div class="actions" style="justify-content: flex-end;">
+            <div class="card mt-3" style="background: rgba(73, 7, 0, 0.55); color: #ffffff; width: 340px;">
+                <div class="card-body">
+                    <p class="card-text" style="font-weight: 700; color: #f4f4f9;">Vārds: <span style="color: #cce3ff;">{{ $item->lietotajvards }}</span></p>
+                    <p class="card-text" style="color: #d0d6ff;">Admina tiesības: <span style="font-weight: 600;">{{ $item->admina_tiesibas ? 'Jā' : 'Nē' }}</span></p>
+                    <div class="auth-links" style="margin-top: 12px;">
                         <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->lietotajs_id }}">Dzēst</a>
                         <a href="/lietotajs/{{ $item->lietotajs_id }}/details" class="bloom-button sm">Detalizēta</a>
                         <a href="/lietotajs/{{ $item->lietotajs_id }}/edit" class="bloom-button sm">Rediģēt</a>
