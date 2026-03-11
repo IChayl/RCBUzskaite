@@ -243,9 +243,13 @@
         .table-card .card-body {
             padding: 14px 16px;
             display: grid;
-            grid-template-columns: 1.6fr 1fr 1.5fr;
-            gap: 12px;
+            grid-template-columns: 1fr;
+            row-gap: 12px;
+        }
+        .table-card .card-body > div {
+            display: flex;
             align-items: center;
+            gap: 12px;
         }
         .table-card .card-text:first-child {
             font-weight: 600;
@@ -255,6 +259,15 @@
             opacity: 0.75;
             font-size: 0.9rem;
             color: rgba(255,255,255,0.82);
+        }
+        .table-card .auth-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .table-card .auth-links a {
+            flex-shrink: 0;
+            min-width: 40px;
         }
 
         @keyframes fadeIn {
