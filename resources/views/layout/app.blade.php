@@ -231,11 +231,14 @@
             background: rgba(73, 7, 0, 0.45);
             border: 1px solid rgba(255,255,255,0.12);
             border-radius: 16px;
-            transition: background 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+            transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            animation: fadeIn 0.25s ease;
         }
         .table-card:hover {
             background: rgba(131, 43, 155, 0.35);
             transform: translateY(-1px);
+            box-shadow: 0 10px 28px rgba(0,0,0,0.4);
         }
         .table-card .card-body {
             padding: 14px 16px;
@@ -246,10 +249,17 @@
         }
         .table-card .card-text:first-child {
             font-weight: 600;
+            color: rgba(255,255,255,0.95);
         }
         .table-card .card-text + .card-text {
             opacity: 0.75;
             font-size: 0.9rem;
+            color: rgba(255,255,255,0.82);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Small bloom button variant */

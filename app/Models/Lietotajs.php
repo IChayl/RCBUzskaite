@@ -16,7 +16,7 @@ class Lietotajs extends Authenticatable
     protected $keyType = 'int';
     public $timestamps = false;
 
-    protected $fillable = ['lietotajvards', 'parole', 'admina_tiesibas'];
+    protected $fillable = ['lietotajvards', 'parole', 'admina_tiesibas', 'avatar'];
 
     /**
      * Disable the default remember token column since it doesn't exist.

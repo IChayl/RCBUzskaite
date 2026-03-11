@@ -21,10 +21,22 @@ class LietotajsController extends Controller
 
     public function LietotajsSubmit(Request $req)
     {
+        $req->validate([
+            'lietotajvards' => 'required|string|max:255',
+            'parole' => 'required|string|max:255',
+            'avatar' => 'nullable|image|max:2048',
+        ]);
+
         $u = new Lietotajs();
         $u->lietotajvards = $req->input('lietotajvards');
         $u->parole = $req->input('parole');
         $u->admina_tiesibas = $req->input('admina_tiesibas') ? 1 : 0;
+
+        if ($req->hasFile('avatar')) {
+            $path = $req->file('avatar')->store('avatars', 'public');
+            $u->avatar = $path;
+        }
+
         $u->save();
         return redirect()->to('/lietotajs')->with('success','Ieraksts pievienots');
     }
@@ -43,11 +55,24 @@ class LietotajsController extends Controller
 
     public function editSubmit(Request $req, $id)
     {
-        DB::table('lietotajs')->where('lietotajs_id',$id)->update([
+        $req->validate([
+            'lietotajvards' => 'required|string|max:255',
+            'parole' => 'required|string|max:255',
+            'avatar' => 'nullable|image|max:2048',
+        ]);
+
+        $data = [
             'lietotajvards' => $req->input('lietotajvards'),
             'parole' => $req->input('parole'),
             'admina_tiesibas' => $req->input('admina_tiesibas') ? 1 : 0,
-        ]);
+        ];
+
+        if ($req->hasFile('avatar')) {
+            $path = $req->file('avatar')->store('avatars', 'public');
+            $data['avatar'] = $path;
+        }
+
+        DB::table('lietotajs')->where('lietotajs_id',$id)->update($data);
         return redirect()->to('/lietotajs')->with('success','Ieraksts atjaunināts');
     }
 
