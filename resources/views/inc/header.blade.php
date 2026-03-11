@@ -168,7 +168,7 @@
     <a href="/kustibas_veidi">Kustības veidi</a>
     <a href="/inventars">Inventārs</a>
     <a href="/telpa">Telpas</a>
-    <a href="/lietotaji">Lietotāji</a>
+    <a href="/lietotajs">Lietotāji</a>
       @else
        <a href="/">Sākums</a>
          @endif
