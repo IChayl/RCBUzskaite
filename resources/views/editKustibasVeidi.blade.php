@@ -1,9 +1,15 @@
 @extends('layout.app')
 
 @section('content')
-    <h2>Rediģēt kustības veidu</h2>
-    <a href="/kustibas_veidi" class="btn btn-secondary">Atpakaļ</a>
+    <p style="color: #ffffff;">Rediģēt kustības veidu</p>
+
+    <div class="auth-links">
+        <a href="/kustibas_veidi" class="btn btn-secondary">Atpakaļ</a>
+    </div>
+
     <hr>
+
+    <h2 style="color: #ffffff;">Rediģēt kustības veidu</h2>
 
     <form method="POST" action="/kustibas_veidi/{{ $veids->kustibas_veids_id }}/editSubmit">
         @csrf

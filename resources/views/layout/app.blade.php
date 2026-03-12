@@ -105,6 +105,11 @@
             0 6px 20px rgba(247, 0, 255, 0.93);
         }
 
+        /* Ensure headings are readable on dark background */
+        h2, h3, h4, h5, h6 {
+            color: #ffffff;
+        }
+
         /* Card style for main content to create shape */
         .card-surface{
             //background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
@@ -210,6 +215,52 @@
         .table-search-input:focus {
             outline: 2px solid rgba(144, 238, 144, 0.7);
         }
+
+        /* Form controls match the dark theme used on list pages */
+        .form-control,
+        .form-select {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #ffffff;
+            border-radius: 999px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            outline: 2px solid rgba(144, 238, 144, 0.7);
+            box-shadow: none;
+        }
+
+        .form-label {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .btn,
+        .btn-primary,
+        .btn-secondary {
+            background: linear-gradient(90deg, var(--maroon) 0%, var(--maroon-2) 50%, var(--navy-2) 100%);
+            color: #FFFFFF;
+            border: none;
+            padding: .55rem 1rem;
+            border-radius: 999px;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow:
+                0 6px 18px rgba(155,43,58,0.28),
+                0 0 12px rgba(155,43,58,0.14),
+                inset 0 1px 0 rgba(255,255,255,0.04);
+            transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px) scale(1.01);
+            filter: saturate(120%) brightness(1.06);
+        }
+
+        .btn:active {
+            transform: translateY(-1px) scale(0.99);
+        }
+
         .no-results-message {
             font-size: 0.95rem;
             opacity: 0.9;

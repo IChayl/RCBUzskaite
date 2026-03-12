@@ -1,9 +1,15 @@
 @extends('layout.app')
 
 @section('content')
-    <h2>Rediģēt telpu</h2>
-    <a href="/telpa" class="btn btn-secondary">Atpakaļ</a>
+    <p style="color: #ffffff;">Rediģēt telpu</p>
+
+    <div class="auth-links">
+        <a href="/telpa" class="btn btn-secondary">Atpakaļ</a>
+    </div>
+
     <hr>
+
+    <h2 style="color: #ffffff;">Rediģēt telpu</h2>
 
     <form method="POST" action="/telpa/{{ $telpa->telpas_id }}/editSubmit">
         @csrf

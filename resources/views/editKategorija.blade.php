@@ -1,9 +1,15 @@
 @extends('layout.app')
 
 @section('content')
-    <h2>Rediģēt Kategoriju</h2>
-    <a href="/kategorija" class="btn btn-secondary">Atpakaļ</a>
+    <p style="color: #ffffff;">Rediģēt kategoriju</p>
+
+    <div class="auth-links">
+        <a href="/kategorija" class="btn btn-secondary">Atpakaļ</a>
+    </div>
+
     <hr>
+
+    <h2 style="color: #ffffff;">Rediģēt kategoriju</h2>
 
     <form method="POST" action="/kategorija/{{ $kategorija->kategorija_id }}/editSubmit">
         @csrf

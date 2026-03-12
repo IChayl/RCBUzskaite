@@ -1,9 +1,15 @@
 @extends('layout.app')
 
 @section('content')
-    <h2>Jauna telpa</h2>
-    <a href="/telpa" class="btn btn-secondary">Atpakaļ uz sarakstu</a>
+    <p style="color: #ffffff;">Jauna telpa</p>
+
+    <div class="auth-links">
+        <a href="/telpa" class="btn btn-secondary">Atpakaļ uz sarakstu</a>
+    </div>
+
     <hr>
+
+    <h2 style="color: #ffffff;">Jauna telpa</h2>
 
     <form method="POST" action="{{ route('telpa.store') }}">
         @csrf

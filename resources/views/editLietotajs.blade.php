@@ -1,9 +1,15 @@
 @extends('layout.app')
 
 @section('content')
-    <h2>Rediģēt lietotāju</h2>
-    <a href="/lietotajs" class="btn btn-secondary">Atpakaļ</a>
+    <p style="color: #ffffff;">Rediģēt lietotāju</p>
+
+    <div class="auth-links">
+        <a href="/lietotajs" class="btn btn-secondary">Atpakaļ</a>
+    </div>
+
     <hr>
+
+    <h2 style="color: #ffffff;">Rediģēt lietotāju</h2>
 
     <form method="POST" action="/lietotajs/{{ $lietotajs->lietotajs_id }}/editSubmit" enctype="multipart/form-data">
         @csrf

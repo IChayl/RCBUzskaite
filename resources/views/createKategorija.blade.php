@@ -1,9 +1,15 @@
 @extends('layout.app')
 
 @section('content')
-    <h2>Jauna kategorija</h2>
-    <a href="/kategorija" class="btn btn-secondary">Atpakal uz kategoriju sarakstu</a>
+    <p style="color: #ffffff;">Jauna kategorija</p>
+
+    <div class="auth-links">
+        <a href="/kategorija" class="btn btn-secondary">Atpakal uz kategoriju sarakstu</a>
+    </div>
+
     <hr>
+
+    <h2 style="color: #ffffff;">Jauna kategorija</h2>
 
     @if($errors->any())
         <div class="alert alert-danger">

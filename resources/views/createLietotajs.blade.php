@@ -1,9 +1,15 @@
 @extends('layout.app')
 
 @section('content')
-    <h2>Jauns lietotājs</h2>
-    <a href="/lietotajs" class="btn btn-secondary">Atpakaļ uz sarakstu</a>
+    <p style="color: #ffffff;">Jauns lietotājs</p>
+
+    <div class="auth-links">
+        <a href="/lietotajs" class="btn btn-secondary">Atpakaļ uz sarakstu</a>
+    </div>
+
     <hr>
+
+    <h2 style="color: #ffffff;">Jauns lietotājs</h2>
 
     <form method="POST" action="{{ route('lietotaji.store') }}" enctype="multipart/form-data">
         @csrf
