@@ -436,9 +436,15 @@
                 });
             };
 
-            document.addEventListener('DOMContentLoaded', () => {
+            const initAllTableControls = () => {
                 document.querySelectorAll('.table-controls').forEach(initTableControls);
-            });
+            };
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initAllTableControls);
+            } else {
+                initAllTableControls();
+            }
         })();
     </script>
 </body>
