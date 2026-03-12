@@ -12,6 +12,16 @@
     <h2 style="color: #ffffff;">Kategorijas</h2>
 
     <form method="GET" class="table-controls">
+        <input type="hidden" name="sort" value="{{ request('sort') }}">
+        <input type="hidden" name="direction" value="{{ request('direction') }}">
+        <label style="display:flex; align-items:center; gap:8px;">
+            <span style="color:#ffffff; font-size:0.9rem;">Meklēt pēc:</span>
+            <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.06); color:#ffffff;">
+                <option value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
+                <option value="nosaukums" {{ request('column') === 'nosaukums' ? 'selected' : '' }}>Nosaukums</option>
+                <option value="apraksts" {{ request('column') === 'apraksts' ? 'selected' : '' }}>Apraksts</option>
+            </select>
+        </label>
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
         <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
         <a href="{{ url('/kategorija') }}" class="bloom-button sm" style="height: 36px;">Notīrīt</a>
@@ -33,13 +43,13 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th class="sortable">
+                        <th class="sortable {{ request('sort') === 'nosaukums' ? 'sorted-'.request('direction','asc') : '' }}">
                             @php
                                 $dir = request('sort') === 'nosaukums' && request('direction') === 'asc' ? 'desc' : 'asc';
                             @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'nosaukums', 'direction' => $dir]) }}">Nosaukums</a>
                         </th>
-                        <th class="sortable">
+                        <th class="sortable {{ request('sort') === 'apraksts' ? 'sorted-'.request('direction','asc') : '' }}">
                             @php
                                 $dir = request('sort') === 'apraksts' && request('direction') === 'asc' ? 'desc' : 'asc';
                             @endphp
@@ -64,6 +74,10 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+        <div style="margin-top: 16px;">
+            {{ $kategorija->links() }}
         </div>
     @endif
 

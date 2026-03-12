@@ -10,26 +10,43 @@ class KustibasVeidiController extends Controller
 {
     public function showAll(Request $request)
     {
+        // Meklēšanas virkne un meklējamā kolonna
         $q = trim($request->input('q', ''));
+        $column = $request->input('column', 'all');
+
+        // Kārtošanas parametri
         $sort = $request->input('sort', 'kustibas_veids_id');
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
+        // Atļauto sortēšanas kolonnu saraksts
         $allowedSort = ['kustibas_veids_id', 'nosaukums', 'apraksts'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'kustibas_veids_id';
         }
 
-        $query = KustibasVeidi::query();
-
-        if ($q !== '') {
-            $query->where(function ($query) use ($q) {
-                $query->where('nosaukums', 'like', "%{$q}%")
-                    ->orWhere('apraksts', 'like', "%{$q}%");
-            });
+        // Atļautās meklēšanas kolonnas
+        $allowedColumns = ['all', 'nosaukums', 'apraksts'];
+        if (!in_array($column, $allowedColumns, true)) {
+            $column = 'all';
         }
 
-        $veidi = $query->orderBy($sort, $direction)->get();
-        return view('kustibas_veidi', compact('veidi', 'sort', 'direction', 'q'));
+        $query = KustibasVeidi::query();
+
+        // Meklēšanas nosacījums
+        if ($q !== '') {
+            if ($column === 'all') {
+                $query->where(function ($query) use ($q) {
+                    $query->where('nosaukums', 'like', "%{$q}%")
+                        ->orWhere('apraksts', 'like', "%{$q}%");
+                });
+            } else {
+                $query->where($column, 'like', "%{$q}%");
+            }
+        }
+
+        // Paginate + kārtošana
+        $veidi = $query->orderBy($sort, $direction)->paginate(15)->withQueryString();
+        return view('kustibas_veidi', compact('veidi', 'sort', 'direction', 'q', 'column'));
     }
 
     public function create()

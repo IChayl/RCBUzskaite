@@ -12,6 +12,18 @@
     <h2 style="color: #ffffff;">Inventāra kustība</h2>
 
     <form method="GET" class="table-controls">
+        <input type="hidden" name="sort" value="{{ request('sort') }}">
+        <input type="hidden" name="direction" value="{{ request('direction') }}">
+        <label style="display:flex; align-items:center; gap:8px;">
+            <span style="color:#ffffff; font-size:0.9rem;">Meklēt pēc:</span>
+            <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.06); color:#ffffff;">
+                <option value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
+                <option value="datums" {{ request('column') === 'datums' ? 'selected' : '' }}>Datums</option>
+                <option value="inventars" {{ request('column') === 'inventars' ? 'selected' : '' }}>Inventārs</option>
+                <option value="kustibas_veids" {{ request('column') === 'kustibas_veids' ? 'selected' : '' }}>Kustības veids</option>
+                <option value="lietotajs" {{ request('column') === 'lietotajs' ? 'selected' : '' }}>Atbildīgais</option>
+            </select>
+        </label>
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
         <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
         <a href="{{ url('/inventara_kustiba') }}" class="bloom-button sm" style="height: 36px;">Notīrīt</a>
@@ -33,15 +45,30 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th class="sortable">
+                        <th class="sortable {{ request('sort') === 'datums' ? 'sorted-'.request('direction','asc') : '' }}">
                             @php
                                 $dir = request('sort') === 'datums' && request('direction') === 'asc' ? 'desc' : 'asc';
                             @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'datums', 'direction' => $dir]) }}">Datums</a>
                         </th>
-                        <th>Inventārs</th>
-                        <th>Kustības veids</th>
-                        <th>Atbildīgais</th>
+                        <th class="sortable {{ request('sort') === 'inventars' ? 'sorted-'.request('direction','asc') : '' }}">
+                            @php
+                                $dir = request('sort') === 'inventars' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'inventars', 'direction' => $dir]) }}">Inventārs</a>
+                        </th>
+                        <th class="sortable {{ request('sort') === 'kustibas_veids' ? 'sorted-'.request('direction','asc') : '' }}">
+                            @php
+                                $dir = request('sort') === 'kustibas_veids' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'kustibas_veids', 'direction' => $dir]) }}">Kustības veids</a>
+                        </th>
+                        <th class="sortable {{ request('sort') === 'lietotajs' ? 'sorted-'.request('direction','asc') : '' }}">
+                            @php
+                                $dir = request('sort') === 'lietotajs' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'lietotajs', 'direction' => $dir]) }}">Atbildīgais</a>
+                        </th>
                         <th>Darbības</th>
                     </tr>
                 </thead>
@@ -63,6 +90,10 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+        <div style="margin-top: 16px;">
+            {{ $kustibas->links() }}
         </div>
     @endif
 

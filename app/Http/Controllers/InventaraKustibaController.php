@@ -13,35 +13,78 @@ class InventaraKustibaController extends Controller
 {
     public function showAllKustiba(Request $request)
     {
+        // Meklēšanas teksts un izvēlētā kolonna (vai "all" līdz meklēšanai visur)
         $q = trim($request->input('q', ''));
+        $column = $request->input('column', 'all');
+
+        // Kārtošanas iestatījumi: kolonna un virziens (asc/desc)
         $sort = $request->input('sort', 'kustiba_id');
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
-        $allowedSort = ['kustiba_id', 'datums'];
+        // Drošība: atļautās kolonnas, pēc kurām var kārtot
+        $allowedSort = ['kustiba_id', 'datums', 'inventars', 'kustibas_veids', 'lietotajs'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'kustiba_id';
         }
 
-        $query = InventaraKustiba::with(['inventars', 'lietotajs', 'kustibasVeids']);
-
-        if ($q !== '') {
-            $query->where(function ($query) use ($q) {
-                $query->where('datums', 'like', "%{$q}%")
-                    ->orWhereHas('inventars', function ($q2) use ($q) {
-                        $q2->where('nosaukums', 'like', "%{$q}%");
-                    })
-                    ->orWhereHas('kustibasVeids', function ($q2) use ($q) {
-                        $q2->where('nosaukums', 'like', "%{$q}%");
-                    })
-                    ->orWhereHas('lietotajs', function ($q2) use ($q) {
-                        $q2->where('lietotajvards', 'like', "%{$q}%");
-                    });
-            });
+        $allowedColumns = ['all', 'datums', 'inventars', 'kustibas_veids', 'lietotajs'];
+        if (!in_array($column, $allowedColumns, true)) {
+            $column = 'all';
         }
 
-        $kustibas = $query->orderBy($sort, $direction)->get();
+        $query = InventaraKustiba::query()->with(['inventars', 'lietotajs', 'kustibasVeids']);
 
-        return view('inventara_kustiba', compact('kustibas', 'sort', 'direction', 'q'));
+        if ($q !== '') {
+            if ($column === 'all') {
+                $query->where(function ($query) use ($q) {
+                    $query->where('datums', 'like', "%{$q}%")
+                        ->orWhereHas('inventars', function ($q2) use ($q) {
+                            $q2->where('nosaukums', 'like', "%{$q}%");
+                        })
+                        ->orWhereHas('kustibasVeids', function ($q2) use ($q) {
+                            $q2->where('nosaukums', 'like', "%{$q}%");
+                        })
+                        ->orWhereHas('lietotajs', function ($q2) use ($q) {
+                            $q2->where('lietotajvards', 'like', "%{$q}%");
+                        });
+                });
+            } elseif ($column === 'datums') {
+                $query->where('datums', 'like', "%{$q}%");
+            } elseif ($column === 'inventars') {
+                $query->whereHas('inventars', function ($q2) use ($q) {
+                    $q2->where('nosaukums', 'like', "%{$q}%");
+                });
+            } elseif ($column === 'kustibas_veids') {
+                $query->whereHas('kustibasVeids', function ($q2) use ($q) {
+                    $q2->where('nosaukums', 'like', "%{$q}%");
+                });
+            } elseif ($column === 'lietotajs') {
+                $query->whereHas('lietotajs', function ($q2) use ($q) {
+                    $q2->where('lietotajvards', 'like', "%{$q}%");
+                });
+            }
+        }
+
+        // Kārtošana pēc saistītajiem modeļiem (jāizmanto join, lai var kārtot pēc saistītajām tabulām)
+        if ($sort === 'inventars') {
+            $query->leftJoin('inventars', 'inventara_kustiba.inventars_id', '=', 'inventars.inventars_id')
+                ->orderBy('inventars.nosaukums', $direction)
+                ->select('inventara_kustiba.*');
+        } elseif ($sort === 'kustibas_veids') {
+            $query->leftJoin('kustibas_veidi', 'inventara_kustiba.kustibas_veids_id', '=', 'kustibas_veidi.kustibas_veids_id')
+                ->orderBy('kustibas_veidi.nosaukums', $direction)
+                ->select('inventara_kustiba.*');
+        } elseif ($sort === 'lietotajs') {
+            $query->leftJoin('lietotajs', 'inventara_kustiba.atbildigais_lietotajs_id', '=', 'lietotajs.lietotajs_id')
+                ->orderBy('lietotajs.lietotajvards', $direction)
+                ->select('inventara_kustiba.*');
+        } else {
+            $query->orderBy($sort, $direction);
+        }
+
+        $kustibas = $query->paginate(15)->withQueryString();
+
+        return view('inventara_kustiba', compact('kustibas', 'sort', 'direction', 'q', 'column'));
     }
 
     public function createKustiba()

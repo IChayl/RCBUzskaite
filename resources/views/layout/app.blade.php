@@ -232,6 +232,41 @@
         .data-table th.sortable.sorted-desc::after {
             content: "↓";
         }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        .pagination li {
+            margin: 0;
+        }
+        .pagination a,
+        .pagination span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(255,255,255,0.06);
+            color: #ffffff;
+            text-decoration: none;
+            min-width: 44px;
+            text-align: center;
+        }
+        .pagination .active span {
+            background: rgba(144, 238, 144, 0.15);
+            border-color: rgba(144, 238, 144, 0.5);
+        }
+        .pagination .disabled span {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
 
         /* Card-based list styling (table-like cards) */
         .card-table {

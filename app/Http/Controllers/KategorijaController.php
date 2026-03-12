@@ -13,27 +13,44 @@ class KategorijaController extends Controller
 // Rāda visu kategoriju sarakstu
    public function showAllKategorija(Request $request)
     {
+        // Meklēšanas frāze un izvēlētā kolonna (vai meklēt visur)
         $q = trim($request->input('q', ''));
+        $column = $request->input('column', 'all');
+
+        // Kārsotāji
         $sort = $request->input('sort', 'kategorija_id');
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
+        // Atļautās kolonnas kārtošanai
         $allowedSort = ['kategorija_id', 'nosaukums', 'apraksts'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'kategorija_id';
         }
 
-        $query = KategorijaModel::query();
-
-        if ($q !== '') {
-            $query->where(function ($query) use ($q) {
-                $query->where('nosaukums', 'like', "%{$q}%")
-                    ->orWhere('apraksts', 'like', "%{$q}%");
-            });
+        // Atļautās kolonnas meklēšanai
+        $allowedColumns = ['all', 'nosaukums', 'apraksts'];
+        if (!in_array($column, $allowedColumns, true)) {
+            $column = 'all';
         }
 
-        $kategorija = $query->orderBy($sort, $direction)->get();
+        $query = KategorijaModel::query();
 
-        return view('kategorija', compact('kategorija', 'sort', 'direction', 'q'));
+        // Meklēšana
+        if ($q !== '') {
+            if ($column === 'all') {
+                $query->where(function ($query) use ($q) {
+                    $query->where('nosaukums', 'like', "%{$q}%")
+                        ->orWhere('apraksts', 'like', "%{$q}%");
+                });
+            } else {
+                $query->where($column, 'like', "%{$q}%");
+            }
+        }
+
+        // Paginācija + kārtošana
+        $kategorija = $query->orderBy($sort, $direction)->paginate(15)->withQueryString();
+
+        return view('kategorija', compact('kategorija', 'sort', 'direction', 'q', 'column'));
     }
 
     

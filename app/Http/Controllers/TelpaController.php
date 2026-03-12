@@ -11,29 +11,49 @@ class TelpaController extends Controller
     // Rāda visu telpu sarakstu
     public function showAllTelpa(Request $request)
     {
+        // Uzstādam meklēšanas tekstu un izvēlētās kolonnas izziņu
         $q = trim($request->input('q', ''));
+        $column = $request->input('column', 'all');
+
+        // Sortēšanas iestatījumi, uzstādām noklusējuma kolonnas un virzienu
         $sort = $request->input('sort', 'telpas_id');
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
+        // Drošība: atļautās kolonnas, pēc kurām drīkst kārtot
         $allowedSort = ['telpas_id', 'nosaukums', 'izmeri', 'numurs', 'stavs'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'telpas_id';
         }
 
-        $query = Telpa::query();
-
-        if ($q !== '') {
-            $query->where(function ($query) use ($q) {
-                $query->where('nosaukums', 'like', "%{$q}%")
-                    ->orWhere('izmeri', 'like', "%{$q}%")
-                    ->orWhere('numurs', 'like', "%{$q}%")
-                    ->orWhere('stavs', 'like', "%{$q}%");
-            });
+        // Drošība: atļautās kolonnas meklēšanai
+        $allowedColumns = ['all', 'nosaukums', 'izmeri', 'numurs', 'stavs'];
+        if (!in_array($column, $allowedColumns, true)) {
+            $column = 'all';
         }
 
-        $telpas = $query->orderBy($sort, $direction)->get();
+        $query = Telpa::query();
 
-        return view('telpa', compact('telpas', 'sort', 'direction', 'q'));
+        // Pievienojam meklēšanas nosacījumus tikai, ja ir ievadīts meklēšanas teksts
+        if ($q !== '') {
+            if ($column === 'all') {
+                // Meklē visās kolonnās
+                $query->where(function ($query) use ($q) {
+                    $query->where('nosaukums', 'like', "%{$q}%")
+                        ->orWhere('izmeri', 'like', "%{$q}%")
+                        ->orWhere('numurs', 'like', "%{$q}%")
+                        ->orWhere('stavs', 'like', "%{$q}%");
+                });
+            } else {
+                // Meklē tikai konkrētajā kolonnā
+                $query->where($column, 'like', "%{$q}%");
+            }
+        }
+
+        // Paginācija + kārtošana pēc norādītajām kritērijiem
+        $telpas = $query->orderBy($sort, $direction)->paginate(15)->withQueryString();
+
+        // Nosūtām datus uz skatu
+        return view('telpa', compact('telpas', 'sort', 'direction', 'q', 'column'));
     }
 
     // forma jaunas telpas izveidei

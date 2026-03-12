@@ -13,37 +13,84 @@ class InventarsController extends Controller
 {
     public function showAllInventars(Request $request)
     {
+        // Meklēšanas teksta un kolonnas iestatījumi
         $q = trim($request->input('q', ''));
+        $column = $request->input('column', 'all');
+
+        // Kārtošanas parametri
         $sort = $request->input('sort', 'inventars_id');
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
-        $allowedSort = ['inventars_id', 'nosaukums', 'apraksts', 'statuss'];
+        // Atļautās kolonnas kārtošanai
+        $allowedSort = ['inventars_id', 'nosaukums', 'apraksts', 'statuss', 'kategorija', 'telpa', 'atbildigais'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'inventars_id';
         }
 
-        $query = Inventar::with(['kategorija', 'telpa', 'atbildigais']);
-
-        if ($q !== '') {
-            $query->where(function ($query) use ($q) {
-                $query->where('nosaukums', 'like', "%{$q}%")
-                    ->orWhere('apraksts', 'like', "%{$q}%")
-                    ->orWhere('statuss', 'like', "%{$q}%")
-                    ->orWhereHas('kategorija', function ($q2) use ($q) {
-                        $q2->where('nosaukums', 'like', "%{$q}%");
-                    })
-                    ->orWhereHas('telpa', function ($q2) use ($q) {
-                        $q2->where('nosaukums', 'like', "%{$q}%");
-                    })
-                    ->orWhereHas('atbildigais', function ($q2) use ($q) {
-                        $q2->where('lietotajvards', 'like', "%{$q}%");
-                    });
-            });
+        // Atļautās kolonnas meklēšanai
+        $allowedColumns = ['all', 'nosaukums', 'apraksts', 'statuss', 'kategorija', 'telpa', 'atbildigais'];
+        if (!in_array($column, $allowedColumns, true)) {
+            $column = 'all';
         }
 
-        $inventari = $query->orderBy($sort, $direction)->get();
+        $query = Inventar::query()
+            ->with(['kategorija', 'telpa', 'atbildigais']);
 
-        return view('inventars', compact('inventari', 'sort', 'direction', 'q'));
+        // Meklēšana kolonnā vai visās kolonnās
+        if ($q !== '') {
+            if ($column === 'all') {
+                $query->where(function ($query) use ($q) {
+                    $query->where('nosaukums', 'like', "%{$q}%")
+                        ->orWhere('apraksts', 'like', "%{$q}%")
+                        ->orWhere('statuss', 'like', "%{$q}%")
+                        ->orWhereHas('kategorija', function ($q2) use ($q) {
+                            $q2->where('nosaukums', 'like', "%{$q}%");
+                        })
+                        ->orWhereHas('telpa', function ($q2) use ($q) {
+                            $q2->where('nosaukums', 'like', "%{$q}%");
+                        })
+                        ->orWhereHas('atbildigais', function ($q2) use ($q) {
+                            $q2->where('lietotajvards', 'like', "%{$q}%");
+                        });
+                });
+            } elseif (in_array($column, ['nosaukums', 'apraksts', 'statuss'], true)) {
+                $query->where($column, 'like', "%{$q}%");
+            } elseif ($column === 'kategorija') {
+                $query->whereHas('kategorija', function ($q2) use ($q) {
+                    $q2->where('nosaukums', 'like', "%{$q}%");
+                });
+            } elseif ($column === 'telpa') {
+                $query->whereHas('telpa', function ($q2) use ($q) {
+                    $q2->where('nosaukums', 'like', "%{$q}%");
+                });
+            } elseif ($column === 'atbildigais') {
+                $query->whereHas('atbildigais', function ($q2) use ($q) {
+                    $q2->where('lietotajvards', 'like', "%{$q}%");
+                });
+            }
+        }
+
+        // Kārtošana pēc saistīto modeļu lauka
+        if ($sort === 'kategorija') {
+            $query->leftJoin('kategorija', 'inventars.kategorija_id', '=', 'kategorija.kategorija_id')
+                ->orderBy('kategorija.nosaukums', $direction)
+                ->select('inventars.*');
+        } elseif ($sort === 'telpa') {
+            $query->leftJoin('telpa', 'inventars.telpas_id', '=', 'telpa.telpas_id')
+                ->orderBy('telpa.nosaukums', $direction)
+                ->select('inventars.*');
+        } elseif ($sort === 'atbildigais') {
+            $query->leftJoin('lietotajs', 'inventars.atbildigais_id', '=', 'lietotajs.lietotajs_id')
+                ->orderBy('lietotajs.lietotajvards', $direction)
+                ->select('inventars.*');
+        } else {
+            $query->orderBy($sort, $direction);
+        }
+
+        // Paginācija ar querystring, lai saglabātu meklēšanas un kārtošanas parametrus
+        $inventari = $query->paginate(15)->withQueryString();
+
+        return view('inventars', compact('inventari', 'sort', 'direction', 'q', 'column'));
     }
 
     public function createInventar()
