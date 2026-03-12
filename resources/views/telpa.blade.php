@@ -20,6 +20,11 @@
 
     <h2 style="color: #ffffff;">Telpas</h2>
 
+    <div class="table-controls">
+        <input class="table-search-input" type="text" placeholder="Meklēt...">
+        <span class="no-results-message" style="display:none; color:#f88;">Nav rezultātu.</span>
+    </div>
+
     @if($telpas->isEmpty())
         <p style="color: #ffffff;">Nav telpu.</p>
     @else
@@ -27,10 +32,10 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>Nosaukums</th>
-                        <th>Izmēri</th>
-                        <th>Numurs</th>
-                        <th>Stāvs</th>
+                        <th class="sortable">Nosaukums</th>
+                        <th class="sortable">Izmēri</th>
+                        <th class="sortable">Numurs</th>
+                        <th class="sortable">Stāvs</th>
                         <th>Darbības</th>
                     </tr>
                 </thead>

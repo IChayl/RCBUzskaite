@@ -20,34 +20,49 @@
 
     <h2 style="color: #ffffff;">Lietotāji</h2>
 
+    <div class="table-controls">
+        <input class="table-search-input" type="text" placeholder="Meklēt...">
+        <span class="no-results-message" style="display:none; color:#f88;">Nav rezultātu.</span>
+    </div>
+
     @if($lietotaji->isEmpty())
         <p style="color: #ffffff;">Nav lietotāju.</p>
     @else
-        <div style="display: flex; flex-wrap: wrap; gap: 16px;">
-        @foreach ($lietotaji as $item)
-            <div class="card mt-3 table-card" style="background: rgba(73, 7, 0, 0.55); color: #ffffff; width: 100%; max-width: 340px;">
-                <div class="card-body">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <div style="width: 50px; height: 50px; border-radius: 12px; overflow: hidden; background: rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center;">
-                            @if($item->avatar)
-                                <img src="{{ Storage::disk('public')->url($item->avatar) }}" alt="Avatar" style="width: 48px; height: 48px; object-fit: cover;">
-                            @else
-                                <span style="color: rgba(255,255,255,0.5); font-size: 20px;">👤</span>
-                            @endif
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div class="card-text" style="font-weight: 700; color: #f4f4f9;">{{ $item->lietotajvards }}</div>
-                            <div class="card-text" style="color: #d0d6ff; font-size: 0.9rem;">Admina tiesības: <span style="font-weight: 600;">{{ $item->admina_tiesibas ? 'Jā' : 'Nē' }}</span></div>
-                        </div>
-                    </div>
-                    <div class="auth-links" style="margin-top: 12px;">
-                        <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->lietotajs_id }}">Dzēst</a>
-                        <a href="/lietotajs/{{ $item->lietotajs_id }}/details" class="bloom-button sm">Detalizēta</a>
-                        <a href="/lietotajs/{{ $item->lietotajs_id }}/edit" class="bloom-button sm">Rediģēt</a>
-                    </div>
-                </div>
-            </div>
-        @endforeach
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th class="sortable">Lietotājvārds</th>
+                        <th class="sortable">Admina tiesības</th>
+                        <th>Avatar</th>
+                        <th>Darbības</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($lietotaji as $item)
+                        <tr>
+                            <td>{{ $item->lietotajvards }}</td>
+                            <td>{{ $item->admina_tiesibas ? 'Jā' : 'Nē' }}</td>
+                            <td>
+                                <div style="width: 36px; height: 36px; border-radius: 12px; overflow: hidden; background: rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center;">
+                                    @if($item->avatar)
+                                        <img src="{{ Storage::disk('public')->url($item->avatar) }}" alt="Avatar" style="width: 34px; height: 34px; object-fit: cover;">
+                                    @else
+                                        <span style="color: rgba(255,255,255,0.5); font-size: 18px;">👤</span>
+                                    @endif
+                                </div>
+                            </td>
+                            <td>
+                                <div class="actions">
+                                    <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->lietotajs_id }}">Dzēst</a>
+                                    <a href="/lietotajs/{{ $item->lietotajs_id }}/details" class="bloom-button sm">Detalizēta</a>
+                                    <a href="/lietotajs/{{ $item->lietotajs_id }}/edit" class="bloom-button sm">Rediģēt</a>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     @endif
 

@@ -20,6 +20,11 @@
 
     <h2 style="color: #ffffff;">Kustību veidi</h2>
 
+    <div class="table-controls">
+        <input class="table-search-input" type="text" placeholder="Meklēt...">
+        <span class="no-results-message" style="display:none; color:#f88;">Nav rezultātu.</span>
+    </div>
+
     @if($veidi->isEmpty())
         <p style="color: #ffffff;">Nav ierakstu.</p>
     @else
@@ -27,8 +32,8 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>Nosaukums</th>
-                        <th>Apraksts</th>
+                        <th class="sortable">Nosaukums</th>
+                        <th class="sortable">Apraksts</th>
                         <th>Darbības</th>
                     </tr>
                 </thead>

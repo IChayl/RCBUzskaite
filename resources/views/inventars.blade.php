@@ -11,6 +11,11 @@
     <hr>
     <h2 style="color: #ffffff;">Inventāri</h2>
 
+    <div class="table-controls">
+        <input class="table-search-input" type="text" placeholder="Meklēt...">
+        <span class="no-results-message" style="display:none; color:#f88;">Nav rezultātu.</span>
+    </div>
+
     <div style="color: #ffffff; margin-top: 20px;">
         @if(session('success'))
             <div id="flash-message" style="background: #490700; color: #90EE90; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #90EE90; cursor: pointer;">
@@ -26,12 +31,12 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>Nosaukums</th>
-                        <th>Apraksts</th>
-                        <th>Statuss</th>
-                        <th>Kategorija</th>
-                        <th>Telpa</th>
-                        <th>Atbildīgais</th>
+                        <th class="sortable">Nosaukums</th>
+                        <th class="sortable">Apraksts</th>
+                        <th class="sortable">Statuss</th>
+                        <th class="sortable">Kategorija</th>
+                        <th class="sortable">Telpa</th>
+                        <th class="sortable">Atbildīgais</th>
                         <th>Darbības</th>
                     </tr>
                 </thead>

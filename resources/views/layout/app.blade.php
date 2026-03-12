@@ -191,6 +191,48 @@
             align-items: center;
         }
 
+        /* Search & sort controls */
+        .table-controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .table-search-input {
+            padding: 10px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.06);
+            color: #ffffff;
+            min-width: 240px;
+        }
+        .table-search-input:focus {
+            outline: 2px solid rgba(144, 238, 144, 0.7);
+        }
+        .no-results-message {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .data-table th.sortable {
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+        .data-table th.sortable::after {
+            content: "⇅";
+            font-size: 0.8rem;
+            margin-left: 8px;
+            opacity: 0.6;
+        }
+        .data-table th.sortable.sorted-asc::after {
+            content: "↑";
+        }
+        .data-table th.sortable.sorted-desc::after {
+            content: "↓";
+        }
+
         /* Card-based list styling (table-like cards) */
         .card-table {
             display: grid;
@@ -323,6 +365,82 @@
     <footer class="container" style="margin-top:1.25rem;">
         @include('inc.footer')
     </footer>
+
+    <script>
+        (function(){
+            const normalize = (str) => (str || '').toString().trim().toLowerCase();
+
+            const applyFilter = (table, query, noResultsEl) => {
+                const rows = Array.from(table.tBodies[0].rows);
+                const matched = rows.filter(row => {
+                    const text = Array.from(row.cells)
+                        .map(cell => cell.textContent)
+                        .join(' ');
+                    return normalize(text).includes(normalize(query));
+                });
+
+                rows.forEach(row => row.style.display = 'none');
+                matched.forEach(row => row.style.display = 'table-row');
+
+                if (noResultsEl) {
+                    noResultsEl.style.display = matched.length === 0 ? 'inline' : 'none';
+                }
+
+                return matched;
+            };
+
+            const sortTable = (table, columnIndex, asc) => {
+                const tbody = table.tBodies[0];
+                const rows = Array.from(tbody.rows);
+                const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+
+                rows.sort((a, b) => {
+                    const aText = normalize(a.cells[columnIndex]?.textContent ?? '');
+                    const bText = normalize(b.cells[columnIndex]?.textContent ?? '');
+                    const result = collator.compare(aText, bText);
+                    return asc ? result : -result;
+                });
+
+                rows.forEach(row => tbody.appendChild(row));
+            };
+
+            const initTableControls = (container) => {
+                const table = container.querySelector('table.data-table');
+                if (!table) return;
+
+                const searchInput = container.querySelector('.table-search-input');
+                const noResults = container.querySelector('.no-results-message');
+
+                if (searchInput) {
+                    searchInput.addEventListener('input', () => {
+                        applyFilter(table, searchInput.value, noResults);
+                    });
+                }
+
+                const headers = Array.from(table.querySelectorAll('th.sortable'));
+                headers.forEach((th, index) => {
+                    th.addEventListener('click', () => {
+                        const current = th.classList.contains('sorted-asc') ? 'asc' : th.classList.contains('sorted-desc') ? 'desc' : null;
+                        const nextAsc = current !== 'asc';
+
+                        headers.forEach(h => h.classList.remove('sorted-asc', 'sorted-desc'));
+                        th.classList.add(nextAsc ? 'sorted-asc' : 'sorted-desc');
+
+                        sortTable(table, index, nextAsc);
+
+                        // Re-apply filter after sort so hidden rows stay hidden.
+                        if (searchInput && searchInput.value.trim()) {
+                            applyFilter(table, searchInput.value, noResults);
+                        }
+                    });
+                });
+            };
+
+            document.addEventListener('DOMContentLoaded', () => {
+                document.querySelectorAll('.table-controls').forEach(initTableControls);
+            });
+        })();
+    </script>
 </body>
 </html>
 
