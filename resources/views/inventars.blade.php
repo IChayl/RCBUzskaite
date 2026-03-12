@@ -11,10 +11,12 @@
     <hr>
     <h2 style="color: #ffffff;">Inventāri</h2>
 
-    <div class="table-controls">
-        <input class="table-search-input" type="text" placeholder="Meklēt...">
+    <form method="GET" class="table-controls">
+        <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
+        <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
+        <a href="{{ url('/inventars') }}" class="bloom-button sm" style="height: 36px;">Notīrīt</a>
         <span class="no-results-message" style="display:none; color:#f88;">Nav rezultātu.</span>
-    </div>
+    </form>
 
     <div style="color: #ffffff; margin-top: 20px;">
         @if(session('success'))
@@ -31,12 +33,27 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th class="sortable">Nosaukums</th>
-                        <th class="sortable">Apraksts</th>
-                        <th class="sortable">Statuss</th>
-                        <th class="sortable">Kategorija</th>
-                        <th class="sortable">Telpa</th>
-                        <th class="sortable">Atbildīgais</th>
+                        <th class="sortable">
+                            @php
+                                $dir = request('sort') === 'nosaukums' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'nosaukums', 'direction' => $dir]) }}">Nosaukums</a>
+                        </th>
+                        <th class="sortable">
+                            @php
+                                $dir = request('sort') === 'apraksts' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'apraksts', 'direction' => $dir]) }}">Apraksts</a>
+                        </th>
+                        <th class="sortable">
+                            @php
+                                $dir = request('sort') === 'statuss' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'statuss', 'direction' => $dir]) }}">Statuss</a>
+                        </th>
+                        <th>Kategorija</th>
+                        <th>Telpa</th>
+                        <th>Atbildīgais</th>
                         <th>Darbības</th>
                     </tr>
                 </thead>

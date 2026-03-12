@@ -11,10 +11,39 @@ use Illuminate\Support\Facades\DB;
 
 class InventarsController extends Controller
 {
-    public function showAllInventars()
+    public function showAllInventars(Request $request)
     {
-        $inventari = Inventar::with(['kategorija','telpa','atbildigais'])->orderBy('inventars_id','asc')->get();
-        return view('inventars', ['inventari' => $inventari]);
+        $q = trim($request->input('q', ''));
+        $sort = $request->input('sort', 'inventars_id');
+        $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        $allowedSort = ['inventars_id', 'nosaukums', 'apraksts', 'statuss'];
+        if (!in_array($sort, $allowedSort, true)) {
+            $sort = 'inventars_id';
+        }
+
+        $query = Inventar::with(['kategorija', 'telpa', 'atbildigais']);
+
+        if ($q !== '') {
+            $query->where(function ($query) use ($q) {
+                $query->where('nosaukums', 'like', "%{$q}%")
+                    ->orWhere('apraksts', 'like', "%{$q}%")
+                    ->orWhere('statuss', 'like', "%{$q}%")
+                    ->orWhereHas('kategorija', function ($q2) use ($q) {
+                        $q2->where('nosaukums', 'like', "%{$q}%");
+                    })
+                    ->orWhereHas('telpa', function ($q2) use ($q) {
+                        $q2->where('nosaukums', 'like', "%{$q}%");
+                    })
+                    ->orWhereHas('atbildigais', function ($q2) use ($q) {
+                        $q2->where('lietotajvards', 'like', "%{$q}%");
+                    });
+            });
+        }
+
+        $inventari = $query->orderBy($sort, $direction)->get();
+
+        return view('inventars', compact('inventari', 'sort', 'direction', 'q'));
     }
 
     public function createInventar()

@@ -11,10 +11,37 @@ use Illuminate\Support\Facades\DB;
 
 class InventaraKustibaController extends Controller
 {
-    public function showAllKustiba()
+    public function showAllKustiba(Request $request)
     {
-        $kustibas = InventaraKustiba::with(['inventars','lietotajs','kustibasVeids'])->orderBy('kustiba_id','asc')->get();
-        return view('inventara_kustiba', ['kustibas' => $kustibas]);
+        $q = trim($request->input('q', ''));
+        $sort = $request->input('sort', 'kustiba_id');
+        $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        $allowedSort = ['kustiba_id', 'datums'];
+        if (!in_array($sort, $allowedSort, true)) {
+            $sort = 'kustiba_id';
+        }
+
+        $query = InventaraKustiba::with(['inventars', 'lietotajs', 'kustibasVeids']);
+
+        if ($q !== '') {
+            $query->where(function ($query) use ($q) {
+                $query->where('datums', 'like', "%{$q}%")
+                    ->orWhereHas('inventars', function ($q2) use ($q) {
+                        $q2->where('nosaukums', 'like', "%{$q}%");
+                    })
+                    ->orWhereHas('kustibasVeids', function ($q2) use ($q) {
+                        $q2->where('nosaukums', 'like', "%{$q}%");
+                    })
+                    ->orWhereHas('lietotajs', function ($q2) use ($q) {
+                        $q2->where('lietotajvards', 'like', "%{$q}%");
+                    });
+            });
+        }
+
+        $kustibas = $query->orderBy($sort, $direction)->get();
+
+        return view('inventara_kustiba', compact('kustibas', 'sort', 'direction', 'q'));
     }
 
     public function createKustiba()

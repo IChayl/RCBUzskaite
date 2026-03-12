@@ -20,10 +20,12 @@
 
     <h2 style="color: #ffffff;">Kustību veidi</h2>
 
-    <div class="table-controls">
-        <input class="table-search-input" type="text" placeholder="Meklēt...">
+    <form method="GET" class="table-controls">
+        <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
+        <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
+        <a href="{{ url('/kustibas_veidi') }}" class="bloom-button sm" style="height: 36px;">Notīrīt</a>
         <span class="no-results-message" style="display:none; color:#f88;">Nav rezultātu.</span>
-    </div>
+    </form>
 
     @if($veidi->isEmpty())
         <p style="color: #ffffff;">Nav ierakstu.</p>
@@ -32,8 +34,18 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th class="sortable">Nosaukums</th>
-                        <th class="sortable">Apraksts</th>
+                        <th class="sortable">
+                            @php
+                                $dir = request('sort') === 'nosaukums' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'nosaukums', 'direction' => $dir]) }}">Nosaukums</a>
+                        </th>
+                        <th class="sortable">
+                            @php
+                                $dir = request('sort') === 'apraksts' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'apraksts', 'direction' => $dir]) }}">Apraksts</a>
+                        </th>
                         <th>Darbības</th>
                     </tr>
                 </thead>

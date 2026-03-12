@@ -11,11 +11,29 @@ class KategorijaController extends Controller
 {
 
 // Rāda visu kategoriju sarakstu
-   public function showAllKategorija()
+   public function showAllKategorija(Request $request)
     {
-     $kategorija= new KategorijaModel();
-     //dd($kategorija->all());
-         return view('kategorija', ['kategorija' => $kategorija->orderBy('kategorija_id', 'asc')->get()]);
+        $q = trim($request->input('q', ''));
+        $sort = $request->input('sort', 'kategorija_id');
+        $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        $allowedSort = ['kategorija_id', 'nosaukums', 'apraksts'];
+        if (!in_array($sort, $allowedSort, true)) {
+            $sort = 'kategorija_id';
+        }
+
+        $query = KategorijaModel::query();
+
+        if ($q !== '') {
+            $query->where(function ($query) use ($q) {
+                $query->where('nosaukums', 'like', "%{$q}%")
+                    ->orWhere('apraksts', 'like', "%{$q}%");
+            });
+        }
+
+        $kategorija = $query->orderBy($sort, $direction)->get();
+
+        return view('kategorija', compact('kategorija', 'sort', 'direction', 'q'));
     }
 
     

@@ -8,10 +8,28 @@ use Illuminate\Support\Facades\DB;
 
 class KustibasVeidiController extends Controller
 {
-    public function showAll()
+    public function showAll(Request $request)
     {
-        $veidi = KustibasVeidi::orderBy('kustibas_veids_id','asc')->get();
-        return view('kustibas_veidi', ['veidi' => $veidi]);
+        $q = trim($request->input('q', ''));
+        $sort = $request->input('sort', 'kustibas_veids_id');
+        $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        $allowedSort = ['kustibas_veids_id', 'nosaukums', 'apraksts'];
+        if (!in_array($sort, $allowedSort, true)) {
+            $sort = 'kustibas_veids_id';
+        }
+
+        $query = KustibasVeidi::query();
+
+        if ($q !== '') {
+            $query->where(function ($query) use ($q) {
+                $query->where('nosaukums', 'like', "%{$q}%")
+                    ->orWhere('apraksts', 'like', "%{$q}%");
+            });
+        }
+
+        $veidi = $query->orderBy($sort, $direction)->get();
+        return view('kustibas_veidi', compact('veidi', 'sort', 'direction', 'q'));
     }
 
     public function create()

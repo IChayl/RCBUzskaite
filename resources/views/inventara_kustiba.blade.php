@@ -11,10 +11,12 @@
     <hr>
     <h2 style="color: #ffffff;">Inventāra kustība</h2>
 
-    <div class="table-controls">
-        <input class="table-search-input" type="text" placeholder="Meklēt...">
+    <form method="GET" class="table-controls">
+        <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
+        <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
+        <a href="{{ url('/inventara_kustiba') }}" class="bloom-button sm" style="height: 36px;">Notīrīt</a>
         <span class="no-results-message" style="display:none; color:#f88;">Nav rezultātu.</span>
-    </div>
+    </form>
 
     <div style="color: #ffffff; margin-top: 20px;">
         @if(session('success'))
@@ -31,10 +33,15 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th class="sortable">Datums</th>
-                        <th class="sortable">Inventārs</th>
-                        <th class="sortable">Kustības veids</th>
-                        <th class="sortable">Atbildīgais</th>
+                        <th class="sortable">
+                            @php
+                                $dir = request('sort') === 'datums' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'datums', 'direction' => $dir]) }}">Datums</a>
+                        </th>
+                        <th>Inventārs</th>
+                        <th>Kustības veids</th>
+                        <th>Atbildīgais</th>
                         <th>Darbības</th>
                     </tr>
                 </thead>

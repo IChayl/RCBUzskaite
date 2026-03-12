@@ -9,10 +9,31 @@ use Illuminate\Support\Facades\DB;
 class TelpaController extends Controller
 {
     // Rāda visu telpu sarakstu
-    public function showAllTelpa()
+    public function showAllTelpa(Request $request)
     {
-        $t = new Telpa();
-        return view('telpa', ['telpas' => $t->orderBy('telpas_id','asc')->get()]);
+        $q = trim($request->input('q', ''));
+        $sort = $request->input('sort', 'telpas_id');
+        $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        $allowedSort = ['telpas_id', 'nosaukums', 'izmeri', 'numurs', 'stavs'];
+        if (!in_array($sort, $allowedSort, true)) {
+            $sort = 'telpas_id';
+        }
+
+        $query = Telpa::query();
+
+        if ($q !== '') {
+            $query->where(function ($query) use ($q) {
+                $query->where('nosaukums', 'like', "%{$q}%")
+                    ->orWhere('izmeri', 'like', "%{$q}%")
+                    ->orWhere('numurs', 'like', "%{$q}%")
+                    ->orWhere('stavs', 'like', "%{$q}%");
+            });
+        }
+
+        $telpas = $query->orderBy($sort, $direction)->get();
+
+        return view('telpa', compact('telpas', 'sort', 'direction', 'q'));
     }
 
     // forma jaunas telpas izveidei
