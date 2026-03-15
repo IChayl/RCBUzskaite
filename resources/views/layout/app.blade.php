@@ -270,6 +270,15 @@
             cursor: pointer;
             position: relative;
             user-select: none;
+            color: #FFFFFF;
+        }
+        .data-table th.sortable a {
+            color: #FFFFFF;
+            text-decoration: none;
+        }
+        .data-table th.sortable:hover a {
+            color: #FFFFFF;
+            text-decoration: underline;
         }
         .data-table th.sortable::after {
             content: "⇅";
