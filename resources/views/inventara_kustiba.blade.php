@@ -98,9 +98,11 @@
                             <td>{{ optional($item->lietotajs)->lietotajvards ?? ('ID: '.$item->atbildigais_lietotajs_id) }}</td>
                             <td>
                                 <div class="actions">
-                                    <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->kustiba_id }}">Dzēst</a>
+                                    @if(Auth::user()->admina_tiesibas)
+                                        <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->kustiba_id }}">Dzēst</a>
+                                        <a href="/inventara_kustiba/{{ $item->kustiba_id }}/edit" class="bloom-button sm">Rediģēt</a>
+                                    @endif
                                     <a href="/inventara_kustiba/{{ $item->kustiba_id }}/details" class="bloom-button sm">Detalizēta</a>
-                                    <a href="/inventara_kustiba/{{ $item->kustiba_id }}/edit" class="bloom-button sm">Rediģēt</a>
                                 </div>
                             </td>
                         </tr>

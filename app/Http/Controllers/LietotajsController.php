@@ -16,11 +16,17 @@ class LietotajsController extends Controller
 
     public function createLietotajs()
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         return view('createLietotajs');
     }
 
     public function LietotajsSubmit(Request $req)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $req->validate([
             'lietotajvards' => 'required|string|max:255',
             'parole' => 'required|string|max:255',
@@ -61,12 +67,18 @@ class LietotajsController extends Controller
 
     public function LietotajsEdit($id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $u = Lietotajs::find($id);
         return view('editLietotajs', ['lietotajs' => $u]);
     }
 
     public function editSubmit(Request $req, $id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $req->validate([
             'lietotajvards' => 'required|string|max:255',
             'parole' => 'required|string|max:255',
@@ -102,6 +114,9 @@ class LietotajsController extends Controller
 
     public function LietotajsDelete($id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         DB::table('lietotajs')->where('lietotajs_id',$id)->delete();
         return redirect('/lietotajs')->with('success','Ieraksts dzēsts');
     }

@@ -160,6 +160,9 @@ class InventaraKustibaController extends Controller
 
     public function KustibaEdit($id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $i = InventaraKustiba::find($id);
         $inventari = Inventar::orderBy('inventars_id','asc')->get();
         $kustibasVeidi = KustibasVeidi::orderBy('kustibas_veids_id','asc')->get();
@@ -170,6 +173,9 @@ class InventaraKustibaController extends Controller
 
     public function editSubmit(Request $req, $id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $data = $req->validate([
             'datums' => 'required|date',
             'inventars_id' => 'required|integer|exists:inventars,inventars_id',
@@ -196,6 +202,9 @@ class InventaraKustibaController extends Controller
 
     public function KustibaDelete($id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         DB::table('inventara_kustiba')->where('kustiba_id',$id)->delete();
         return redirect('/inventara_kustiba')->with('success','Ieraksts dzēsts');
     }

@@ -51,11 +51,17 @@ class KustibasVeidiController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         return view('createKustibasVeidi');
     }
 
     public function store(Request $req)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $data = $req->validate([
             'nosaukums' => 'required|string|max:50',
             'apraksts' => 'nullable|string|max:200',
@@ -77,12 +83,18 @@ class KustibasVeidiController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $veids = KustibasVeidi::find($id);
         return view('editKustibasVeidi', ['veids' => $veids]);
     }
 
     public function update(Request $req, $id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $data = $req->validate([
             'nosaukums' => 'required|string|max:50',
             'apraksts' => 'nullable|string|max:200',
@@ -98,6 +110,9 @@ class KustibasVeidiController extends Controller
 
     public function delete($id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         DB::table('kustibas_veidi')->where('kustibas_veids_id', $id)->delete();
         return redirect('/kustibas_veidi')->with('success','Ieraksts dzēsts');
     }

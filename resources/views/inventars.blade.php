@@ -5,7 +5,11 @@
 
     <div class="auth-links">
         <a href="/">Atpakaļ uz sākumlapu</a>
-        <a href="/inventars/create">Jauns inventārs</a>
+        @if(Auth::user()->admina_tiesibas)
+            <a href="/inventars/create">Jauns inventārs</a>
+        @else
+            <a href="/inventars/create" class="bloom-button sm">Jauns inventārs</a>
+        @endif
         <button type="button" class="bloom-button sm" onclick="window.print()">Printēt</button>
     </div>
 
@@ -99,9 +103,11 @@
                             <td>{{ optional($item->atbildigais)->lietotajvards ?? ('ID: '.$item->atbildigais_id) }}</td>
                             <td>
                                 <div class="actions">
-                                    <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->inventars_id }}">Dzēst</a>
+                                    @if(Auth::user()->admina_tiesibas)
+                                        <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->inventars_id }}">Dzēst</a>
+                                        <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm">Rediģēt</a>
+                                    @endif
                                     <a href="/inventars/{{ $item->inventars_id }}/details" class="bloom-button sm">Detalizēta</a>
-                                    <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm">Rediģēt</a>
                                 </div>
                             </td>
                         </tr>

@@ -281,16 +281,18 @@
             text-decoration: underline;
         }
         .data-table th.sortable::after {
-            content: "⇅";
-            font-size: 0.8rem;
-            margin-left: 8px;
-            opacity: 0.6;
+            content: "▾";
+            font-size: 0.62rem;
+            margin-left: 6px;
+            opacity: 0.65;
+            line-height: 1;
+            vertical-align: middle;
         }
         .data-table th.sortable.sorted-asc::after {
-            content: "↑";
+            content: "▴";
         }
         .data-table th.sortable.sorted-desc::after {
-            content: "↓";
+            content: "▾";
         }
         
         /* Pagination */
@@ -426,6 +428,18 @@
             .card-table-row {
                 grid-template-columns: 1.5fr 1fr;
             }
+        }
+        @media print {
+            body, html { background: #fff !important; color: #000 !important; }
+            .page-shapes, header, footer, .auth-links a, .bloom-button, .btn { display: none !important; }
+            .card-surface { border: none !important; box-shadow: none !important; background: transparent !important; }
+            .data-table, .data-table th, .data-table td { color: #000 !important; border-color: #ccc !important; }
+            .data-table th.sortable::after { content: '' !important; }
+            .no-results-message { display: none !important; }
+            * { text-shadow: none !important; box-shadow: none !important; filter: none !important; }
+            .container { padding: 0 !important; margin: 0 !important; }
+            main { padding: 0 !important; }
+            .card-surface { margin: 0 !important; border: 1px solid #ccc !important; border-radius: 0 !important; }
         }
     </style>
 </head>

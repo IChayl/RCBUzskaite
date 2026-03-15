@@ -139,6 +139,9 @@ class InventarsController extends Controller
 
     public function InventarEdit($id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $i = Inventar::find($id);
         $telpas = Telpa::orderBy('telpas_id','asc')->get();
         $kategorijas = KategorijaModel::orderBy('kategorija_id','asc')->get();
@@ -148,6 +151,9 @@ class InventarsController extends Controller
 
     public function editSubmit(Request $req, $id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $data = $req->validate([
             'nosaukums' => 'required|string|max:30',
             'apraksts' => 'nullable|string|max:200',
@@ -175,6 +181,9 @@ class InventarsController extends Controller
 
     public function InventarDelete($id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         DB::table('inventars')->where('inventars_id',$id)->delete();
         return redirect('/inventars')->with('success','Ieraksts dzēsts');
     }

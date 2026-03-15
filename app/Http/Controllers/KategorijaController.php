@@ -58,14 +58,20 @@ class KategorijaController extends Controller
      
     public function createKategorija()
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         return view('createKategorija');
     }
 
-   
+    
      //Saglabā jaunu kategoriju datubāzē.
      
  public function KatSubmit(Request $Kategorija)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $kategorija = new KategorijaModel();
         $kategorija->nosaukums = $Kategorija->input('nosaukums');
         $kategorija->apraksts = $Kategorija->input('apraksts');
@@ -84,15 +90,18 @@ class KategorijaController extends Controller
 
     public function KatEdit($id)
     {
-        // use the Eloquent model so the custom primary key is respected
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $kategorija = KategorijaModel::find($id);
         return view('editKategorija', ['kategorija' => $kategorija]);
     }
 
     public function editSubmit(Request $dati, $id)
     {
-    
-
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         DB::table('kategorija')
             ->where('kategorija_id', $id)
             ->update([
@@ -105,6 +114,9 @@ class KategorijaController extends Controller
 
      public function KatDelete($id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         DB::table('kategorija')->where('kategorija_id', $id)->delete();
         return redirect('/kategorija')->with('success', 'Ieraksts dzēsts');
     }

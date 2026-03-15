@@ -5,7 +5,11 @@
 
     <div class="auth-links">
         <a href="/">Atpakaļ uz sākumlapu</a>
-        <a href="/kustibas_veidi/create">Jauns kustības veids</a>        <button type="button" class="bloom-button sm" onclick="window.print()">Printēt</button>    </div>
+        @if(Auth::user()->admina_tiesibas)
+            <a href="/kustibas_veidi/create">Jauns kustības veids</a>
+        @endif
+        <button type="button" class="bloom-button sm" onclick="window.print()">Printēt</button>
+    </div>
 
     <hr>
 
@@ -65,9 +69,11 @@
                             <td>{{ $item->apraksts ?? '-' }}</td>
                             <td>
                                 <div class="actions">
-                                    <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->kustibas_veids_id }}">Dzēst</a>
+                                    @if(Auth::user()->admina_tiesibas)
+                                        <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->kustibas_veids_id }}">Dzēst</a>
+                                        <a href="/kustibas_veidi/{{ $item->kustibas_veids_id }}/edit" class="bloom-button sm">Rediģēt</a>
+                                    @endif
                                     <a href="/kustibas_veidi/{{ $item->kustibas_veids_id }}/details" class="bloom-button sm">Detalizēta</a>
-                                    <a href="/kustibas_veidi/{{ $item->kustibas_veids_id }}/edit" class="bloom-button sm">Rediģēt</a>
                                 </div>
                             </td>
                         </tr>

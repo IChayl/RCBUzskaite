@@ -59,12 +59,18 @@ class TelpaController extends Controller
     // forma jaunas telpas izveidei
     public function createTelpa()
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         return view('createTelpa');
     }
 
     // saglabā jaunu ierakstu
     public function TelpaSubmit(Request $req)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $data = $req->validate([
             'nosaukums' => 'required|string|max:50',
             'izmeri' => 'nullable|string|max:10',
@@ -91,12 +97,18 @@ class TelpaController extends Controller
 
     public function TelpaEdit($id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $t = Telpa::find($id);
         return view('editTelpa', ['telpa' => $t]);
     }
 
     public function editSubmit(Request $req, $id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         $data = $req->validate([
             'nosaukums' => 'required|string|max:50',
             'izmeri' => 'nullable|string|max:10',
@@ -118,6 +130,9 @@ class TelpaController extends Controller
 
     public function TelpaDelete($id)
     {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
         DB::table('telpa')->where('telpas_id',$id)->delete();
         return redirect('/telpa')->with('success','Ieraksts dzēsts');
     }

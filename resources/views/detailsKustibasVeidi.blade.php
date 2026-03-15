@@ -4,7 +4,9 @@
     <p style="color: #ffffff;">Visi dati</p>
     <div class="auth-links">
         <a href="/kustibas_veidi">Atpakaļ uz veidiem</a>
-        <a href="/kustibas_veidi/{{ $veids->kustibas_veids_id }}/edit" class="bloom-button sm">Rediģēt</a>
+        @if(Auth::user()->admina_tiesibas)
+            <a href="/kustibas_veidi/{{ $veids->kustibas_veids_id }}/edit" class="bloom-button sm">Rediģēt</a>
+        @endif
     </div>
 
     <hr>
