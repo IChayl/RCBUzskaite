@@ -23,12 +23,12 @@ class InventaraKustibaController extends Controller
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
         // Drošība: atļautās kolonnas, pēc kurām var kārtot
-        $allowedSort = ['kustiba_id', 'datums', 'inventars', 'kustibas_veids', 'lietotajs'];
+        $allowedSort = ['kustiba_id', 'datums', 'inventars', 'kustibas_veids', 'lietotajs', 'veca_telpa', 'jauna_telpa'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'kustiba_id';
         }
 
-        $allowedColumns = ['all', 'datums', 'inventars', 'kustibas_veids', 'lietotajs'];
+        $allowedColumns = ['all', 'datums', 'inventars', 'kustibas_veids', 'lietotajs', 'veca_telpa', 'jauna_telpa'];
         if (!in_array($column, $allowedColumns, true)) {
             $column = 'all';
         }
@@ -45,9 +45,17 @@ class InventaraKustibaController extends Controller
                         ->orWhereHas('kustibasVeids', function ($q2) use ($q) {
                             $q2->where('nosaukums', 'like', "%{$q}%");
                         })
-                        ->orWhereHas('lietotajs', function ($q2) use ($q) {
+                                ->orWhereHas('lietotajs', function ($q2) use ($q) {
                             $q2->where('lietotajvards', 'like', "%{$q}%");
-                        });
+                        })
+                        ->orWhereHas('vecaTelpa', function ($q2) use ($q) {
+                            $q2->where('nosaukums', 'like', "%{$q}%");
+                        })
+                        ->orWhereHas('jaunaTelpa', function ($q2) use ($q) {
+                            $q2->where('nosaukums', 'like', "%{$q}%");
+                        })
+                        ->orWhere('piezimes', 'like', "%{$q}%")
+                        ->orWhere('dokuments', 'like', "%{$q}%");
                 });
             } elseif ($column === 'datums') {
                 $query->where('datums', 'like', "%{$q}%");
@@ -63,6 +71,18 @@ class InventaraKustibaController extends Controller
                 $query->whereHas('lietotajs', function ($q2) use ($q) {
                     $q2->where('lietotajvards', 'like', "%{$q}%");
                 });
+            } elseif ($column === 'veca_telpa') {
+                $query->whereHas('vecaTelpa', function ($q2) use ($q) {
+                    $q2->where('nosaukums', 'like', "%{$q}%");
+                });
+            } elseif ($column === 'jauna_telpa') {
+                $query->whereHas('jaunaTelpa', function ($q2) use ($q) {
+                    $q2->where('nosaukums', 'like', "%{$q}%");
+                });
+            } elseif ($column === 'piezimes') {
+                $query->where('piezimes', 'like', "%{$q}%");
+            } elseif ($column === 'dokuments') {
+                $query->where('dokuments', 'like', "%{$q}%");
             }
         }
 
@@ -78,6 +98,14 @@ class InventaraKustibaController extends Controller
         } elseif ($sort === 'lietotajs') {
             $query->leftJoin('lietotajs', 'inventara_kustiba.atbildigais_lietotajs_id', '=', 'lietotajs.lietotajs_id')
                 ->orderBy('lietotajs.lietotajvards', $direction)
+                ->select('inventara_kustiba.*');
+        } elseif ($sort === 'veca_telpa') {
+            $query->leftJoin('telpa as veca', 'inventara_kustiba.veca_telpa_id', '=', 'veca.telpas_id')
+                ->orderBy('veca.nosaukums', $direction)
+                ->select('inventara_kustiba.*');
+        } elseif ($sort === 'jauna_telpa') {
+            $query->leftJoin('telpa as jauna', 'inventara_kustiba.jauna_telpa_id', '=', 'jauna.telpas_id')
+                ->orderBy('jauna.nosaukums', $direction)
                 ->select('inventara_kustiba.*');
         } else {
             $query->orderBy($sort, $direction);

@@ -22,13 +22,13 @@ class InventarsController extends Controller
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
         // Atļautās kolonnas kārtošanai
-        $allowedSort = ['inventars_id', 'nosaukums', 'apraksts', 'statuss', 'kategorija', 'telpa', 'atbildigais'];
+        $allowedSort = ['inventars_id', 'nosaukums', 'apraksts', 'statuss', 'inventara_numurs', 'iegades_datums', 'kategorija', 'telpa', 'atbildigais'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'inventars_id';
         }
 
         // Atļautās kolonnas meklēšanai
-        $allowedColumns = ['all', 'nosaukums', 'apraksts', 'statuss', 'kategorija', 'telpa', 'atbildigais'];
+        $allowedColumns = ['all', 'nosaukums', 'apraksts', 'statuss', 'inventara_numurs', 'iegades_datums', 'kategorija', 'telpa', 'atbildigais'];
         if (!in_array($column, $allowedColumns, true)) {
             $column = 'all';
         }
@@ -51,9 +51,11 @@ class InventarsController extends Controller
                         })
                         ->orWhereHas('atbildigais', function ($q2) use ($q) {
                             $q2->where('lietotajvards', 'like', "%{$q}%");
-                        });
+                        })
+                        ->orWhere('inventara_numurs', 'like', "%{$q}%")
+                        ->orWhere('iegades_datums', 'like', "%{$q}%");
                 });
-            } elseif (in_array($column, ['nosaukums', 'apraksts', 'statuss'], true)) {
+            } elseif (in_array($column, ['nosaukums', 'apraksts', 'statuss', 'inventara_numurs', 'iegades_datums'], true)) {
                 $query->where($column, 'like', "%{$q}%");
             } elseif ($column === 'kategorija') {
                 $query->whereHas('kategorija', function ($q2) use ($q) {

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Inventar;
 use App\Models\KustibasVeidi;
 use App\Models\Lietotajs;
+use App\Models\Telpa;
 
 class InventaraKustiba extends Model
 {
@@ -28,5 +29,15 @@ class InventaraKustiba extends Model
     public function lietotajs()
     {
         return $this->belongsTo(Lietotajs::class, 'atbildigais_lietotajs_id', 'lietotajs_id');
+    }
+
+    public function vecaTelpa()
+    {
+        return $this->belongsTo(Telpa::class, 'veca_telpa_id', 'telpas_id');
+    }
+
+    public function jaunaTelpa()
+    {
+        return $this->belongsTo(Telpa::class, 'jauna_telpa_id', 'telpas_id');
     }
 }

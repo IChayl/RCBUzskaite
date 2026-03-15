@@ -22,6 +22,10 @@
                 <option value="inventars" {{ request('column') === 'inventars' ? 'selected' : '' }}>Inventārs</option>
                 <option value="kustibas_veids" {{ request('column') === 'kustibas_veids' ? 'selected' : '' }}>Kustības veids</option>
                 <option value="lietotajs" {{ request('column') === 'lietotajs' ? 'selected' : '' }}>Atbildīgais</option>
+                <option value="veca_telpa" {{ request('column') === 'veca_telpa' ? 'selected' : '' }}>Vecā telpa</option>
+                <option value="jauna_telpa" {{ request('column') === 'jauna_telpa' ? 'selected' : '' }}>Jaunā telpa</option>
+                <option value="piezimes" {{ request('column') === 'piezimes' ? 'selected' : '' }}>Piezīmes</option>
+                <option value="dokuments" {{ request('column') === 'dokuments' ? 'selected' : '' }}>Dokuments</option>
             </select>
         </label>
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
@@ -63,6 +67,20 @@
                             @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'kustibas_veids', 'direction' => $dir]) }}">Kustības veids</a>
                         </th>
+                        <th class="sortable {{ request('sort') === 'veca_telpa' ? 'sorted-'.request('direction','asc') : '' }}">
+                            @php
+                                $dir = request('sort') === 'veca_telpa' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'veca_telpa', 'direction' => $dir]) }}">Vecā telpa</a>
+                        </th>
+                        <th class="sortable {{ request('sort') === 'jauna_telpa' ? 'sorted-'.request('direction','asc') : '' }}">
+                            @php
+                                $dir = request('sort') === 'jauna_telpa' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'jauna_telpa', 'direction' => $dir]) }}">Jaunā telpa</a>
+                        </th>
+                        <th>Piezīmes</th>
+                        <th>Dokuments</th>
                         <th class="sortable {{ request('sort') === 'lietotajs' ? 'sorted-'.request('direction','asc') : '' }}">
                             @php
                                 $dir = request('sort') === 'lietotajs' && request('direction') === 'asc' ? 'desc' : 'asc';
@@ -78,6 +96,10 @@
                             <td>{{ $item->datums }}</td>
                             <td>{{ $item->inventars->nosaukums ?? ('ID: '.$item->inventars_id) }}</td>
                             <td>{{ optional($item->kustibasVeids)->nosaukums ?? ('ID: '.$item->kustibas_veids_id) }}</td>
+                            <td>{{ optional($item->vecaTelpa)->nosaukums ?? ('ID: '.$item->veca_telpa_id) }}</td>
+                            <td>{{ optional($item->jaunaTelpa)->nosaukums ?? ('ID: '.$item->jauna_telpa_id) }}</td>
+                            <td>{{ $item->piezimes ?? '-' }}</td>
+                            <td>{{ $item->dokuments ?? '-' }}</td>
                             <td>{{ optional($item->lietotajs)->lietotajvards ?? ('ID: '.$item->atbildigais_lietotajs_id) }}</td>
                             <td>
                                 <div class="actions">

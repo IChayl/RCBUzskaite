@@ -1,22 +1,19 @@
- @extends('layout.app')
+@extends('layout.app')
 
 @section('content')
     <p style="color: #ffffff;">Visi dati</p>
-<div class="auth-links">
-    <a href="/kategorija" >Atpakaļ uz Tabulu</a>
-</div>
-
-<hr>
-
-<h2 style="color: #ffffff;">Detalizēta informācija</h2>          
-             <div style="background: #490700; color: white; width: 200px;" class="card mt-3">
-        <div class="card-body">
-            <h5  class="card-title">Kategorija: {{$kategorija->nosaukums}}</h5>
-            <p class="card-text">Nosaukums: {{$kategorija->nosaukums }}</p>
-            <p class="card-text">Apraksts: {{$kategorija->apraksts }}</p>
-
-           
-        </div>
+    <div class="auth-links">
+        <a href="/kategorija">Atpakaļ uz kategorijām</a>
+        <a href="/kategorija/{{ $kategorija->kategorija_id }}/edit" class="bloom-button sm">Rediģēt</a>
     </div>
 
+    <hr>
+    <h2 style="color: #ffffff;">Kategorijas detaļas</h2>
+    <div class="card mt-3" style="background: rgba(73, 7, 0, 0.65); border: 1px solid rgba(255,255,255,0.2); color: #ffffff; max-width: 600px;">
+        <div class="card-body">
+            <h5 class="card-title">{{ $kategorija->nosaukums }} (ID: {{ $kategorija->kategorija_id }})</h5>
+            <p class="card-text"><strong>Nosaukums:</strong> {{ $kategorija->nosaukums }}</p>
+            <p class="card-text"><strong>Apraksts:</strong> {{ $kategorija->apraksts ?? '-' }}</p>
+        </div>
+    </div>
 @endsection
