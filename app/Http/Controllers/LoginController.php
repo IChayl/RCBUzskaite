@@ -41,7 +41,7 @@ class LoginController extends Controller
         // Still keep a small session helper for any non-Auth uses.
         Session::put('user_name', $user->lietotajvards);
 
-        return redirect('/')->with('success', 'Pieteikšanās veiksmīga');
+        return redirect('/home')->with('success', 'Pieteikšanās veiksmīga');
     }
 
     /**

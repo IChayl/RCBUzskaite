@@ -178,7 +178,7 @@
             </form>
 
             <div class="text-center mt-3">
-                <a href="/register">Izveidot kontu</a> · <a href="/">← Atpakaļ uz sākumlapu</a>
+
             </div>
         </div>
     </div>
