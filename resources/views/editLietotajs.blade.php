@@ -22,6 +22,30 @@
             <input type="password" class="form-control" id="parole" name="parole" value="{{ $lietotajs->parole }}" required>
         </div>
         <div class="mb-3">
+            <label for="vards" class="form-label">Vārds</label>
+            <input type="text" class="form-control" id="vards" name="vards" value="{{ $lietotajs->vards }}">
+        </div>
+        <div class="mb-3">
+            <label for="uzvards" class="form-label">Uzvārds</label>
+            <input type="text" class="form-control" id="uzvards" name="uzvards" value="{{ $lietotajs->uzvards }}">
+        </div>
+        <div class="mb-3">
+            <label for="epasts" class="form-label">E-pasts</label>
+            <input type="email" class="form-control" id="epasts" name="epasts" value="{{ $lietotajs->epasts }}">
+        </div>
+        <div class="mb-3">
+            <label for="telefons" class="form-label">Telefons</label>
+            <input type="text" class="form-control" id="telefons" name="telefons" value="{{ $lietotajs->telefons }}">
+        </div>
+        <div class="mb-3">
+            <label for="amats" class="form-label">Amats</label>
+            <input type="text" class="form-control" id="amats" name="amats" value="{{ $lietotajs->amats }}">
+        </div>
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" value="1" id="aktivs" name="aktivs" {{ $lietotajs->aktivs ? 'checked' : '' }}>
+            <label class="form-check-label" for="aktivs">Aktīvs</label>
+        </div>
+        <div class="mb-3">
             <label for="avatar" class="form-label">Profila attēls</label>
             <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">
             @if($lietotajs->avatar)

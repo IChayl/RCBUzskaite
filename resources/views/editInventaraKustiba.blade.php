@@ -27,6 +27,32 @@
             </select>
         </div>
         <div class="mb-3">
+            <label for="veca_telpa_id" class="form-label">Vecā telpa</label>
+            <select class="form-control" id="veca_telpa_id" name="veca_telpa_id">
+                <option value="">-- Nav --</option>
+                @foreach($telpas as $t)
+                    <option value="{{ $t->telpas_id }}" @if($kustiba->veca_telpa_id == $t->telpas_id) selected @endif>{{ $t->nosaukums }} (ID: {{ $t->telpas_id }})</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="jauna_telpa_id" class="form-label">Jaunā telpa</label>
+            <select class="form-control" id="jauna_telpa_id" name="jauna_telpa_id">
+                <option value="">-- Nav --</option>
+                @foreach($telpas as $t)
+                    <option value="{{ $t->telpas_id }}" @if($kustiba->jauna_telpa_id == $t->telpas_id) selected @endif>{{ $t->nosaukums }} (ID: {{ $t->telpas_id }})</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="piezimes" class="form-label">Piezīmes</label>
+            <input type="text" class="form-control" id="piezimes" name="piezimes" value="{{ $kustiba->piezimes }}">
+        </div>
+        <div class="mb-3">
+            <label for="dokuments" class="form-label">Dokuments</label>
+            <input type="text" class="form-control" id="dokuments" name="dokuments" value="{{ $kustiba->dokuments }}">
+        </div>
+        <div class="mb-3">
             <label for="kustibas_veids_id" class="form-label">Kustības veids</label>
             <select class="form-control" id="kustibas_veids_id" name="kustibas_veids_id">
                 <option value="">-- Izvēlieties kustības veidu --</option>

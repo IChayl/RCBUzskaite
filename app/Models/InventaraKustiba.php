@@ -13,7 +13,7 @@ class InventaraKustiba extends Model
     protected $primaryKey = 'kustiba_id';
     public $timestamps = false;
 
-    protected $fillable = ['datums', 'inventars_id', 'atbildigais_lietotajs_id', 'kustibas_veids_id'];
+    protected $fillable = ['datums', 'inventars_id', 'atbildigais_lietotajs_id', 'kustibas_veids_id', 'veca_telpa_id', 'jauna_telpa_id', 'piezimes', 'dokuments'];
 
     public function inventars()
     {

@@ -11,7 +11,7 @@ use App\Http\Controllers\TelpaController;
 
 // Public home page
 Route::get('/', function () {
-    return view('home');
+    return view('Login');
 });
 
 // Guest-only routes (redirect logged-in users away)

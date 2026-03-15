@@ -13,7 +13,7 @@ class Inventar extends Model
     protected $primaryKey = 'inventars_id';
     public $timestamps = false;
 
-    protected $fillable = ['nosaukums', 'apraksts', 'nolietojums', 'statuss', 'kategorija_id', 'telpas_id', 'atbildigais_id'];
+    protected $fillable = ['nosaukums', 'apraksts', 'statuss', 'kategorija_id', 'telpas_id', 'atbildigais_id', 'inventara_numurs', 'iegades_datums'];
 
     public function kategorija()
     {

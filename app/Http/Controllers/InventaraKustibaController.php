@@ -7,6 +7,7 @@ use App\Models\InventaraKustiba;
 use App\Models\Inventar;
 use App\Models\KustibasVeidi;
 use App\Models\Lietotajs;
+use App\Models\Telpa;
 use Illuminate\Support\Facades\DB;
 
 class InventaraKustibaController extends Controller
@@ -92,7 +93,8 @@ class InventaraKustibaController extends Controller
         $inventari = Inventar::orderBy('inventars_id','asc')->get();
         $kustibasVeidi = KustibasVeidi::orderBy('kustibas_veids_id','asc')->get();
         $lietotaji = Lietotajs::orderBy('lietotajs_id','asc')->get();
-        return view('createInventaraKustiba', ['inventari' => $inventari, 'kustibasVeidi' => $kustibasVeidi, 'lietotaji' => $lietotaji]);
+        $telpas = Telpa::orderBy('telpas_id','asc')->get();
+        return view('createInventaraKustiba', ['inventari' => $inventari, 'kustibasVeidi' => $kustibasVeidi, 'lietotaji' => $lietotaji, 'telpas' => $telpas]);
     }
 
     public function KustibaSubmit(Request $req)
@@ -102,6 +104,10 @@ class InventaraKustibaController extends Controller
             'inventars_id' => 'required|integer|exists:inventars,inventars_id',
             'kustibas_veids_id' => 'nullable|integer|exists:kustibas_veidi,kustibas_veids_id',
             'atbildigais_lietotajs_id' => 'required|integer|exists:lietotajs,lietotajs_id',
+            'veca_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
+            'jauna_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
+            'piezimes' => 'nullable|string|max:255',
+            'dokuments' => 'nullable|string|max:255',
         ]);
 
         $i = new InventaraKustiba();
@@ -109,6 +115,10 @@ class InventaraKustibaController extends Controller
         $i->inventars_id = $data['inventars_id'];
         $i->kustibas_veids_id = $data['kustibas_veids_id'] ?? null;
         $i->atbildigais_lietotajs_id = $data['atbildigais_lietotajs_id'];
+        $i->veca_telpa_id = $data['veca_telpa_id'] ?? null;
+        $i->jauna_telpa_id = $data['jauna_telpa_id'] ?? null;
+        $i->piezimes = $data['piezimes'] ?? null;
+        $i->dokuments = $data['dokuments'] ?? null;
         $i->save();
 
         return redirect()->to('/inventara_kustiba')->with('success','Ieraksts pievienots');
@@ -126,7 +136,8 @@ class InventaraKustibaController extends Controller
         $inventari = Inventar::orderBy('inventars_id','asc')->get();
         $kustibasVeidi = KustibasVeidi::orderBy('kustibas_veids_id','asc')->get();
         $lietotaji = Lietotajs::orderBy('lietotajs_id','asc')->get();
-        return view('editInventaraKustiba', ['kustiba' => $i, 'inventari' => $inventari, 'kustibasVeidi' => $kustibasVeidi, 'lietotaji' => $lietotaji]);
+        $telpas = Telpa::orderBy('telpas_id','asc')->get();
+        return view('editInventaraKustiba', ['kustiba' => $i, 'inventari' => $inventari, 'kustibasVeidi' => $kustibasVeidi, 'lietotaji' => $lietotaji, 'telpas' => $telpas]);
     }
 
     public function editSubmit(Request $req, $id)
@@ -136,6 +147,10 @@ class InventaraKustibaController extends Controller
             'inventars_id' => 'required|integer|exists:inventars,inventars_id',
             'kustibas_veids_id' => 'nullable|integer|exists:kustibas_veidi,kustibas_veids_id',
             'atbildigais_lietotajs_id' => 'required|integer|exists:lietotajs,lietotajs_id',
+            'veca_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
+            'jauna_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
+            'piezimes' => 'nullable|string|max:255',
+            'dokuments' => 'nullable|string|max:255',
         ]);
 
         DB::table('inventara_kustiba')->where('kustiba_id',$id)->update([
@@ -143,6 +158,10 @@ class InventaraKustibaController extends Controller
             'inventars_id' => $data['inventars_id'],
             'kustibas_veids_id' => $data['kustibas_veids_id'] ?? null,
             'atbildigais_lietotajs_id' => $data['atbildigais_lietotajs_id'],
+            'veca_telpa_id' => $data['veca_telpa_id'] ?? null,
+            'jauna_telpa_id' => $data['jauna_telpa_id'] ?? null,
+            'piezimes' => $data['piezimes'] ?? null,
+            'dokuments' => $data['dokuments'] ?? null,
         ]);
         return redirect()->to('/inventara_kustiba')->with('success','Ieraksts atjaunināts');
     }

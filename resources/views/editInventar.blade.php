@@ -26,6 +26,14 @@
             <input type="text" class="form-control" id="statuss" name="statuss" value="{{ $inventar->statuss }}">
         </div>
         <div class="mb-3">
+            <label for="inventara_numurs" class="form-label">Inventāra numurs</label>
+            <input type="text" class="form-control" id="inventara_numurs" name="inventara_numurs" value="{{ $inventar->inventara_numurs }}">
+        </div>
+        <div class="mb-3">
+            <label for="iegades_datums" class="form-label">Iegādes datums</label>
+            <input type="date" class="form-control" id="iegades_datums" name="iegades_datums" value="{{ $inventar->iegades_datums }}">
+        </div>
+        <div class="mb-3">
             <label for="kategorija_id" class="form-label">Kategorijas ID</label>
             <select class="form-control" id="kategorija_id" name="kategorija_id" required>
                 <option value="">-- Izvēlieties kategoriju --</option>

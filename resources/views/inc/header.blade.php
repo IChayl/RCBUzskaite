@@ -180,8 +180,6 @@
     @else
     <a href="/Login">Ielogoties</a>
     
-    <a href="/register">Reģistrēties</a>
-    
     @endif
   </div>
 </header>

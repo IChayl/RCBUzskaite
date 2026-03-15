@@ -25,12 +25,24 @@ class LietotajsController extends Controller
             'lietotajvards' => 'required|string|max:255',
             'parole' => 'required|string|max:255',
             'avatar' => 'nullable|image|max:2048',
+            'vards' => 'nullable|string|max:50',
+            'uzvards' => 'nullable|string|max:50',
+            'epasts' => 'nullable|email|max:100',
+            'telefons' => 'nullable|string|max:20',
+            'amats' => 'nullable|string|max:50',
+            'aktivs' => 'nullable|boolean',
         ]);
 
         $u = new Lietotajs();
         $u->lietotajvards = $req->input('lietotajvards');
         $u->parole = $req->input('parole');
         $u->admina_tiesibas = $req->input('admina_tiesibas') ? 1 : 0;
+        $u->vards = $req->input('vards');
+        $u->uzvards = $req->input('uzvards');
+        $u->epasts = $req->input('epasts');
+        $u->telefons = $req->input('telefons');
+        $u->amats = $req->input('amats');
+        $u->aktivs = $req->input('aktivs') ? 1 : 0;
 
         if ($req->hasFile('avatar')) {
             $path = $req->file('avatar')->store('avatars', 'public');
@@ -59,12 +71,24 @@ class LietotajsController extends Controller
             'lietotajvards' => 'required|string|max:255',
             'parole' => 'required|string|max:255',
             'avatar' => 'nullable|image|max:2048',
+            'vards' => 'nullable|string|max:50',
+            'uzvards' => 'nullable|string|max:50',
+            'epasts' => 'nullable|email|max:100',
+            'telefons' => 'nullable|string|max:20',
+            'amats' => 'nullable|string|max:50',
+            'aktivs' => 'nullable|boolean',
         ]);
 
         $data = [
             'lietotajvards' => $req->input('lietotajvards'),
             'parole' => $req->input('parole'),
             'admina_tiesibas' => $req->input('admina_tiesibas') ? 1 : 0,
+            'vards' => $req->input('vards'),
+            'uzvards' => $req->input('uzvards'),
+            'epasts' => $req->input('epasts'),
+            'telefons' => $req->input('telefons'),
+            'amats' => $req->input('amats'),
+            'aktivs' => $req->input('aktivs') ? 1 : 0,
         ];
 
         if ($req->hasFile('avatar')) {

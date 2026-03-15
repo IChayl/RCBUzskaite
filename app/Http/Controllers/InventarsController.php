@@ -110,6 +110,8 @@ class InventarsController extends Controller
             'kategorija_id' => 'required|integer|exists:kategorija,kategorija_id',
             'telpas_id' => 'required|integer|exists:telpa,telpas_id',
             'atbildigais_id' => 'nullable|integer|exists:lietotajs,lietotajs_id',
+            'inventara_numurs' => 'nullable|string|max:50',
+            'iegades_datums' => 'nullable|date',
         ]);
 
         // create the record
@@ -120,6 +122,8 @@ class InventarsController extends Controller
         $i->kategorija_id = $data['kategorija_id'];
         $i->telpas_id = $data['telpas_id'];
         $i->atbildigais_id = $data['atbildigais_id'] ?? null;
+        $i->inventara_numurs = $data['inventara_numurs'] ?? null;
+        $i->iegades_datums = $data['iegades_datums'] ?? null;
         $i->save();
 
         return redirect()->to('/inventars')->with('success','Ieraksts pievienots');
@@ -149,6 +153,8 @@ class InventarsController extends Controller
             'kategorija_id' => 'required|integer|exists:kategorija,kategorija_id',
             'telpas_id' => 'required|integer|exists:telpa,telpas_id',
             'atbildigais_id' => 'nullable|integer|exists:lietotajs,lietotajs_id',
+            'inventara_numurs' => 'nullable|string|max:50',
+            'iegades_datums' => 'nullable|date',
         ]);
 
         DB::table('inventars')->where('inventars_id',$id)->update([
@@ -158,6 +164,8 @@ class InventarsController extends Controller
             'kategorija_id' => $data['kategorija_id'],
             'telpas_id' => $data['telpas_id'],
             'atbildigais_id' => $data['atbildigais_id'] ?? null,
+            'inventara_numurs' => $data['inventara_numurs'] ?? null,
+            'iegades_datums' => $data['iegades_datums'] ?? null,
         ]);
 
         return redirect()->to('/inventars')->with('success','Ieraksts atjaunināts');
