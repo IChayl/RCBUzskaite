@@ -23,8 +23,6 @@
                 <option value="statuss" {{ request('column') === 'statuss' ? 'selected' : '' }}>Statuss</option>
                 <option value="kategorija" {{ request('column') === 'kategorija' ? 'selected' : '' }}>Kategorija</option>
                 <option value="telpa" {{ request('column') === 'telpa' ? 'selected' : '' }}>Telpa</option>
-                <option value="inventara_numurs" {{ request('column') === 'inventara_numurs' ? 'selected' : '' }}>Inventāra numurs</option>
-                <option value="iegades_datums" {{ request('column') === 'iegades_datums' ? 'selected' : '' }}>Iegādes datums</option>
                 <option value="atbildigais" {{ request('column') === 'atbildigais' ? 'selected' : '' }}>Atbildīgais</option>
             </select>
         </label>
@@ -79,18 +77,7 @@
                             @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'telpa', 'direction' => $dir]) }}">Telpa</a>
                         </th>
-                                <th class="sortable {{ request('sort') === 'inventara_numurs' ? 'sorted-'.request('direction','asc') : '' }}">
-                            @php
-                                $dir = request('sort') === 'inventara_numurs' && request('direction') === 'asc' ? 'desc' : 'asc';
-                            @endphp
-                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'inventara_numurs', 'direction' => $dir]) }}">Inventāra numurs</a>
-                        </th>
-                        <th class="sortable {{ request('sort') === 'iegades_datums' ? 'sorted-'.request('direction','asc') : '' }}">
-                            @php
-                                $dir = request('sort') === 'iegades_datums' && request('direction') === 'asc' ? 'desc' : 'asc';
-                            @endphp
-                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'iegades_datums', 'direction' => $dir]) }}">Iegādes datums</a>
-                        </th>
+        
                         <th class="sortable {{ request('sort') === 'atbildigais' ? 'sorted-'.request('direction','asc') : '' }}">
                             @php
                                 $dir = request('sort') === 'atbildigais' && request('direction') === 'asc' ? 'desc' : 'asc';
@@ -108,8 +95,6 @@
                             <td>{{ $item->statuss ?? '-' }}</td>
                             <td>{{ $item->kategorija->nosaukums ?? ('ID: '.$item->kategorija_id) }}</td>
                             <td>{{ optional($item->telpa)->nosaukums ?? ('ID: '.$item->telpas_id) }}</td>
-                            <td>{{ $item->inventara_numurs ?? '-' }}</td>
-                            <td>{{ $item->iegades_datums ?? '-' }}</td>
                             <td>{{ optional($item->atbildigais)->lietotajvards ?? ('ID: '.$item->atbildigais_id) }}</td>
                             <td>
                                 <div class="actions">
