@@ -10,9 +10,18 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TelpaController;
 
 // Public home page
-Route::get('/', function () {
+
+
+    @if(Auth::check())
+     Route::get('/', function () {
+    return view('home');
+        });
+    @else
+   Route::get('/', function () {
     return view('Login');
-});
+        });
+    @endif
+
 
 // Guest-only routes (redirect logged-in users away)
 Route::middleware('guest')->group(function () {
