@@ -307,27 +307,34 @@
         .pagination li {
             margin: 0;
         }
-        .pagination a,
-        .pagination span {
+        .pagination li a,
+        .pagination li span {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 0.5rem 0.75rem;
+            padding: 0.4rem 0.7rem;
             border-radius: 999px;
             border: 1px solid rgba(255,255,255,0.18);
             background: rgba(255,255,255,0.06);
             color: #ffffff;
             text-decoration: none;
-            min-width: 44px;
+            min-width: 36px;
+            font-size: 0.9rem;
+            line-height: 1;
             text-align: center;
         }
-        .pagination .active span {
+        .pagination li.active span {
             background: rgba(144, 238, 144, 0.15);
             border-color: rgba(144, 238, 144, 0.5);
+            font-weight: 600;
         }
-        .pagination .disabled span {
-            opacity: 0.45;
+        .pagination li.disabled span {
+            opacity: 0.35;
             cursor: not-allowed;
+        }
+        .pagination li a:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.35);
         }
 
         /* Card-based list styling (table-like cards) */
