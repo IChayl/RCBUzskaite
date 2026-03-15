@@ -50,34 +50,34 @@
         }
         .page-shapes .blob{
             position: absolute;
-            filter: blur(36px) saturate(120%);
-            opacity: 0.9;
+            filter: blur(24px) saturate(120%);
+            opacity: 0.4;
             transform: translate3d(0,0,0);
             mix-blend-mode: screen;
             border-radius: 50%;
         }
         .page-shapes .b1{
-            width: 420px;
-            height: 420px;
-            left: -10%;
-            top: -6%;
-            /* background: radial-gradient(circle at 30% 30%, rgba(142, 43, 155, 0.95), rgba(131, 43, 155, 0.6) 40%, transparent 70%); */
-        }
-        .page-shapes .b2{
-            width: 520px;
-            height: 520px;
-            right: -8%;
-            bottom: -14%;
-            /* background: radial-gradient(circle at 70% 70%, rgba(186, 7, 22, 0.95), rgba(217, 100, 106, 0.55) 40%, transparent 72%); */
-        }
-        .page-shapes .b3{
             width: 260px;
             height: 260px;
-            right: 10%;
-            top: 12%;
-            background: radial-gradient(circle at 30% 70%, rgba(133, 43, 155, 0.65), rgba(133, 43, 155, 0.25));
-            opacity: 0.6;
-            filter: blur(56px);
+            left: 5%;
+            top: 2%;
+            background: radial-gradient(circle at 30% 30%, rgba(225, 80, 160, 0.8), rgba(225, 80, 160, 0.2) 55%, transparent 85%);
+        }
+        .page-shapes .b2{
+            width: 240px;
+            height: 240px;
+            right: 2%;
+            bottom: 20%;
+            background: radial-gradient(circle at 70% 70%, rgba(20, 110, 255, 0.6), rgba(20, 110, 255, 0.2) 55%, transparent 85%);
+        }
+        .page-shapes .b3{
+            width: 180px;
+            height: 180px;
+            right: 8%;
+            top: 15%;
+            background: radial-gradient(circle at 30% 70%, rgba(150, 50, 190, 0.5), rgba(150, 50, 190, 0.15) 60%, transparent 85%);
+            opacity: 0.35;
+            filter: blur(16px);
         }
 
         /* Layout layers */

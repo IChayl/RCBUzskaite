@@ -33,30 +33,25 @@
 
     /* Decorative shape behind header */
     header::before {
-            border-radius: 18px;
-      border: 1px solid #ffd6d6;
       content: '';
       position: absolute;
-      top: -80px;
-      right: -100px;
-      width: 250px;
-      height: 250px;
-      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1), transparent 70%);
-      transform: rotate(25deg);
-      filter: blur(30px);
+      top: -30px;
+      right: -40px;
+      width: 160px;
+      height: 160px;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.2), transparent 75%);
+      filter: blur(18px);
     }
 
     header::after {
-      
       content: '';
       position: absolute;
-      bottom: -100px;
-      left: -120px;
-      width: 280px;
-      height: 280px;
-      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.08), transparent 70%);
-      transform: rotate(-20deg);
-      filter: blur(25px);
+      bottom: -30px;
+      left: -40px;
+      width: 160px;
+      height: 160px;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.2), transparent 75%);
+      filter: blur(18px);
     }
 
     /* Brand name */
