@@ -5,8 +5,7 @@
 
     <div class="auth-links">
         <a href="/">Atpakaļ uz sākumlapu</a>
-        <a href="/lietotajs/create">Jauns lietotājs</a>
-    </div>
+        <a href="/lietotajs/create">Jauns lietotājs</a>        <button type="button" class="bloom-button sm" onclick="window.print()">Printēt</button>    </div>
 
     <hr>
 

@@ -6,6 +6,7 @@
     <div class="auth-links">
         <a href="/">Atpakaļ uz sākumlapu</a>
         <a href="/inventara_kustiba/create">Jauna kustība</a>
+        <button type="button" class="bloom-button sm" onclick="window.print()">Printēt</button>
     </div>
 
     <hr>
