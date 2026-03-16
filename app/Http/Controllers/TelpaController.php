@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Telpa;
 use Illuminate\Support\Facades\DB;
 
+// Kontrolieris telpu ierakstu pārvaldībai.
 class TelpaController extends Controller
 {
     // Rāda visu telpu sarakstu
@@ -56,7 +57,7 @@ class TelpaController extends Controller
         return view('telpa', compact('telpas', 'sort', 'direction', 'q', 'column'));
     }
 
-    // forma jaunas telpas izveidei
+    // Forma jaunas telpas izveidei.
     public function createTelpa()
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -65,7 +66,7 @@ class TelpaController extends Controller
         return view('createTelpa');
     }
 
-    // saglabā jaunu ierakstu
+    // Saglabā jaunu telpas ierakstu.
     public function TelpaSubmit(Request $req)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -88,13 +89,14 @@ class TelpaController extends Controller
         return redirect()->to('/telpa')->with('success','Ieraksts pievienots');
     }
 
-    // detalizēta informācija
+    // Parāda telpas detalizētu informāciju.
     public function TelpaDetails($id)
     {
         $t = Telpa::find($id);
         return view('detailsTelpa', ['telpa' => $t]);
     }
 
+    // Atver telpas rediģēšanas formu.
     public function TelpaEdit($id)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -104,6 +106,7 @@ class TelpaController extends Controller
         return view('editTelpa', ['telpa' => $t]);
     }
 
+    // Saglabā telpas izmaiņas datubāzē.
     public function editSubmit(Request $req, $id)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -128,6 +131,7 @@ class TelpaController extends Controller
         return redirect()->to('/telpa')->with('success','Ieraksts atjaunināts');
     }
 
+    // Dzēš telpas ierakstu.
     public function TelpaDelete($id)
     {
         if (!auth()->user()->admina_tiesibas) {

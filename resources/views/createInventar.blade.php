@@ -11,8 +11,10 @@
 
     <h2 style="color: #E2D4BB;">Jauns inventārs</h2>
 
+    <!-- Jauna inventāra izveides forma -->
     <form method="POST" action="{{ route('inventars.store') }}">
         @csrf
+        <!-- Validācijas kļūdu attēlošana -->
         @if($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -69,6 +71,7 @@
                 @endforeach
             </select>
         </div>
+        <!-- Saglabā inventāra ierakstu -->
         <button type="submit" class="btn btn-primary">Saglabāt</button>
     </form>
 @endsection

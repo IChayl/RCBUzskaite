@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        /* Match app layout theme */
+        /* Pielāgojums lietotnes izkārtojuma tēmai */
         :root{
             --navy: #0F1931;
             --navy-2: #2D4159;
@@ -28,7 +28,7 @@
             color: var(--muted-white);
         }
 
-        /* Centering container */
+        /* Centrējošs konteiners */
         .center-wrap {
             min-height: 100vh;
             display: flex;
@@ -37,7 +37,7 @@
             padding: 2rem;
         }
 
-        /* Glassy card */
+        /* Stikla efekta kartīte */
         .card.custom {
             width: 400px;
             background: var(--card-bg);
@@ -72,7 +72,7 @@
             color: var(--muted-white);
         }
 
-        /* Button bloom effect */
+        /* Pogas bloom efekts */
         .btn-bloom {
             position: relative;
             overflow: hidden;
@@ -118,7 +118,7 @@
             opacity: 1;
         }
 
-        /* Link and small text */
+        /* Saites un mazais teksts */
         .card .text-center a {
             color: rgba(226, 212, 187, 0.85);
             text-decoration: none;
@@ -129,14 +129,14 @@
             text-decoration: underline;
         }
 
-        /* Error box adapted to theme */
+        /* Kļūdu bloks pielāgots tēmai */
         .alert-danger {
             background: linear-gradient(180deg, rgba(45, 65, 89, 0.15), rgba(45, 65, 89, 0.08));
             border-color: rgba(226, 212, 187, 0.06);
             color: #E2D4BB;
         }
 
-        /* Responsive tweaks */
+        /* Responsīvie pielāgojumi */
         @media (max-width: 420px){
             .card.custom { width: 100%; padding: 1.25rem; border-radius: 10px; }
         }
@@ -160,7 +160,7 @@
                 </div>
             @endif
 
-            <!-- Login forma -->
+            <!-- Pieteikšanās forma -->
             <form method="POST" action="/Login/submit">
                 @csrf
 

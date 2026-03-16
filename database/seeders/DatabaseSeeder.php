@@ -11,11 +11,11 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database.
+    * Aizpilda lietotnes datubāzi ar sākuma datiem.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Piemērs: User::factory(10)->create();
 
         User::factory()->create([
             'name' => 'Test User',

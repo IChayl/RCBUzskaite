@@ -83,7 +83,7 @@ class KategorijaController extends Controller
 // Rāda konkrētas kategorijas detaļas.
         public function Katdetails($id)
     {
-        // using the model directly is simpler and honours primary key
+        // Tieša modeļa izmantošana ir vienkāršāka un korekti ievēro primāro atslēgu
         $kategorija = KategorijaModel::find($id);
         return view('detailsKategorija', ['kategorija' => $kategorija]);
     }

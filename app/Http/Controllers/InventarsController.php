@@ -9,8 +9,12 @@ use App\Models\KategorijaModel;
 use App\Models\Lietotajs;
 use Illuminate\Support\Facades\DB;
 
+// Kontrolieris inventāra ierakstu sarakstam, izveidei, labošanai un dzēšanai.
 class InventarsController extends Controller
 {
+    /**
+     * Parāda inventāra sarakstu ar meklēšanu, kārtošanu un lapošanu.
+     */
     public function showAllInventars(Request $request)
     {
         // Meklēšanas teksta un kolonnas iestatījumi
@@ -95,6 +99,9 @@ class InventarsController extends Controller
         return view('inventars', compact('inventari', 'sort', 'direction', 'q', 'column'));
     }
 
+    /**
+     * Ielādē formas datus jauna inventāra izveidei.
+     */
     public function createInventar()
     {
         $telpas = Telpa::orderBy('telpas_id','asc')->get();
@@ -103,6 +110,9 @@ class InventarsController extends Controller
         return view('createInventar', ['telpas' => $telpas, 'kategorijas' => $kategorijas, 'lietotaji' => $lietotaji]);
     }
 
+    /**
+     * Validē ievadi un saglabā jaunu inventāra ierakstu.
+     */
     public function InventarSubmit(Request $req)
     {
         $data = $req->validate([
@@ -116,7 +126,7 @@ class InventarsController extends Controller
             'iegades_datums' => 'nullable|date',
         ]);
 
-        // create the record
+        // Izveido ierakstu
         $i = new Inventar();
         $i->nosaukums = $data['nosaukums'];
         $i->apraksts = $data['apraksts'] ?? null;
@@ -131,12 +141,18 @@ class InventarsController extends Controller
         return redirect()->to('/inventars')->with('success','Ieraksts pievienots');
     }
 
+    /**
+     * Parāda viena inventāra detalizēto skatu.
+     */
     public function InventarDetails($id)
     {
         $i = Inventar::find($id);
         return view('detailsInventar', ['inventar' => $i]);
     }
 
+    /**
+     * Atver inventāra rediģēšanas formu (tikai administratoram).
+     */
     public function InventarEdit($id)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -149,6 +165,9 @@ class InventarsController extends Controller
         return view('editInventar', ['inventar' => $i, 'telpas' => $telpas, 'kategorijas' => $kategorijas, 'lietotaji' => $lietotaji]);
     }
 
+    /**
+     * Saglabā inventāra izmaiņas datubāzē.
+     */
     public function editSubmit(Request $req, $id)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -179,6 +198,9 @@ class InventarsController extends Controller
         return redirect()->to('/inventars')->with('success','Ieraksts atjaunināts');
     }
 
+    /**
+     * Dzēš inventāra ierakstu (tikai administratoram).
+     */
     public function InventarDelete($id)
     {
         if (!auth()->user()->admina_tiesibas) {

@@ -1,6 +1,6 @@
 <header>
   <style>
-    /* General header style */
+    /* Galvenes pamatstils */
     header {
       position: relative;
       background: linear-gradient(90deg, #0F1931, #2D4159);
@@ -31,7 +31,7 @@
       border-bottom: 2px solid rgba(226, 212, 187, 0.1);
     }
 
-    /* Decorative shape behind header */
+    /* Dekoratīva forma aiz galvenes */
     header::before {
       content: '';
       position: absolute;
@@ -54,7 +54,7 @@
       filter: blur(18px);
     }
 
-    /* Brand name */
+    /* Zīmola nosaukums */
     .brand a {
       color: #E2D4BB;
       font-size: 1.6em;
@@ -71,7 +71,7 @@
       text-shadow: 0 0 10px #2D4159, 0 0 20px #2D4159;
     }
 
-    /* Navigation */
+    /* Navigācija */
     nav {
       display: flex;
       align-items: center;
@@ -113,7 +113,7 @@
       text-shadow: 0 0 10px #E2D4BB, 0 0 22px #E2D4BB;
     }
 
-    /* Auth section (Login/Register) */
+    /* Autentifikācijas sadaļa (Ielogoties/Reģistrēties) */
     .auth-links {
       display: flex;
       gap: 20px;
@@ -142,7 +142,7 @@
       transform: translateY(-2px);
     }
 
-    /* Responsive (optional) */
+    /* Responsīvais izkārtojums (pēc izvēles) */
     @media (max-width: 768px) {
       header {
         flex-direction: column;

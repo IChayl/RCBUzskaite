@@ -19,7 +19,7 @@ class Lietotajs extends Authenticatable
     protected $fillable = ['lietotajvards', 'parole', 'admina_tiesibas', 'avatar', 'vards', 'uzvards', 'epasts', 'telefons', 'amats', 'aktivs'];
 
     /**
-     * Disable the default remember token column since it doesn't exist.
+     * Atspējo noklusēto remember token kolonnu, jo tā neeksistē.
      */
     public function getRememberTokenName()
     {

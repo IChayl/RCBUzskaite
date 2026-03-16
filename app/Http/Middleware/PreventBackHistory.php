@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class PreventBackHistory
 {
     /**
-     * Handle an incoming request.
+    * Apstrādā ienākošo pieprasījumu.
      */
     public function handle(Request $request, Closure $next)
     {

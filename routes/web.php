@@ -9,7 +9,7 @@ use App\Http\Controllers\LietotajsController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TelpaController;
 
-// Public home page
+// Publiskā sākumlapa
 Route::get('/', function () {
     return view('Login');
 });
@@ -19,7 +19,7 @@ Route::get('/home', function () {
 });
 
 
-// Guest-only routes (redirect logged-in users away)
+// Tikai viesiem paredzētie maršruti (ielogotos lietotājus pāradresē)
 Route::middleware('guest')->group(function () {
     Route::get('/Login', [LoginController::class, 'showLogin'])->name('login');
     Route::post('/Login/submit', [LoginController::class, 'submit'])->name('login.submit');
@@ -28,9 +28,9 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [LoginController::class, 'register'])->name('register.submit');
 });
 
-// Protected routes (requires login)
+// Aizsargātie maršruti (nepieciešama pieteikšanās)
 Route::middleware('auth')->group(function () {
-    // logout
+    // Izrakstīšanās
     Route::get('/Logout', [LoginController::class, 'logout'])->name('logout');
 
     // kategorija

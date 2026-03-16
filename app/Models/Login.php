@@ -11,7 +11,7 @@ class Login extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * Use the existing Lietotajs table so login uses the same user store.
+    * Izmanto esošo Lietotajs tabulu, lai pieteikšanās lietotu to pašu lietotāju glabātuvi.
      */
     protected $table = 'lietotajs';
     protected $primaryKey = 'lietotajs_id';
@@ -20,7 +20,7 @@ class Login extends Authenticatable
     public $timestamps = false;
 
     /**
-     * The attributes that are mass assignable.
+     * Atribūti, kuriem atļauta masveida piešķiršana.
      */
     protected $fillable = [
         'lietotajvards',
@@ -29,7 +29,7 @@ class Login extends Authenticatable
     ];
 
     /**
-     * Disable the default remember token column since it doesn't exist.
+     * Atspējo noklusēto remember token kolonnu, jo tā neeksistē.
      */
     public function getRememberTokenName()
     {

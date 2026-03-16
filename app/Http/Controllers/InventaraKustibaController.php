@@ -10,8 +10,12 @@ use App\Models\Lietotajs;
 use App\Models\Telpa;
 use Illuminate\Support\Facades\DB;
 
+// Kontrolieris inventāra kustību pārvaldībai.
 class InventaraKustibaController extends Controller
 {
+    /**
+     * Parāda kustību sarakstu ar filtrēšanu, kārtošanu un lapošanu.
+     */
     public function showAllKustiba(Request $request)
     {
         // Meklēšanas teksts un izvēlētā kolonna (vai "all" līdz meklēšanai visur)
@@ -28,13 +32,16 @@ class InventaraKustibaController extends Controller
             $sort = 'kustiba_id';
         }
 
+        // Atļautās kolonnas meklēšanai.
         $allowedColumns = ['all', 'datums', 'inventars', 'kustibas_veids', 'lietotajs', 'veca_telpa', 'jauna_telpa'];
         if (!in_array($column, $allowedColumns, true)) {
             $column = 'all';
         }
 
+        // Ielādējam saistītos modeļus, lai samazinātu papildus SQL pieprasījumus skatā.
         $query = InventaraKustiba::query()->with(['inventars', 'lietotajs', 'kustibasVeids']);
 
+        // Meklēšanas loģika pa vienu vai visām kolonnām.
         if ($q !== '') {
             if ($column === 'all') {
                 $query->where(function ($query) use ($q) {
@@ -116,6 +123,9 @@ class InventaraKustibaController extends Controller
         return view('inventara_kustiba', compact('kustibas', 'sort', 'direction', 'q', 'column'));
     }
 
+    /**
+     * Atver kustības izveides formu ar nepieciešamajiem izvēļņu datiem.
+     */
     public function createKustiba()
     {
         $inventari = Inventar::orderBy('inventars_id','asc')->get();
@@ -125,6 +135,9 @@ class InventaraKustibaController extends Controller
         return view('createInventaraKustiba', ['inventari' => $inventari, 'kustibasVeidi' => $kustibasVeidi, 'lietotaji' => $lietotaji, 'telpas' => $telpas]);
     }
 
+    /**
+     * Validē un saglabā jaunu inventāra kustību.
+     */
     public function KustibaSubmit(Request $req)
     {
         $data = $req->validate([
@@ -152,12 +165,18 @@ class InventaraKustibaController extends Controller
         return redirect()->to('/inventara_kustiba')->with('success','Ieraksts pievienots');
     }
 
+    /**
+     * Parāda vienas kustības detalizētu informāciju.
+     */
     public function KustibaDetails($id)
     {
         $i = InventaraKustiba::with(['inventars','lietotajs','kustibasVeids'])->find($id);
         return view('detailsInventaraKustiba', ['kustiba' => $i]);
     }
 
+    /**
+     * Atver kustības rediģēšanas formu (tikai administratoram).
+     */
     public function KustibaEdit($id)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -171,6 +190,9 @@ class InventaraKustibaController extends Controller
         return view('editInventaraKustiba', ['kustiba' => $i, 'inventari' => $inventari, 'kustibasVeidi' => $kustibasVeidi, 'lietotaji' => $lietotaji, 'telpas' => $telpas]);
     }
 
+    /**
+     * Saglabā kustības ieraksta izmaiņas.
+     */
     public function editSubmit(Request $req, $id)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -200,6 +222,9 @@ class InventaraKustibaController extends Controller
         return redirect()->to('/inventara_kustiba')->with('success','Ieraksts atjaunināts');
     }
 
+    /**
+     * Dzēš kustības ierakstu (tikai administratoram).
+     */
     public function KustibaDelete($id)
     {
         if (!auth()->user()->admina_tiesibas) {

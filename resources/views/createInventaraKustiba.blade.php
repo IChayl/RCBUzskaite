@@ -11,6 +11,7 @@
 
     <h2 style="color: #E2D4BB;">Jauna inventāra kustība</h2>
 
+    <!-- Jaunas kustības izveides forma -->
     <form method="POST" action="{{ route('inventara_kustiba.store') }}">
         @csrf
         <div class="mb-3">
@@ -70,6 +71,7 @@
                 @endforeach
             </select>
         </div>
+        <!-- Saglabā kustības ierakstu -->
         <button type="submit" class="btn btn-primary">Saglabāt</button>
     </form>
 @endsection

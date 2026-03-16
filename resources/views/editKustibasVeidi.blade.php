@@ -11,6 +11,7 @@
 
     <h2 style="color: #E2D4BB;">Rediģēt kustības veidu</h2>
 
+    <!-- Kustības veida rediģēšanas forma -->
     <form method="POST" action="/kustibas_veidi/{{ $veids->kustibas_veids_id }}/editSubmit">
         @csrf
         <div class="mb-3">
@@ -21,6 +22,7 @@
             <label for="apraksts" class="form-label">Apraksts</label>
             <textarea class="form-control" id="apraksts" name="apraksts">{{ $veids->apraksts }}</textarea>
         </div>
+        <!-- Apstiprina izmaiņas -->
         <button type="submit" class="btn btn-primary">Atjaunināt</button>
     </form>
 @endsection

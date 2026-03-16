@@ -14,6 +14,7 @@
     <hr>
     <h2 style="color: #E2D4BB;">Kategorijas</h2>
 
+    <!-- Meklēšana un kārtošanas parametru nodošana uz serveri -->
     <form method="GET" class="table-controls">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
@@ -42,6 +43,7 @@
     @if($kategorija->isEmpty())
         <p style="color: #E2D4BB;">Nav kategoriju.</p>
     @else
+        <!-- Kategoriju tabula ar kārtojamām kolonnām -->
         <div style="overflow-x: auto;">
             <table class="data-table">
                 <thead>
@@ -62,6 +64,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Izvada visas kategorijas no paginētā saraksta -->
                     @foreach ($kategorija as $item)
                         <tr>
                             <td>{{ $item->nosaukums }}</td>
@@ -89,6 +92,7 @@
 @endsection
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Noņem flash ziņojumu pēc lietotāja klikšķa.
         const flash = document.getElementById('flash-message');
         if (flash) {
             flash.addEventListener('click', function() {
@@ -96,7 +100,7 @@
             });
         }
 
-        // Delete confirmation
+        // Dzēšanas apstiprinājums pirms pāradresācijas uz dzēšanas maršrutu.
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();

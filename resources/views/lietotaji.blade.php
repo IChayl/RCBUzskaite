@@ -26,12 +26,15 @@
     @if($lietotaji->isEmpty())
         <p style="color: #E2D4BB;">Nav lietotāju.</p>
     @else
+        <!-- Kartīšu izkārtojums lietotāju sarakstam (ne-tabulas skats) -->
         <div style="display: flex; flex-wrap: wrap; gap: 16px;">
         @foreach ($lietotaji as $item)
+            <!-- Viena lietotāja kartīte ar pamatinformāciju un darbībām -->
             <div class="card mt-3 table-card" style="background: rgba(45, 65, 89, 0.55); color: #E2D4BB; width: 100%; max-width: 340px;">
                 <div class="card-body">
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <div style="width: 50px; height: 50px; border-radius: 12px; overflow: hidden; background: rgba(226, 212, 187, 0.06); display:flex; align-items:center; justify-content:center;">
+                            <!-- Ja ir avatar, rāda attēlu; pretējā gadījumā — rezerves ikonu -->
                             @if($item->avatar)
                                 <img src="{{ Storage::disk('public')->url($item->avatar) }}" alt="Avatar" style="width: 48px; height: 48px; object-fit: cover;">
                             @else
@@ -65,6 +68,7 @@
 @endsection
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Flash ziņojums pazūd pēc klikšķa.
         const flash = document.getElementById('flash-message');
         if (flash) {
             flash.addEventListener('click', function() {
@@ -72,6 +76,7 @@
             });
         }
 
+        // Dzēšanas darbībai pieprasa apstiprinājumu.
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();

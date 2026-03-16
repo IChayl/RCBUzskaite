@@ -16,6 +16,7 @@
     <hr>
     <h2 style="color: #E2D4BB;">Inventāri</h2>
 
+    <!-- Filtrēšanas forma: saglabā kārtošanas parametrus un meklēšanas frāzi -->
     <form method="GET" class="table-controls">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
@@ -48,6 +49,7 @@
     @if($inventari->isEmpty())
         <p style="color: #E2D4BB;">Nav ierakstu.</p>
     @else
+        <!-- Inventāra tabula ar servera puses kārtošanu pa kolonnām -->
         <div style="overflow-x: auto;">
             <table class="data-table">
                 <thead>
@@ -93,6 +95,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Tabulas rinda katram inventāra ierakstam -->
                     @foreach ($inventari as $item)
                         <tr>
                             <td>{{ $item->nosaukums }}</td>
@@ -124,6 +127,7 @@
 @endsection
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Klikšķis uz paziņojuma aizver veiksmīgo ziņojumu bez lapas pārlādes.
         const flash = document.getElementById('flash-message');
         if (flash) {
             flash.addEventListener('click', function() {
@@ -131,6 +135,7 @@
             });
         }
 
+        // Dzēšanas darbībai prasām lietotāja apstiprinājumu.
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();

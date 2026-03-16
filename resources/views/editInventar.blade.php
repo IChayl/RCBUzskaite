@@ -11,6 +11,7 @@
 
     <h2 style="color: #E2D4BB;">Rediģēt inventāru</h2>
 
+    <!-- Inventāra rediģēšanas forma -->
     <form method="POST" action="/inventars/{{ $inventar->inventars_id }}/editSubmit">
         @csrf
         <div class="mb-3">
@@ -60,6 +61,7 @@
                 @endforeach
             </select>
         </div>
+        <!-- Saglabā atjaunināto inventāra informāciju -->
         <button type="submit" class="btn btn-primary">Atjaunināt</button>
     </form>
 @endsection

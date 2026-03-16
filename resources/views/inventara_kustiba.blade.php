@@ -12,6 +12,7 @@
     <hr>
     <h2 style="color: #E2D4BB;">Inventāra kustība</h2>
 
+    <!-- Filtrs un meklēšana kustību sarakstam -->
     <form method="GET" class="table-controls">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
@@ -44,6 +45,7 @@
     @if($kustibas->isEmpty())
         <p style="color: #E2D4BB;">Nav ierakstu.</p>
     @else
+        <!-- Kustību tabula ar dinamiskiem kārtošanas linkiem -->
         <div style="overflow-x: auto;">
             <table class="data-table">
                 <thead>
@@ -88,6 +90,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Attēlo katru kustību kā atsevišķu tabulas rindu -->
                     @foreach ($kustibas as $item)
                         <tr>
                             <td>{{ $item->datums }}</td>
@@ -119,6 +122,7 @@
 @endsection
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Ātra veiksmīgā paziņojuma paslēpšana, uzklikšķinot uz tā.
         const flash = document.getElementById('flash-message');
         if (flash) {
             flash.addEventListener('click', function() {
@@ -126,6 +130,7 @@
             });
         }
 
+        // Dzēšanas poga pāradresē tikai pēc lietotāja apstiprinājuma.
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();

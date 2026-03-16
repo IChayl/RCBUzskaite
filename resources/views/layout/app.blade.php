@@ -10,15 +10,15 @@
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v={{ filemtime(public_path('favicon.ico')) }}">
    
     <meta name="theme-color" content="#0F1931">
-    <!-- Inline data-URI favicon (fallback) -->
+    <!-- Iekļauta data-URI favicon (rezerves variants) -->
     
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
-    <!-- Icons & Bootstrap -->
+    <!-- Ikonas un Bootstrap -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-    <!-- Navy-Maroon theme + bloom buttons + decorative shapes -->
+    <!-- Tumšā tēma + bloom pogas + dekoratīvās formas -->
     <style>
         :root{
             --navy: #0F1931;
@@ -40,7 +40,7 @@
             -moz-osx-font-smoothing:grayscale;
         }
 
-        /* Decorative blurred shapes behind content */
+        /* Dekoratīvas izpludinātas formas aiz satura */
         .page-shapes{
             position: fixed;
             inset: 0;
@@ -80,10 +80,10 @@
             filter: blur(16px);
         }
 
-        /* Layout layers */
+        /* Izkārtojuma slāņi */
         header, main, footer{
             position: relative;
-            z-index: 2; /* above shapes */
+            z-index: 2; /* virs formām */
         }
 
         .container{
@@ -105,12 +105,12 @@
             0 6px 20px rgba(15, 25, 49, 0.8);
         }
 
-        /* Ensure headings are readable on dark background */
+        /* Nodrošina, ka virsraksti ir salasāmi uz tumša fona */
         h2, h3, h4, h5, h6 {
             color: var(--accent);
         }
 
-        /* Card style for main content to create shape */
+        /* Kartītes stils galvenajam saturam */
         .card-surface{
             border: 1px solid rgba(45, 65, 89, 0.42);
             border-radius: 18px;
@@ -119,7 +119,7 @@
             backdrop-filter: blur(6px) saturate(120%);
         }
 
-        /* Bloom button style */
+        /* Bloom pogas stils */
         .bloom-button{
             display:inline-block;
             background: linear-gradient(90deg, var(--navy-2) 0%, var(--maroon) 50%, var(--maroon-2) 100%);
@@ -157,14 +157,14 @@
                 0 0 18px rgba(45, 65, 89, 0.2);
         }
 
-        /* Small utility */
+        /* Neliels palīgstils */
         .spaced{
             gap: .75rem;
             display:inline-flex;
             align-items:center;
         }
 
-        /* Table styling for list pages */
+        /* Tabulas stils sarakstu lapām */
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -195,7 +195,7 @@
             align-items: center;
         }
 
-        /* Search & sort controls */
+        /* Meklēšanas un kārtošanas vadīklas */
         .table-controls {
             display: flex;
             flex-wrap: wrap;
@@ -215,7 +215,7 @@
             outline: 2px solid rgba(45, 65, 89, 0.7);
         }
 
-        /* Form controls match the dark theme used on list pages */
+        /* Formu lauki pielāgoti tumšajai sarakstu lapu tēmai */
         .form-control,
         .form-select {
             background: rgba(45, 65, 89, 0.5);
@@ -294,7 +294,7 @@
             content: "▾";
         }
         
-        /* Pagination */
+        /* Lapošana */
         .pagination {
             display: flex;
             flex-wrap: wrap;
@@ -336,7 +336,7 @@
             border-color: rgba(226, 212, 187, 0.5);
         }
 
-        /* Card-based list styling (table-like cards) */
+        /* Kartītēs balstīts saraksta stils (tabulai līdzīgas kartītes) */
         .card-table {
             display: grid;
             gap: 10px;
@@ -371,7 +371,7 @@
             justify-content: flex-end;
         }
 
-        /* Card list rows styled like table rows */
+        /* Kartīšu saraksta rindas, stilizētas kā tabulas rindas */
         .table-card {
             background: rgba(45, 65, 89, 0.45);
             border: 1px solid rgba(45, 65, 89, 0.62);
@@ -420,13 +420,13 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Small bloom button variant */
+        /* Mazās bloom pogas variants */
         .bloom-button.sm {
             padding: 0.45rem 0.8rem;
             font-size: 0.9rem;
         }
 
-        /* Responsive tweaks */
+        /* Responsīvie pielāgojumi */
         @media (max-width: 768px){
             header h1{ font-size:1.25rem; }
             .card-surface{ padding:1rem; border-radius:12px; }
@@ -458,7 +458,7 @@
 
 
 
-<!-- Update the header element to include the new class -->
+<!-- Atjaunināts header elements ar jauno klasi -->
 <header class="small">
     <h1>RCB inventāra uzskaite</h1>
         <div>
@@ -543,7 +543,7 @@
 
                         sortTable(table, index, nextAsc);
 
-                        // Re-apply filter after sort so hidden rows stay hidden.
+                        // Pēc kārtošanas atkārtoti piemēro filtru, lai paslēptās rindas paliek paslēptas.
                         if (searchInput && searchInput.value.trim()) {
                             applyFilter(table, searchInput.value, noResults);
                         }

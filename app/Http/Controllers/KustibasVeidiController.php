@@ -6,8 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\KustibasVeidi;
 use Illuminate\Support\Facades\DB;
 
+// Kontrolieris kustību veidu datu pārvaldībai.
 class KustibasVeidiController extends Controller
 {
+    /**
+     * Parāda kustību veidu sarakstu ar meklēšanu un kārtošanu.
+     */
     public function showAll(Request $request)
     {
         // Meklēšanas virkne un meklējamā kolonna
@@ -49,6 +53,9 @@ class KustibasVeidiController extends Controller
         return view('kustibas_veidi', compact('veidi', 'sort', 'direction', 'q', 'column'));
     }
 
+    /**
+     * Atver jauna kustības veida formu.
+     */
     public function create()
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -57,6 +64,9 @@ class KustibasVeidiController extends Controller
         return view('createKustibasVeidi');
     }
 
+    /**
+     * Saglabā jaunu kustības veida ierakstu.
+     */
     public function store(Request $req)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -75,12 +85,18 @@ class KustibasVeidiController extends Controller
         return redirect()->to('/kustibas_veidi')->with('success','Ieraksts pievienots');
     }
 
+    /**
+     * Parāda viena kustības veida detalizētu informāciju.
+     */
     public function details($id)
     {
         $veids = KustibasVeidi::find($id);
         return view('detailsKustibasVeidi', ['veids' => $veids]);
     }
 
+    /**
+     * Atver kustības veida rediģēšanas formu.
+     */
     public function edit($id)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -90,6 +106,9 @@ class KustibasVeidiController extends Controller
         return view('editKustibasVeidi', ['veids' => $veids]);
     }
 
+    /**
+     * Atjaunina kustības veida ierakstu datubāzē.
+     */
     public function update(Request $req, $id)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -108,6 +127,9 @@ class KustibasVeidiController extends Controller
         return redirect()->to('/kustibas_veidi')->with('success','Ieraksts atjaunināts');
     }
 
+    /**
+     * Dzēš kustības veida ierakstu.
+     */
     public function delete($id)
     {
         if (!auth()->user()->admina_tiesibas) {

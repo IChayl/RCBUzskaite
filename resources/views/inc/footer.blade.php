@@ -36,7 +36,7 @@
       margin: 5px 0;
     }
 
-    /* Bloom effect when active */
+    /* Bloom efekts aktīvā stāvoklī */
     @keyframes glow {
       0% { text-shadow: 0 0 5px #E2D4BB, 0 0 10px #2D4159, 0 0 20px #2D4159; }
       100% { text-shadow: 0 0 10px #E2D4BB, 0 0 20px #2D4159, 0 0 40px #2D4159; }
@@ -46,10 +46,10 @@
       animation: glow 0.3s ease-in-out;
     }
 
-    /* Make sure content above doesn't hide behind footer */
+    /* Nodrošina, ka saturs virs kājenes nepazūd aiz tās */
     body {
       margin: 0;
-      padding-bottom: 70px; /* Adjust depending on footer height */
+      padding-bottom: 70px; /* Pielāgo atkarībā no kājenes augstuma */
       background-color: #0F1931;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }

@@ -8,34 +8,41 @@ use App\Models\KustibasVeidi;
 use App\Models\Lietotajs;
 use App\Models\Telpa;
 
+// Modelis inventāra kustību ierakstiem.
 class InventaraKustiba extends Model
 {
     protected $table = 'inventara_kustiba';
     protected $primaryKey = 'kustiba_id';
     public $timestamps = false;
 
+    // Lauki, kuriem atļauta masveida aizpilde.
     protected $fillable = ['datums', 'inventars_id', 'atbildigais_lietotajs_id', 'kustibas_veids_id', 'veca_telpa_id', 'jauna_telpa_id', 'piezimes', 'dokuments'];
 
+    // Saite uz inventāru, kuram veikta kustība.
     public function inventars()
     {
         return $this->belongsTo(Inventar::class, 'inventars_id', 'inventars_id');
     }
 
+    // Saite uz kustības veidu (piem., pārvietošana, norakstīšana).
     public function kustibasVeids()
     {
         return $this->belongsTo(KustibasVeidi::class, 'kustibas_veids_id', 'kustibas_veids_id');
     }
 
+    // Saite uz lietotāju, kas atbild par kustību.
     public function lietotajs()
     {
         return $this->belongsTo(Lietotajs::class, 'atbildigais_lietotajs_id', 'lietotajs_id');
     }
 
+    // Saite uz iepriekšējo telpu.
     public function vecaTelpa()
     {
         return $this->belongsTo(Telpa::class, 'veca_telpa_id', 'telpas_id');
     }
 
+    // Saite uz jauno telpu.
     public function jaunaTelpa()
     {
         return $this->belongsTo(Telpa::class, 'jauna_telpa_id', 'telpas_id');

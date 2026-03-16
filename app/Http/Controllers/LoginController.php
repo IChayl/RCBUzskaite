@@ -10,7 +10,7 @@ use App\Models\Lietotajs;
 class LoginController extends Controller
 {
     /**
-     * Show the login form.
+    * Parāda pieteikšanās formu.
      */
     public function showLogin()
     {
@@ -18,7 +18,7 @@ class LoginController extends Controller
     }
 
     /**
-     * Handle form submission and validate the user credentials.
+     * Apstrādā formas iesniegšanu un validē lietotāja datus.
      */
     public function submit(Request $request)
     {
@@ -38,14 +38,14 @@ class LoginController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        // Still keep a small session helper for any non-Auth uses.
+        // Saglabā nelielu sesijas palīgu gadījumiem ārpus Auth izmantošanas.
         Session::put('user_name', $user->lietotajvards);
 
         return redirect('/home')->with('success', 'Pieteikšanās veiksmīga');
     }
 
     /**
-     * Show the registration form.
+     * Parāda reģistrācijas formu.
      */
     public function showRegister()
     {
@@ -53,7 +53,7 @@ class LoginController extends Controller
     }
 
     /**
-     * Handle registration and store a new Lietotajs record.
+     * Apstrādā reģistrāciju un saglabā jaunu Lietotajs ierakstu.
      */
     public function register(Request $request)
     {
@@ -75,13 +75,13 @@ class LoginController extends Controller
     }
 
     /**
-     * Log the user out.
+     * Izraksta lietotāju no sistēmas.
      */
     public function logout(Request $request)
     {
         Auth::logout();
 
-        // Invalidate session and regenerate CSRF token to prevent reuse.
+        // Invalidē sesiju un atjauno CSRF tokenu, lai novērstu atkārtotu izmantošanu.
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

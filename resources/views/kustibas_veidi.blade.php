@@ -23,6 +23,7 @@
 
     <h2 style="color: #E2D4BB;">Kustību veidi</h2>
 
+    <!-- Filtri kustību veidu sarakstam -->
     <form method="GET" class="table-controls">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
@@ -43,6 +44,7 @@
     @if($veidi->isEmpty())
         <p style="color: #E2D4BB;">Nav ierakstu.</p>
     @else
+        <!-- Tabula kustību veidiem ar kārtošanu pa laukiem -->
         <div style="overflow-x: auto;">
             <table class="data-table">
                 <thead>
@@ -63,6 +65,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Iterē cauri visiem paginētajiem kustību veidiem -->
                     @foreach ($veidi as $item)
                         <tr>
                             <td>{{ $item->nosaukums }}</td>
@@ -91,6 +94,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Flash ziņojumu var aizvērt ar klikšķi.
         const flash = document.getElementById('flash-message');
         if (flash) {
             flash.addEventListener('click', function() {
@@ -98,6 +102,7 @@
             });
         }
 
+        // Dzēšanas apstiprinājums pirms faktiskās dzēšanas.
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();

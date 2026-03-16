@@ -11,6 +11,7 @@
 
     <h2 style="color: #E2D4BB;">Jauns lietotājs</h2>
 
+    <!-- Jauna lietotāja izveides forma -->
     <form method="POST" action="{{ route('lietotaji.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
@@ -53,6 +54,7 @@
             <input class="form-check-input" type="checkbox" value="1" id="admina_tiesibas" name="admina_tiesibas">
             <label class="form-check-label" for="admina_tiesibas">Admina tiesības</label>
         </div>
+        <!-- Saglabā lietotāja ierakstu -->
         <button type="submit" class="btn btn-primary">Saglabāt</button>
     </form>
 @endsection

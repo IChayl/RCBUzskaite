@@ -11,6 +11,7 @@
 
     <h2 style="color: #E2D4BB;">Rediģēt inventāra kustību</h2>
 
+    <!-- Inventāra kustības rediģēšanas forma -->
     <form method="POST" action="/inventara_kustiba/{{ $kustiba->kustiba_id }}/editSubmit">
         @csrf
         <div class="mb-3">
@@ -70,6 +71,7 @@
                 @endforeach
             </select>
         </div>
+        <!-- Saglabā atjaunināto kustības ierakstu -->
         <button type="submit" class="btn btn-primary">Atjaunināt</button>
     </form>
 @endsection

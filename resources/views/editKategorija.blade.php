@@ -11,6 +11,7 @@
 
     <h2 style="color: #E2D4BB;">Rediģēt kategoriju</h2>
 
+    <!-- Kategorijas datu atjaunināšanas forma -->
     <form method="POST" action="/kategorija/{{ $kategorija->kategorija_id }}/editSubmit">
         @csrf
         <div class="mb-3">
@@ -21,6 +22,7 @@
             <label for="apraksts" class="form-label">Apraksts</label>
             <input type="text" class="form-control" id="apraksts" name="apraksts" value="{{ $kategorija->apraksts }}">
         </div>
+        <!-- Saglabā veiktās izmaiņas -->
         <button type="submit" class="btn btn-primary">Atjaunināt</button>
     </form>
 @endsection

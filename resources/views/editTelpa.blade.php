@@ -11,6 +11,7 @@
 
     <h2 style="color: #E2D4BB;">Rediģēt telpu</h2>
 
+    <!-- Telpas datu rediģēšanas forma -->
     <form method="POST" action="/telpa/{{ $telpa->telpas_id }}/editSubmit">
         @csrf
         <div class="mb-3">
@@ -29,6 +30,7 @@
             <label for="stavs" class="form-label">Stāvs</label>
             <input type="number" class="form-control" id="stavs" name="stavs" value="{{ $telpa->stavs }}" required>
         </div>
+        <!-- Saglabā atjauninātos telpas datus -->
         <button type="submit" class="btn btn-primary">Atjaunināt</button>
     </form>
 @endsection

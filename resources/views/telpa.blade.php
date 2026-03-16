@@ -23,6 +23,7 @@
 
     <h2 style="color: #E2D4BB;">Telpas</h2>
 
+    <!-- Telpu meklēšanas un kārtošanas vadīklas -->
     <form method="GET" class="table-controls">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
@@ -45,6 +46,7 @@
     @if($telpas->isEmpty())
         <p style="color: #E2D4BB;">Nav telpu.</p>
     @else
+        <!-- Telpu tabula ar kārtojamām kolonnām -->
         <div style="overflow-x: auto;">
             <table class="data-table">
                 <thead>
@@ -77,6 +79,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Attēlo katru telpu kā tabulas rindu -->
                     @foreach ($telpas as $item)
                         <tr>
                             <td>{{ $item->nosaukums }}</td>
@@ -107,6 +110,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Flash paziņojumu aizver ar klikšķi.
         const flash = document.getElementById('flash-message');
         if (flash) {
             flash.addEventListener('click', function() {
@@ -114,6 +118,7 @@
             });
         }
 
+        // Pirms dzēšanas lūdzam lietotājam apstiprināt darbību.
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();

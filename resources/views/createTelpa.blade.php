@@ -11,6 +11,7 @@
 
     <h2 style="color: #E2D4BB;">Jauna telpa</h2>
 
+    <!-- Forma jaunas telpas pievienošanai -->
     <form method="POST" action="{{ route('telpa.store') }}">
         @csrf
         <div class="mb-3">
@@ -29,6 +30,7 @@
             <label for="stavs" class="form-label">Stāvs</label>
             <input type="number" class="form-control" id="stavs" name="stavs" required>
         </div>
+        <!-- Saglabā telpas ierakstu -->
         <button type="submit" class="btn btn-primary">Saglabāt</button>
     </form>
 @endsection

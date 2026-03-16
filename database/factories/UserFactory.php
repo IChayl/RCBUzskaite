@@ -12,12 +12,12 @@ use Illuminate\Support\Str;
 class UserFactory extends Factory
 {
     /**
-     * The current password being used by the factory.
+    * Pašreizējā parole, ko izmanto fabrika.
      */
     protected static ?string $password;
 
     /**
-     * Define the model's default state.
+        * Definē modeļa noklusēto stāvokli.
      *
      * @return array<string, mixed>
      */
@@ -33,7 +33,7 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Norāda, ka modeļa e-pasta adrese nav verificēta.
      */
     public function unverified(): static
     {

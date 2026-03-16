@@ -12,6 +12,6 @@ class KategorijaModel extends Model
    protected $keyType = 'int';
    public $timestamps = false;
 
-   // allow mass assignment for these columns
+   // Atļauj masveida piešķiršanu šīm kolonnām
    protected $fillable = ['nosaukums', 'apraksts'];
 }

@@ -6,14 +6,21 @@ use Illuminate\Http\Request;
 use App\Models\Lietotajs;
 use Illuminate\Support\Facades\DB;
 
+// Kontrolieris lietotāju pārvaldībai (CRUD darbības).
 class LietotajsController extends Controller
 {
+    /**
+     * Parāda visu lietotāju sarakstu.
+     */
     public function showAllLietotaji()
     {
         $u = new Lietotajs();
         return view('lietotaji', ['lietotaji' => $u->orderBy('lietotajs_id','asc')->get()]);
     }
 
+    /**
+     * Atver lietotāja izveides formu (tikai administratoram).
+     */
     public function createLietotajs()
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -22,6 +29,9 @@ class LietotajsController extends Controller
         return view('createLietotajs');
     }
 
+    /**
+     * Validē ievadi un izveido jaunu lietotāja ierakstu.
+     */
     public function LietotajsSubmit(Request $req)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -50,6 +60,7 @@ class LietotajsController extends Controller
         $u->amats = $req->input('amats');
         $u->aktivs = $req->input('aktivs') ? 1 : 0;
 
+        // Ja augšupielādēts attēls, saglabā to publiskajā diskā.
         if ($req->hasFile('avatar')) {
             $path = $req->file('avatar')->store('avatars', 'public');
             $u->avatar = $path;
@@ -59,12 +70,18 @@ class LietotajsController extends Controller
         return redirect()->to('/lietotajs')->with('success','Ieraksts pievienots');
     }
 
+    /**
+     * Parāda lietotāja detalizēto skatu.
+     */
     public function LietotajsDetails($id)
     {
         $u = Lietotajs::find($id);
         return view('detailsLietotajs', ['lietotajs' => $u]);
     }
 
+    /**
+     * Atver lietotāja rediģēšanas formu (tikai administratoram).
+     */
     public function LietotajsEdit($id)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -74,6 +91,9 @@ class LietotajsController extends Controller
         return view('editLietotajs', ['lietotajs' => $u]);
     }
 
+    /**
+     * Validē un saglabā lietotāja izmaiņas.
+     */
     public function editSubmit(Request $req, $id)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -103,6 +123,7 @@ class LietotajsController extends Controller
             'aktivs' => $req->input('aktivs') ? 1 : 0,
         ];
 
+        // Ja pievienots jauns avatar attēls, aizvieto ceļu ar jauno failu.
         if ($req->hasFile('avatar')) {
             $path = $req->file('avatar')->store('avatars', 'public');
             $data['avatar'] = $path;
@@ -112,6 +133,9 @@ class LietotajsController extends Controller
         return redirect()->to('/lietotajs')->with('success','Ieraksts atjaunināts');
     }
 
+    /**
+     * Dzēš lietotāja ierakstu (tikai administratoram).
+     */
     public function LietotajsDelete($id)
     {
         if (!auth()->user()->admina_tiesibas) {

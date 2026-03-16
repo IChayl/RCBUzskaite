@@ -11,6 +11,7 @@
 
     <h2 style="color: #E2D4BB;">Jauns kustības veids</h2>
 
+    <!-- Forma jauna kustības veida pievienošanai -->
     <form method="POST" action="{{ url('/kustibas_veidi') }}">
         @csrf
         <div class="mb-3">
@@ -21,6 +22,7 @@
             <label for="apraksts" class="form-label">Apraksts</label>
             <textarea class="form-control" id="apraksts" name="apraksts"></textarea>
         </div>
+        <!-- Iesniedz formas datus saglabāšanai -->
         <button type="submit" class="btn btn-primary">Saglabāt</button>
     </form>
 @endsection

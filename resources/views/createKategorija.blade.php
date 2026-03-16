@@ -11,6 +11,7 @@
 
     <h2 style="color: #E2D4BB;">Jauna kategorija</h2>
 
+    <!-- Validācijas kļūdu saraksts, ja forma iesniegta ar neatbilstošiem datiem -->
     @if($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -21,6 +22,7 @@
         </div>
     @endif
 
+    <!-- Jaunas kategorijas izveides forma -->
     <form method="POST" action="{{ route('kategorijas.store') }}">
         @csrf
         <div class="mb-3">
@@ -31,6 +33,7 @@
             <label for="apraksts" class="form-label">Apraksts</label>
             <textarea class="form-control" id="apraksts" name="apraksts"></textarea>
         </div>
+        <!-- Saglabā ierakstu datubāzē -->
         <button type="submit" class="btn btn-primary">Saglabat</button>
     </form>
 @endsection
