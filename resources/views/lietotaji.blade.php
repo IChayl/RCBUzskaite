@@ -40,13 +40,13 @@
                         </div>
                         <div style="flex: 1; min-width: 0;">
                             <div class="card-text" style="font-weight: 700; color: #E2D4BB;">{{ $item->lietotajvards }}</div>
-                            <div class="card-text" style="color: #2D4159; font-size: 0.9rem;">Vārds: {{ $item->vards ?? '-' }}</div>
-                            <div class="card-text" style="color: #2D4159; font-size: 0.9rem;">Uzvārds: {{ $item->uzvards ?? '-' }}</div>
-                            <div class="card-text" style="color: #2D4159; font-size: 0.9rem;">E-pasts: {{ $item->epasts ?? '-' }}</div>
-                            <div class="card-text" style="color: #2D4159; font-size: 0.9rem;">Telefons: {{ $item->telefons ?? '-' }}</div>
-                            <div class="card-text" style="color: #2D4159; font-size: 0.9rem;">Amats: {{ $item->amats ?? '-' }}</div>
-                            <div class="card-text" style="color: #2D4159; font-size: 0.9rem;">Admina tiesības: <span style="font-weight: 600;">{{ $item->admina_tiesibas ? 'Jā' : 'Nē' }}</span></div>
-                            <div class="card-text" style="color: #2D4159; font-size: 0.9rem;">Aktīvs: <span style="font-weight: 600;">{{ $item->aktivs ? 'Jā' : 'Nē' }}</span></div>
+                            <div class="card-text" style="color: #E2D4BB; font-size: 0.9rem;">Vārds: {{ $item->vards ?? '-' }}</div>
+                            <div class="card-text" style="color: #E2D4BB; font-size: 0.9rem;">Uzvārds: {{ $item->uzvards ?? '-' }}</div>
+                            <div class="card-text" style="color: #E2D4BB; font-size: 0.9rem;">E-pasts: {{ $item->epasts ?? '-' }}</div>
+                            <div class="card-text" style="color: #E2D4BB; font-size: 0.9rem;">Telefons: {{ $item->telefons ?? '-' }}</div>
+                            <div class="card-text" style="color: #E2D4BB; font-size: 0.9rem;">Amats: {{ $item->amats ?? '-' }}</div>
+                            <div class="card-text" style="color: #E2D4BB; font-size: 0.9rem;">Admina tiesības: <span style="font-weight: 600;">{{ $item->admina_tiesibas ? 'Jā' : 'Nē' }}</span></div>
+                            <div class="card-text" style="color: #E2D4BB; font-size: 0.9rem;">Aktīvs: <span style="font-weight: 600;">{{ $item->aktivs ? 'Jā' : 'Nē' }}</span></div>
                         </div>
                     </div>
                     <div class="auth-links" style="margin-top: 12px;">

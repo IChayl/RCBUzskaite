@@ -135,7 +135,7 @@
 
     .auth-links a:hover {
       background: rgba(226, 212, 187, 0.15);
-      color: #2D4159;
+      color: #E2D4BB;
       border: 1px solid #2D4159;
       border-radius: 25px;
       box-shadow: 0 0 10px #2D4159, 0 0 20px rgba(226, 212, 187, 0.4);
