@@ -4,7 +4,7 @@
     <p style="color: #E2D4BB;">Visi kustību veidi</p>
  <div class="auth-links">
         @if(Auth::user()->admina_tiesibas)
-            <a href="/lietotajs/create">Jauns lietotājs</a>
+            <a href="/kustibas_veidi/create">Jauns kustību veids</a>
         @endif
         <a type="button" class="auth-links" onclick="window.print()">Printēt</a>
     </div>

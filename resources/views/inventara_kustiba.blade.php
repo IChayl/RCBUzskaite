@@ -5,7 +5,7 @@
     
  <div class="auth-links">
         @if(Auth::user()->admina_tiesibas)
-            <a href="/lietotajs/create">Jauns lietotājs</a>
+            <a href="/inventara_kustiba/create">Jauna inventāra kustība</a>
         @endif
         <a type="button" class="auth-links" onclick="window.print()">Printēt</a>
     </div>

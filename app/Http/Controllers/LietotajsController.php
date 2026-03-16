@@ -45,7 +45,7 @@ class LietotajsController extends Controller
             'vards' => 'nullable|string|max:50',
             'uzvards' => 'nullable|string|max:50',
             'epasts' => 'nullable|email|max:100',
-            'telefons' => 'nullable|string|max:20',
+            'telefons' => ['nullable', 'string', 'max:20', 'regex:/^[0-9]+$/'],
             'amats' => 'nullable|string|max:50',
             'aktivs' => 'nullable|boolean',
         ]);
@@ -108,7 +108,7 @@ class LietotajsController extends Controller
             'vards' => 'nullable|string|max:50',
             'uzvards' => 'nullable|string|max:50',
             'epasts' => 'nullable|email|max:100',
-            'telefons' => 'nullable|string|max:20',
+            'telefons' => ['nullable', 'string', 'max:20', 'regex:/^[0-9]+$/'],
             'amats' => 'nullable|string|max:50',
             'aktivs' => 'nullable|boolean',
         ]);

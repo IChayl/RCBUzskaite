@@ -38,7 +38,7 @@
         </div>
         <div class="mb-3">
             <label for="telefons" class="form-label">Telefons</label>
-            <input type="text" class="form-control" id="telefons" name="telefons">
+            <input type="text" class="form-control" id="telefons" name="telefons" inputmode="numeric" pattern="[0-9]+" maxlength="20">
         </div>
                    <div class="mb-3" style="margin-bottom:16px;">
             <label style="font-weight:700; display:block; margin-bottom:8px;">Amats:</label>
