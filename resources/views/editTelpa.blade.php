@@ -11,6 +11,8 @@
 
     <h2 style="color: #E2D4BB;">Rediģēt telpu</h2>
 
+    @include('partials.validation-errors')
+
     <!-- Telpas datu rediģēšanas forma -->
     <form method="POST" action="/telpa/{{ $telpa->telpas_id }}/editSubmit">
         @csrf

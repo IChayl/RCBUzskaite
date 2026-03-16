@@ -11,6 +11,8 @@
 
     <h2 style="color: #E2D4BB;">Rediģēt kategoriju</h2>
 
+    @include('partials.validation-errors')
+
     <!-- Kategorijas datu atjaunināšanas forma -->
     <form method="POST" action="/kategorija/{{ $kategorija->kategorija_id }}/editSubmit">
         @csrf

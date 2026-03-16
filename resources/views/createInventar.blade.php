@@ -11,19 +11,11 @@
 
     <h2 style="color: #E2D4BB;">Jauns inventārs</h2>
 
+    @include('partials.validation-errors')
+
     <!-- Jauna inventāra izveides forma -->
     <form method="POST" action="{{ route('inventars.store') }}">
         @csrf
-        <!-- Validācijas kļūdu attēlošana -->
-        @if($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
         <div class="mb-3">
             <label for="nosaukums" class="form-label">Nosaukums</label>
             <input type="text" class="form-control" id="nosaukums" name="nosaukums" required>

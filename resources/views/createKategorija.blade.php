@@ -11,16 +11,7 @@
 
     <h2 style="color: #E2D4BB;">Jauna kategorija</h2>
 
-    <!-- Validācijas kļūdu saraksts, ja forma iesniegta ar neatbilstošiem datiem -->
-    @if($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    @include('partials.validation-errors')
 
     <!-- Jaunas kategorijas izveides forma -->
     <form method="POST" action="{{ route('kategorijas.store') }}">

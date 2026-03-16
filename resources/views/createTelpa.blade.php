@@ -11,6 +11,8 @@
 
     <h2 style="color: #E2D4BB;">Jauna telpa</h2>
 
+    @include('partials.validation-errors')
+
     <!-- Forma jaunas telpas pievienošanai -->
     <form method="POST" action="{{ route('telpa.store') }}">
         @csrf

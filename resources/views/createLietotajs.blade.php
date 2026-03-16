@@ -11,6 +11,8 @@
 
     <h2 style="color: #E2D4BB;">Jauns lietotājs</h2>
 
+    @include('partials.validation-errors')
+
     <!-- Jauna lietotāja izveides forma -->
     <form method="POST" action="{{ route('lietotajs.store') }}" enctype="multipart/form-data">
         @csrf

@@ -72,9 +72,14 @@ class KategorijaController extends Controller
         if (!auth()->user()->admina_tiesibas) {
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
+        $data = $Kategorija->validate([
+            'nosaukums' => 'required|string|max:50',
+            'apraksts' => 'nullable|string|max:200',
+        ]);
+
         $kategorija = new KategorijaModel();
-        $kategorija->nosaukums = $Kategorija->input('nosaukums');
-        $kategorija->apraksts = $Kategorija->input('apraksts');
+        $kategorija->nosaukums = $data['nosaukums'];
+        $kategorija->apraksts = $data['apraksts'] ?? null;
         $kategorija->save();
 
         return redirect()->to('/kategorija')->with('success', 'Ieraksts pievienots');
@@ -102,11 +107,16 @@ class KategorijaController extends Controller
         if (!auth()->user()->admina_tiesibas) {
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
+        $data = $dati->validate([
+            'nosaukums' => 'required|string|max:50',
+            'apraksts' => 'nullable|string|max:200',
+        ]);
+
         DB::table('kategorija')
             ->where('kategorija_id', $id)
             ->update([
-                'nosaukums' => $dati->input('nosaukums'),
-                'apraksts' => $dati->input('apraksts'),
+                'nosaukums' => $data['nosaukums'],
+                'apraksts' => $data['apraksts'] ?? null,
             ]);
 
         return redirect()->to('/kategorija')->with('success', 'Ieraksts atjaunināts');

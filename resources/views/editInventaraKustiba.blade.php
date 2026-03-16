@@ -11,6 +11,8 @@
 
     <h2 style="color: #E2D4BB;">Rediģēt inventāra kustību</h2>
 
+    @include('partials.validation-errors')
+
     <!-- Inventāra kustības rediģēšanas forma -->
     <form method="POST" action="/inventara_kustiba/{{ $kustiba->kustiba_id }}/editSubmit">
         @csrf

@@ -11,6 +11,8 @@
 
     <h2 style="color: #E2D4BB;">Jauna inventāra kustība</h2>
 
+    @include('partials.validation-errors')
+
     <!-- Jaunas kustības izveides forma -->
     <form method="POST" action="{{ route('inventara_kustiba.store') }}">
         @csrf

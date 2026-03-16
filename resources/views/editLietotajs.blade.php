@@ -11,6 +11,8 @@
 
     <h2 style="color: #E2D4BB;">Rediģēt lietotāju</h2>
 
+    @include('partials.validation-errors')
+
     <!-- Lietotāja datu rediģēšanas forma -->
     <form method="POST" action="/lietotajs/{{ $lietotajs->lietotajs_id }}/editSubmit" enctype="multipart/form-data">
         @csrf

@@ -11,6 +11,8 @@
 
     <h2 style="color: #E2D4BB;">Rediģēt kustības veidu</h2>
 
+    @include('partials.validation-errors')
+
     <!-- Kustības veida rediģēšanas forma -->
     <form method="POST" action="/kustibas_veidi/{{ $veids->kustibas_veids_id }}/editSubmit">
         @csrf

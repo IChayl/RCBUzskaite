@@ -11,6 +11,8 @@
 
     <h2 style="color: #E2D4BB;">Jauns kustības veids</h2>
 
+    @include('partials.validation-errors')
+
     <!-- Forma jauna kustības veida pievienošanai -->
     <form method="POST" action="{{ url('/kustibas_veidi') }}">
         @csrf
