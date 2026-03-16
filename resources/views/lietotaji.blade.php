@@ -3,11 +3,11 @@
 @section('content')
     <p style="color: #E2D4BB;">Visi lietotāji</p>
 
-    <div class="auth-links">
+   <div class="auth-links">
         @if(Auth::user()->admina_tiesibas)
             <a href="/lietotajs/create">Jauns lietotājs</a>
         @endif
-        <button type="button" class="auth-links" onclick="window.print()">Printēt</button>
+        <a type="button" class="auth-links" onclick="window.print()">Printēt</a>
     </div>
 
     <hr>
