@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #ffffff;">Jauns lietotājs</p>
+    <p style="color: #E2D4BB;">Jauns lietotājs</p>
 
     <div class="auth-links">
         <a href="/lietotajs" class="btn btn-secondary">Atpakaļ uz sarakstu</a>
@@ -9,7 +9,7 @@
 
     <hr>
 
-    <h2 style="color: #ffffff;">Jauns lietotājs</h2>
+    <h2 style="color: #E2D4BB;">Jauns lietotājs</h2>
 
     <form method="POST" action="{{ route('lietotaji.store') }}" enctype="multipart/form-data">
         @csrf

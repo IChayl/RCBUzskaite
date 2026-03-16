@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #ffffff;">Visas kategorijas</p>
+    <p style="color: #E2D4BB;">Visas kategorijas</p>
 
     <div class="auth-links">
         <a href="/">Atpakaļ uz sākumlapu</a>
@@ -12,14 +12,14 @@
     </div>
 
     <hr>
-    <h2 style="color: #ffffff;">Kategorijas</h2>
+    <h2 style="color: #E2D4BB;">Kategorijas</h2>
 
     <form method="GET" class="table-controls">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
         <label style="display:flex; align-items:center; gap:8px;">
-            <span style="color:#ffffff; font-size:0.9rem;">Meklēt pēc:</span>
-            <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.06); color:#ffffff;">
+            <span style="color:#E2D4BB; font-size:0.9rem;">Meklēt pēc:</span>
+            <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
                 <option value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
                 <option value="nosaukums" {{ request('column') === 'nosaukums' ? 'selected' : '' }}>Nosaukums</option>
                 <option value="apraksts" {{ request('column') === 'apraksts' ? 'selected' : '' }}>Apraksts</option>
@@ -28,19 +28,19 @@
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
         <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
         <a href="{{ url('/kategorija') }}" class="bloom-button sm" style="height: 36px;">Notīrīt</a>
-        <span class="no-results-message" style="display:none; color:#f88;">Nav rezultātu.</span>
+        <span class="no-results-message" style="display:none; color:#C89768;">Nav rezultātu.</span>
     </form>
 
-    <div style="color: #ffffff; margin-top: 20px;">
+    <div style="color: #E2D4BB; margin-top: 20px;">
         @if(session('success'))
-            <div id="flash-message" style="background: #490700; color: #90EE90; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #90EE90; cursor: pointer;">
+            <div id="flash-message" style="background: #0F1931; color: #C89768; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #C89768; cursor: pointer;">
                 {{ session('success') }}
             </div>
         @endif
     </div>
 
     @if($kategorija->isEmpty())
-        <p style="color: #ffffff;">Nav kategoriju.</p>
+        <p style="color: #E2D4BB;">Nav kategoriju.</p>
     @else
         <div style="overflow-x: auto;">
             <table class="data-table">

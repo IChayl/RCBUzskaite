@@ -3,22 +3,22 @@
     /* General header style */
     header {
       position: relative;
-      background: linear-gradient(90deg, #490700, #5400A8);
-      color: #FFFFFF;
+      background: linear-gradient(90deg, #0F1931, #594435);
+      color: #E2D4BB;
       padding: 15px 30px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       overflow: hidden;
       transparency: true;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 12px rgba(15, 25, 49, 0.45);
+      border-bottom: 2px solid rgba(226, 212, 187, 0.1);
     }
 
       .small header {
       position: relative;
-      background: linear-gradient(90deg, #490700, #5400A8);
-      color: #FFFFFF;
+      background: linear-gradient(90deg, #0F1931, #594435);
+      color: #E2D4BB;
       padding: 15px 30px;
       display: flex;
       align-items: center;
@@ -27,8 +27,8 @@
       transparency: true;
       border-radius: 18px;
       
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 12px rgba(15, 25, 49, 0.45);
+      border-bottom: 2px solid rgba(226, 212, 187, 0.1);
     }
 
     /* Decorative shape behind header */
@@ -39,7 +39,7 @@
       right: -40px;
       width: 160px;
       height: 160px;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.2), transparent 75%);
+      background: radial-gradient(circle at center, rgba(226, 212, 187, 0.2), transparent 75%);
       filter: blur(18px);
     }
 
@@ -50,13 +50,13 @@
       left: -40px;
       width: 160px;
       height: 160px;
-      background: radial-gradient(circle at center, rgba(255,255,255,0.2), transparent 75%);
+      background: radial-gradient(circle at center, rgba(226, 212, 187, 0.2), transparent 75%);
       filter: blur(18px);
     }
 
     /* Brand name */
     .brand a {
-      color: #150024;
+      color: #E2D4BB;
       font-size: 1.6em;
       font-weight: bold;
       text-decoration: none;
@@ -67,8 +67,8 @@
     }
 
     .brand a:hover {
-      color: #150024;
-      text-shadow: 0 0 10px #ff00d0, 0 0 20px maroon;
+      color: #C89768;
+      text-shadow: 0 0 10px #C89768, 0 0 20px #594435;
     }
 
     /* Navigation */
@@ -81,7 +81,7 @@
 
     nav a {
       position: relative;
-      color: #FFFFFF;
+      color: #E2D4BB;
       text-decoration: none;
       font-weight: 500;
       letter-spacing: 0.5px;
@@ -98,7 +98,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+      background: linear-gradient(90deg, rgba(226, 212, 187, 0.2), rgba(226, 212, 187, 0.05));
       transition: all 0.4s ease;
       border-radius: 12px;
       z-index: -1;
@@ -109,8 +109,8 @@
     }
 
     nav a:hover {
-      color: #ffd6d6;
-      text-shadow: 0 0 8px #fff, 0 0 18px maroon;
+      color: #C89768;
+      text-shadow: 0 0 8px #E2D4BB, 0 0 18px #594435;
     }
 
     /* Auth section (Login/Register) */
@@ -121,24 +121,24 @@
     }
 
     .auth-links a {
-      color: #FFFFFF;
+      color: #E2D4BB;
       text-decoration: none;
       font-weight: 500;
       letter-spacing: 0.5px;
       padding: 8px 14px;
       border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(226, 212, 187, 0.3);
       transition: all 0.3s ease;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(226, 212, 187, 0.05);
       backdrop-filter: blur(3px);
     }
 
     .auth-links a:hover {
-      background: rgba(255, 255, 255, 0.15);
-      color: #ffd6d6;
-      border: 1px solid #ffd6d6;
+      background: rgba(226, 212, 187, 0.15);
+      color: #C89768;
+      border: 1px solid #C89768;
       border-radius: 25px;
-      box-shadow: 0 0 10px maroon, 0 0 20px rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 10px #594435, 0 0 20px rgba(226, 212, 187, 0.4);
       transform: translateY(-2px);
     }
 

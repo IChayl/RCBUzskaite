@@ -5,25 +5,25 @@
 
 <style>
 .navy-maroon {
-    background: #490700; /* navy -> maroon */
-    color: #FFFFFF;
+    background: #0F1931; /* navy -> maroon */
+    color: #E2D4BB;
     padding: 1rem;
     border-radius: 6px;
 }
 .navy-maroon p { margin: 0; font-size: 1.05rem; }
 .sidemenu {
-    background: #490700;
-    color: #FFFFFF;
+    background: #0F1931;
+    color: #E2D4BB;
     padding: 0.75rem;
     border-radius: 6px;
 }
 .sidemenu a {
-    color: #FFFFFF;
+    color: #E2D4BB;
     text-decoration: none;
     display: block;
     padding: 0.25rem 0;
 }
-.sidemenu a:hover { color: #fff; }
+.sidemenu a:hover { color: #C89768; }
 </style>
 
 <div class="navy-maroon">

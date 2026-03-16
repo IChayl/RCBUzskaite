@@ -9,21 +9,21 @@
     <style>
         /* Match app layout theme */
         :root{
-            --navy: #490700;
-            --navy-2: #75150b;
-            --maroon: #5400A8;
-            --maroon-2: #7528c3;
-            --accent: #f3c6c9;
-            --card-bg: rgba(255,255,255,0.06);
-            --muted-white: rgba(255,255,255,0.9);
+            --navy: #0F1931;
+            --navy-2: #2D4159;
+            --maroon: #594435;
+            --maroon-2: #C89768;
+            --accent: #E2D4BB;
+            --card-bg: rgba(226, 212, 187, 0.06);
+            --muted-white: rgba(226, 212, 187, 0.9);
         }
 
         html, body {
             height: 100%;
             margin: 0;
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            background: radial-gradient(1200px 800px at 10% 20%, rgba(131, 43, 155, 0.12), transparent 8%),
-                        radial-gradient(1000px 600px at 90% 80%, rgba(9, 51, 7, 0.12), transparent 10%),
+            background: radial-gradient(1200px 800px at 10% 20%, rgba(45, 65, 89, 0.12), transparent 8%),
+                        radial-gradient(1000px 600px at 90% 80%, rgba(15, 25, 49, 0.2), transparent 10%),
                         linear-gradient(180deg, var(--navy) 0%, var(--maroon) 100%);
             color: var(--muted-white);
         }
@@ -41,9 +41,9 @@
         .card.custom {
             width: 400px;
             background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(226, 212, 187, 0.08);
             color: var(--muted-white);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+            box-shadow: 0 8px 30px rgba(15,25,49,0.45);
             border-radius: 12px;
             backdrop-filter: blur(6px) saturate(120%);
             overflow: hidden;
@@ -55,20 +55,20 @@
         }
 
         label.form-label {
-            color: rgba(255,255,255,0.85);
+            color: rgba(226, 212, 187, 0.85);
             font-weight: 500;
         }
 
         input.form-control {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(226, 212, 187, 0.03);
+            border: 1px solid rgba(226, 212, 187, 0.06);
             color: var(--muted-white);
         }
 
         input.form-control:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 0.15rem rgba(185,75,75,0.15);
-            background: rgba(255,255,255,0.04);
+            box-shadow: 0 0 0 0.15rem rgba(200,151,104,0.15);
+            background: rgba(226, 212, 187, 0.04);
             color: var(--muted-white);
         }
 
@@ -76,7 +76,7 @@
         .btn-bloom {
             position: relative;
             overflow: hidden;
-            color: #fff;
+            color: #E2D4BB;
             background: linear-gradient(90deg, var(--maroon) 0%, var(--maroon-2) 50%, var(--navy-2) 100%);
             border: none;
             transition: transform 180ms ease, box-shadow 180ms ease;
@@ -90,7 +90,7 @@
             top: 50%;
             width: 20px;
             height: 20px;
-            background: radial-gradient(circle, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.06) 40%, transparent 60%);
+            background: radial-gradient(circle, rgba(226, 212, 187, 0.32) 0%, rgba(226, 212, 187, 0.06) 40%, transparent 60%);
             transform: translate(-50%, -50%) scale(0);
             opacity: 0;
             transition: transform 600ms cubic-bezier(.2,.9,.2,1), opacity 250ms ease;
@@ -101,7 +101,7 @@
 
         .btn-bloom:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(107,15,20,0.35);
+            box-shadow: 0 10px 30px rgba(89,68,53,0.35);
         }
 
         .btn-bloom:active {
@@ -110,7 +110,7 @@
 
         .btn-bloom:focus {
             outline: none;
-            box-shadow: 0 0 0 0.3rem rgba(185,75,75,0.18);
+            box-shadow: 0 0 0 0.3rem rgba(200,151,104,0.18);
         }
 
         .btn-bloom:hover::after {
@@ -120,7 +120,7 @@
 
         /* Link and small text */
         .card .text-center a {
-            color: rgba(255,255,255,0.85);
+            color: rgba(226, 212, 187, 0.85);
             text-decoration: none;
         }
 
@@ -131,9 +131,9 @@
 
         /* Error box adapted to theme */
         .alert-danger {
-            background: linear-gradient(180deg, rgba(107,15,20,0.15), rgba(107,15,20,0.08));
-            border-color: rgba(255,255,255,0.06);
-            color: #ffdede;
+            background: linear-gradient(180deg, rgba(89,68,53,0.15), rgba(89,68,53,0.08));
+            border-color: rgba(226, 212, 187, 0.06);
+            color: #E2D4BB;
         }
 
         /* Responsive tweaks */
