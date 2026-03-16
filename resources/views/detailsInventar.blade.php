@@ -22,7 +22,7 @@
             <p class="card-text"><strong>Telpa:</strong> {{ optional($inventar->telpa)->nosaukums ?? ('ID: '.$inventar->telpas_id) }}</p>
             <p class="card-text"><strong>Atbildīgais:</strong> {{ optional($inventar->atbildigais)->lietotajvards ?? ('ID: '.$inventar->atbildigais_id) }}</p>
             <p class="card-text"><strong>Inventāra numurs:</strong> {{ $inventar->inventara_numurs ?? '-' }}</p>
-            <p class="card-text"><strong>Iegādes datums:</strong> {{ $inventar->iegades_datums ?? '-' }}</p>
+            <p class="card-text"><strong>Iegādes datums:</strong> {{ $inventar->iegades_datums ? \Carbon\Carbon::parse($inventar->iegades_datums)->locale('lv')->translatedFormat('j. F Y') : '-' }}</p>
         </div>
     </div>
 @endsection

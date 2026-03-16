@@ -16,7 +16,7 @@
         @csrf
         <div class="mb-3">
             <label for="datums" class="form-label">Datums</label>
-            <input type="date" class="form-control" id="datums" name="datums" value="{{ $kustiba->datums }}" required>
+            <input type="date" class="form-control" id="datums" name="datums" value="{{ $kustiba->datums }}" required lang="lv">
         </div>
         <div class="mb-3">
             <label for="inventars_id" class="form-label">Inventārs</label>

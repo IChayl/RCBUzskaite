@@ -93,7 +93,7 @@
                     <!-- Attēlo katru kustību kā atsevišķu tabulas rindu -->
                     @foreach ($kustibas as $item)
                         <tr>
-                            <td>{{ $item->datums }}</td>
+                            <td>{{ \Carbon\Carbon::parse($item->datums)->locale('lv')->translatedFormat('j. F Y') }}</td>
                             <td>{{ $item->inventars->nosaukums ?? ('ID: '.$item->inventars_id) }}</td>
                             <td>{{ optional($item->kustibasVeids)->nosaukums ?? ('ID: '.$item->kustibas_veids_id) }}</td>
                             <td>{{ optional($item->vecaTelpa)->nosaukums ?? ('ID: '.$item->veca_telpa_id) }}</td>

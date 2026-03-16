@@ -42,7 +42,7 @@
         </div>
         <div class="mb-3">
             <label for="iegades_datums" class="form-label">Iegādes datums</label>
-            <input type="date" class="form-control" id="iegades_datums" name="iegades_datums">
+            <input type="date" class="form-control" id="iegades_datums" name="iegades_datums" lang="lv">
         </div>
         <div class="mb-3">
             <label for="kategorija_id" class="form-label">Kategorijas ID</label>
