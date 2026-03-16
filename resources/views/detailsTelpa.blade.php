@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #E2D4BB;">Visi dati</p>
+    <p style="color: #FAF8F2;">Visi dati</p>
     <div class="auth-links">
         <a href="/telpa">Atpakaļ uz telpām</a>
         @if(Auth::user()->admina_tiesibas)
@@ -10,8 +10,8 @@
     </div>
 
     <hr>
-    <h2 style="color: #E2D4BB;">Telpas detaļas</h2>
-    <div class="card mt-3" style="background: rgba(45, 65, 89, 0.65); border: 1px solid rgba(226, 212, 187, 0.2); color: #E2D4BB; max-width: 600px;">
+    <h2 style="color: #FAF8F2;">Telpas detaļas</h2>
+    <div class="card mt-3" style="background: rgba(36, 59, 83, 0.65); border: 1px solid rgba(209, 195, 165, 0.2); color: #FAF8F2; max-width: 600px;">
         <div class="card-body">
             <h5 class="card-title">{{ $telpa->nosaukums }} (ID: {{ $telpa->telpas_id }})</h5>
             <p class="card-text"><strong>Izmēri:</strong> {{ $telpa->izmeri ?? '-' }}</p>

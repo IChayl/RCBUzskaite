@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #E2D4BB;">Jauna inventāra kustība</p>
+    <p style="color: #FAF8F2;">Jauna inventāra kustība</p>
 
     <div class="auth-links">
         <a href="/inventara_kustiba" class="btn btn-secondary">Atpakaļ uz sarakstu</a>
@@ -9,7 +9,7 @@
 
     <hr>
 
-    <h2 style="color: #E2D4BB;">Jauna inventāra kustība</h2>
+    <h2 style="color: #FAF8F2;">Jauna inventāra kustība</h2>
 
     <form method="POST" action="{{ route('inventara_kustiba.store') }}">
         @csrf

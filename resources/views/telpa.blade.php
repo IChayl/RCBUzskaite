@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #E2D4BB;">Visas telpas</p>
+    <p style="color: #FAF8F2;">Visas telpas</p>
 
     <div class="auth-links">
         <a href="/">Atpakaļ uz sākumlapu</a>
@@ -13,22 +13,22 @@
 
     <hr>
 
-    <div style="color: #E2D4BB; margin-top: 20px;">
+    <div style="color: #FAF8F2; margin-top: 20px;">
         @if(session('success'))
-            <div id="flash-message" style="background: #0F1931; color: #2D4159; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #2D4159; cursor: pointer;">
+            <div id="flash-message" style="background: #0D203A; color: #243B53; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #243B53; cursor: pointer;">
                 {{ session('success') }}
             </div>
         @endif
     </div>
 
-    <h2 style="color: #E2D4BB;">Telpas</h2>
+    <h2 style="color: #FAF8F2;">Telpas</h2>
 
     <form method="GET" class="table-controls">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
         <label style="display:flex; align-items:center; gap:8px;">
-            <span style="color:#E2D4BB; font-size:0.9rem;">Meklēt pēc:</span>
-            <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
+            <span style="color:#FAF8F2; font-size:0.9rem;">Meklēt pēc:</span>
+            <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(209, 195, 165, 0.2); background:rgba(209, 195, 165, 0.06); color:#FAF8F2;">
                 <option value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
                 <option value="nosaukums" {{ request('column') === 'nosaukums' ? 'selected' : '' }}>Nosaukums</option>
                 <option value="izmeri" {{ request('column') === 'izmeri' ? 'selected' : '' }}>Izmēri</option>
@@ -39,11 +39,11 @@
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
         <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
         <a href="{{ url('/telpa') }}" class="bloom-button sm" style="height: 36px;">Notīrīt</a>
-        <span class="no-results-message" style="display:none; color:#2D4159;">Nav rezultātu.</span>
+        <span class="no-results-message" style="display:none; color:#243B53;">Nav rezultātu.</span>
     </form>
 
     @if($telpas->isEmpty())
-        <p style="color: #E2D4BB;">Nav telpu.</p>
+        <p style="color: #FAF8F2;">Nav telpu.</p>
     @else
         <div style="overflow-x: auto;">
             <table class="data-table">
