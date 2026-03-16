@@ -3,14 +3,11 @@
 @section('content')
     <p style="color: #E2D4BB;">Visi inventāri</p>
 
-    <div class="auth-links">
-        <a href="/">Atpakaļ uz sākumlapu</a>
+ <div class="auth-links">
         @if(Auth::user()->admina_tiesibas)
-            <a href="/inventars/create">Jauns inventārs</a>
-        @else
-            <a href="/inventars/create" class="bloom-button sm">Jauns inventārs</a>
+            <a href="/lietotajs/create">Jauns lietotājs</a>
         @endif
-        <button type="button" class="bloom-button sm" onclick="window.print()">Printēt</button>
+        <button type="button" class="auth-links" onclick="window.print()">Printēt</button>
     </div>
 
     <hr>

@@ -2,11 +2,12 @@
 
 @section('content')
     <p style="color: #E2D4BB;">Visas inventāra kustības</p>
-
-    <div class="auth-links">
-        <a href="/">Atpakaļ uz sākumlapu</a>
-        <a href="/inventara_kustiba/create">Jauna kustība</a>
-        <button type="button" class="bloom-button sm" onclick="window.print()">Printēt</button>
+    
+ <div class="auth-links">
+        @if(Auth::user()->admina_tiesibas)
+            <a href="/lietotajs/create">Jauns lietotājs</a>
+        @endif
+        <button type="button" class="auth-links" onclick="window.print()">Printēt</button>
     </div>
 
     <hr>

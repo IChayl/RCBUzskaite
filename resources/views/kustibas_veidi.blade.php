@@ -4,11 +4,10 @@
     <p style="color: #E2D4BB;">Visi kustību veidi</p>
 
     <div class="auth-links">
-        <a href="/">Atpakaļ uz sākumlapu</a>
         @if(Auth::user()->admina_tiesibas)
-            <a href="/kustibas_veidi/create">Jauns kustības veids</a>
+            <a href="/lietotajs/create">Jauns lietotājs</a>
         @endif
-        <button type="button" class="bloom-button sm" onclick="window.print()">Printēt</button>
+        <button type="button" class="auth-links" onclick="window.print()">Printēt</button>
     </div>
 
     <hr>
