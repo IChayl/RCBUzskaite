@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/lietotajs', [LietotajsController::class,'showAllLietotaji'])->name('lietotaji.lapa');
     Route::get('/lietotajs/create', [LietotajsController::class,'createLietotajs'])->name('lietotajs.create');
     Route::post('/lietotajs', [LietotajsController::class,'LietotajsSubmit'])->name('lietotajs.store');
+    Route::get('/lietotajs/{id}/avatar', [LietotajsController::class,'avatar'])->name('lietotajs.avatar');
     Route::get('/lietotajs/{id}/details', [LietotajsController::class,'LietotajsDetails'])->name('lietotajs.details');
     Route::get('/lietotajs/{id}/edit', [LietotajsController::class,'LietotajsEdit'])->name('lietotajs.edit');
     Route::post('/lietotajs/{id}/editSubmit', [LietotajsController::class,'editSubmit'])->name('lietotajs.update');

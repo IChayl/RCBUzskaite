@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Lietotajs;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 // Kontrolieris lietotāju pārvaldībai (CRUD darbības).
 class LietotajsController extends Controller
@@ -62,6 +63,7 @@ class LietotajsController extends Controller
 
         // Ja augšupielādēts attēls, saglabā to publiskajā diskā.
         if ($req->hasFile('avatar')) {
+            Storage::disk('public')->makeDirectory('avatars');
             $path = $req->file('avatar')->store('avatars', 'public');
             $u->avatar = $path;
         }
@@ -125,12 +127,28 @@ class LietotajsController extends Controller
 
         // Ja pievienots jauns avatar attēls, aizvieto ceļu ar jauno failu.
         if ($req->hasFile('avatar')) {
+            Storage::disk('public')->makeDirectory('avatars');
             $path = $req->file('avatar')->store('avatars', 'public');
             $data['avatar'] = $path;
         }
 
         DB::table('lietotajs')->where('lietotajs_id',$id)->update($data);
         return redirect()->to('/lietotajs')->with('success','Ieraksts atjaunināts');
+    }
+
+    /**
+     * Atgriež lietotāja avatar attēlu tieši no publiskā diska.
+     */
+    public function avatar($id)
+    {
+        $lietotajs = Lietotajs::findOrFail($id);
+        $avatarPath = $lietotajs->resolveAvatarPath();
+
+        if (! $avatarPath) {
+            abort(404);
+        }
+
+        return response()->file(Storage::disk('public')->path($avatarPath));
     }
 
     /**

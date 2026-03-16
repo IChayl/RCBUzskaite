@@ -35,8 +35,8 @@
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <div style="width: 50px; height: 50px; border-radius: 12px; overflow: hidden; background: rgba(226, 212, 187, 0.06); display:flex; align-items:center; justify-content:center;">
                             <!-- Ja ir avatar, rāda attēlu; pretējā gadījumā — rezerves ikonu -->
-                            @if($item->avatar && Storage::disk('public')->exists($item->avatar))
-                                <img src="{{ '/storage/' . ltrim($item->avatar, '/') }}" alt="Avatar" style="width: 48px; height: 48px; object-fit: cover;">
+                            @if($item->hasAvatarFile())
+                                <img src="{{ route('lietotajs.avatar', $item->lietotajs_id) }}" alt="Avatar" style="width: 48px; height: 48px; object-fit: cover;">
                             @else
                                 <span style="color: rgba(226, 212, 187, 0.5); font-size: 20px;">👤</span>
                             @endif

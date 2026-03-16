@@ -12,7 +12,7 @@
     <h2 style="color: #E2D4BB;">Jauns lietotājs</h2>
 
     <!-- Jauna lietotāja izveides forma -->
-    <form method="POST" action="{{ route('lietotaji.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('lietotajs.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label for="lietotajvards" class="form-label">Lietotājvārds</label>
