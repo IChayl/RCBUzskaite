@@ -38,19 +38,15 @@
             <label for="telefons" class="form-label">Telefons</label>
             <input type="text" class="form-control" id="telefons" name="telefons" value="{{ $lietotajs->telefons }}">
         </div>
-        <div class="mb-3">
-            <label for="amats" class="form-label">Amats</label>
-            <input type="text" class="form-control" id="amats" name="amats" value="{{ $lietotajs->amats }}">
             <div class="form-control" style="margin-bottom:16px;">
             <label style="font-weight:700; display:block; margin-bottom:8px;">Loma:</label>
-                <select name="loma" style="width:90%; padding:10px; border-radius:6px;">
+                <select name="amats" style="width:90%; padding:10px; border-radius:6px;">
                     <option value="">-- izvēlēties --</option>
                     <option value="Direktors" {{ (old('amats', $lietotajs->amats ?? '')=='Direktors') ? 'selected' : '' }}>Direktors</option>
                     <option value="Dir.Vietnieks" {{ (old('amats', $lietotajs->amats ?? '')=='Dir.Vietnieks') ? 'selected' : '' }}>Dir.Vietnieks</option>
                     <option value="Vecākais bibliotekārs" {{ (old('amats', $lietotajs->amats ?? '')=='Vecākais bibliotekārs') ? 'selected' : '' }}>Vecākais bibliotekārs</option>
                     <option value="Bibliotekārs" {{ (old('amats', $lietotajs->amats ?? '')=='Bibliotekārs') ? 'selected' : '' }}>Bibliotekārs</option>
                 </select>
-        </div>
         </div>
         <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" value="1" id="aktivs" name="aktivs" {{ $lietotajs->aktivs ? 'checked' : '' }}>
