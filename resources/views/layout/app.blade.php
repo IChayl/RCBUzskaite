@@ -451,11 +451,11 @@
     </style>
 </head>
 <body>
-    <div class="page-shapes" aria-hidden="true">
+    <!-- <div class="page-shapes" aria-hidden="true">
         <div class="blob b1"></div>
         <div class="blob b2"></div>
         <div class="blob b3"></div>
-    </div>
+    </div> -->
 
 
 
