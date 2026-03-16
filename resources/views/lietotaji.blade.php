@@ -15,7 +15,7 @@
 
     <div style="color: #E2D4BB; margin-top: 20px;">
         @if(session('success'))
-            <div id="flash-message" style="background: #0F1931; color: #C89768; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #C89768; cursor: pointer;">
+            <div id="flash-message" style="background: #0F1931; color: #2D4159; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #2D4159; cursor: pointer;">
                 {{ session('success') }}
             </div>
         @endif
@@ -28,7 +28,7 @@
     @else
         <div style="display: flex; flex-wrap: wrap; gap: 16px;">
         @foreach ($lietotaji as $item)
-            <div class="card mt-3 table-card" style="background: rgba(89, 68, 53, 0.55); color: #E2D4BB; width: 100%; max-width: 340px;">
+            <div class="card mt-3 table-card" style="background: rgba(45, 65, 89, 0.55); color: #E2D4BB; width: 100%; max-width: 340px;">
                 <div class="card-body">
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <div style="width: 50px; height: 50px; border-radius: 12px; overflow: hidden; background: rgba(226, 212, 187, 0.06); display:flex; align-items:center; justify-content:center;">
@@ -40,13 +40,13 @@
                         </div>
                         <div style="flex: 1; min-width: 0;">
                             <div class="card-text" style="font-weight: 700; color: #E2D4BB;">{{ $item->lietotajvards }}</div>
-                            <div class="card-text" style="color: #C89768; font-size: 0.9rem;">Vārds: {{ $item->vards ?? '-' }}</div>
-                            <div class="card-text" style="color: #C89768; font-size: 0.9rem;">Uzvārds: {{ $item->uzvards ?? '-' }}</div>
-                            <div class="card-text" style="color: #C89768; font-size: 0.9rem;">E-pasts: {{ $item->epasts ?? '-' }}</div>
-                            <div class="card-text" style="color: #C89768; font-size: 0.9rem;">Telefons: {{ $item->telefons ?? '-' }}</div>
-                            <div class="card-text" style="color: #C89768; font-size: 0.9rem;">Amats: {{ $item->amats ?? '-' }}</div>
-                            <div class="card-text" style="color: #C89768; font-size: 0.9rem;">Admina tiesības: <span style="font-weight: 600;">{{ $item->admina_tiesibas ? 'Jā' : 'Nē' }}</span></div>
-                            <div class="card-text" style="color: #C89768; font-size: 0.9rem;">Aktīvs: <span style="font-weight: 600;">{{ $item->aktivs ? 'Jā' : 'Nē' }}</span></div>
+                            <div class="card-text" style="color: #2D4159; font-size: 0.9rem;">Vārds: {{ $item->vards ?? '-' }}</div>
+                            <div class="card-text" style="color: #2D4159; font-size: 0.9rem;">Uzvārds: {{ $item->uzvards ?? '-' }}</div>
+                            <div class="card-text" style="color: #2D4159; font-size: 0.9rem;">E-pasts: {{ $item->epasts ?? '-' }}</div>
+                            <div class="card-text" style="color: #2D4159; font-size: 0.9rem;">Telefons: {{ $item->telefons ?? '-' }}</div>
+                            <div class="card-text" style="color: #2D4159; font-size: 0.9rem;">Amats: {{ $item->amats ?? '-' }}</div>
+                            <div class="card-text" style="color: #2D4159; font-size: 0.9rem;">Admina tiesības: <span style="font-weight: 600;">{{ $item->admina_tiesibas ? 'Jā' : 'Nē' }}</span></div>
+                            <div class="card-text" style="color: #2D4159; font-size: 0.9rem;">Aktīvs: <span style="font-weight: 600;">{{ $item->aktivs ? 'Jā' : 'Nē' }}</span></div>
                         </div>
                     </div>
                     <div class="auth-links" style="margin-top: 12px;">

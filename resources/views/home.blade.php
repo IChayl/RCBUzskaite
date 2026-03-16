@@ -23,7 +23,7 @@
     display: block;
     padding: 0.25rem 0;
 }
-.sidemenu a:hover { color: #C89768; }
+.sidemenu a:hover { color: #2D4159; }
 </style>
 
 <div class="navy-maroon">

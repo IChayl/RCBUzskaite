@@ -11,8 +11,8 @@
         :root{
             --navy: #0F1931;
             --navy-2: #2D4159;
-            --maroon: #594435;
-            --maroon-2: #C89768;
+            --maroon: #2D4159;
+            --maroon-2: #2D4159;
             --accent: #E2D4BB;
             --card-bg: rgba(226, 212, 187, 0.06);
             --muted-white: rgba(226, 212, 187, 0.9);
@@ -67,7 +67,7 @@
 
         input.form-control:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 0.15rem rgba(200,151,104,0.15);
+            box-shadow: 0 0 0 0.15rem rgba(45, 65, 89, 0.15);
             background: rgba(226, 212, 187, 0.04);
             color: var(--muted-white);
         }
@@ -101,7 +101,7 @@
 
         .btn-bloom:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(89,68,53,0.35);
+            box-shadow: 0 10px 30px rgba(45, 65, 89, 0.35);
         }
 
         .btn-bloom:active {
@@ -110,7 +110,7 @@
 
         .btn-bloom:focus {
             outline: none;
-            box-shadow: 0 0 0 0.3rem rgba(200,151,104,0.18);
+            box-shadow: 0 0 0 0.3rem rgba(45, 65, 89, 0.18);
         }
 
         .btn-bloom:hover::after {
@@ -131,7 +131,7 @@
 
         /* Error box adapted to theme */
         .alert-danger {
-            background: linear-gradient(180deg, rgba(89,68,53,0.15), rgba(89,68,53,0.08));
+            background: linear-gradient(180deg, rgba(45, 65, 89, 0.15), rgba(45, 65, 89, 0.08));
             border-color: rgba(226, 212, 187, 0.06);
             color: #E2D4BB;
         }

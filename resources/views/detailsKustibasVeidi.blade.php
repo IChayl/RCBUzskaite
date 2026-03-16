@@ -11,7 +11,7 @@
 
     <hr>
     <h2 style="color: #E2D4BB;">Kustības veida detaļas</h2>
-    <div class="card mt-3" style="background: rgba(89, 68, 53, 0.65); border: 1px solid rgba(226, 212, 187, 0.2); color: #E2D4BB; max-width: 600px;">
+    <div class="card mt-3" style="background: rgba(45, 65, 89, 0.65); border: 1px solid rgba(226, 212, 187, 0.2); color: #E2D4BB; max-width: 600px;">
         <div class="card-body">
             <h5 class="card-title">{{ $veids->nosaukums }} (ID: {{ $veids->kustibas_veids_id }})</h5>
             <p class="card-text"><strong>Nosaukums:</strong> {{ $veids->nosaukums }}</p>

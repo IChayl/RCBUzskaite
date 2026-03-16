@@ -3,7 +3,7 @@
     /* General header style */
     header {
       position: relative;
-      background: linear-gradient(90deg, #0F1931, #594435);
+      background: linear-gradient(90deg, #0F1931, #2D4159);
       color: #E2D4BB;
       padding: 15px 30px;
       display: flex;
@@ -17,7 +17,7 @@
 
       .small header {
       position: relative;
-      background: linear-gradient(90deg, #0F1931, #594435);
+      background: linear-gradient(90deg, #0F1931, #2D4159);
       color: #E2D4BB;
       padding: 15px 30px;
       display: flex;
@@ -67,8 +67,8 @@
     }
 
     .brand a:hover {
-      color: #C89768;
-      text-shadow: 0 0 10px #C89768, 0 0 20px #594435;
+      color: #2D4159;
+      text-shadow: 0 0 10px #2D4159, 0 0 20px #2D4159;
     }
 
     /* Navigation */
@@ -109,8 +109,8 @@
     }
 
     nav a:hover {
-      color: #C89768;
-      text-shadow: 0 0 8px #E2D4BB, 0 0 18px #594435;
+      color: #2D4159;
+      text-shadow: 0 0 8px #E2D4BB, 0 0 18px #2D4159;
     }
 
     /* Auth section (Login/Register) */
@@ -135,10 +135,10 @@
 
     .auth-links a:hover {
       background: rgba(226, 212, 187, 0.15);
-      color: #C89768;
-      border: 1px solid #C89768;
+      color: #2D4159;
+      border: 1px solid #2D4159;
       border-radius: 25px;
-      box-shadow: 0 0 10px #594435, 0 0 20px rgba(226, 212, 187, 0.4);
+      box-shadow: 0 0 10px #2D4159, 0 0 20px rgba(226, 212, 187, 0.4);
       transform: translateY(-2px);
     }
 

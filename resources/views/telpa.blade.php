@@ -15,7 +15,7 @@
 
     <div style="color: #E2D4BB; margin-top: 20px;">
         @if(session('success'))
-            <div id="flash-message" style="background: #0F1931; color: #C89768; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #C89768; cursor: pointer;">
+            <div id="flash-message" style="background: #0F1931; color: #2D4159; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #2D4159; cursor: pointer;">
                 {{ session('success') }}
             </div>
         @endif
@@ -39,7 +39,7 @@
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
         <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
         <a href="{{ url('/telpa') }}" class="bloom-button sm" style="height: 36px;">Notīrīt</a>
-        <span class="no-results-message" style="display:none; color:#C89768;">Nav rezultātu.</span>
+        <span class="no-results-message" style="display:none; color:#2D4159;">Nav rezultātu.</span>
     </form>
 
     @if($telpas->isEmpty())

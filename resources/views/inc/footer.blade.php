@@ -1,7 +1,7 @@
 <footer>
   <style>
     footer {
-      background: linear-gradient(90deg, #0F1931, #594435);
+      background: linear-gradient(90deg, #0F1931, #2D4159);
       color: #E2D4BB;
       text-align: center;
       padding: 20px 10px;
@@ -28,8 +28,8 @@
     }
 
     footer a:hover {
-      color: #C89768;
-      text-shadow: 0 0 10px rgba(226, 212, 187, 0.8), 0 0 20px #594435;
+      color: #2D4159;
+      text-shadow: 0 0 10px rgba(226, 212, 187, 0.8), 0 0 20px #2D4159;
     }
 
     footer p {
@@ -38,8 +38,8 @@
 
     /* Bloom effect when active */
     @keyframes glow {
-      0% { text-shadow: 0 0 5px #E2D4BB, 0 0 10px #C89768, 0 0 20px #594435; }
-      100% { text-shadow: 0 0 10px #E2D4BB, 0 0 20px #C89768, 0 0 40px #594435; }
+      0% { text-shadow: 0 0 5px #E2D4BB, 0 0 10px #2D4159, 0 0 20px #2D4159; }
+      100% { text-shadow: 0 0 10px #E2D4BB, 0 0 20px #2D4159, 0 0 40px #2D4159; }
     }
 
     footer a:active {

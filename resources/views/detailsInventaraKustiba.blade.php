@@ -12,7 +12,7 @@
     <hr>
 
     <h2 style="color: #E2D4BB;">Inventāra kustības detaļas</h2>
-    <div class="card mt-3" style="background: rgba(89, 68, 53, 0.65); border: 1px solid rgba(226, 212, 187, 0.2); color: #E2D4BB; max-width: 700px;">
+    <div class="card mt-3" style="background: rgba(45, 65, 89, 0.65); border: 1px solid rgba(226, 212, 187, 0.2); color: #E2D4BB; max-width: 700px;">
         <div class="card-body">
             <h5 class="card-title">Kustība #{{ $kustiba->kustiba_id }}</h5>
             <p class="card-text"><strong>Datums:</strong> {{ $kustiba->datums }}</p>
