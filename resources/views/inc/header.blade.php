@@ -3,22 +3,22 @@
     /* General header style */
     header {
       position: relative;
-      background: linear-gradient(90deg, #0D203A, #243B53);
-      color: #FAF8F2;
+      background: linear-gradient(90deg, #0F1931, #2D4159);
+      color: #E2D4BB;
       padding: 15px 30px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       overflow: hidden;
       transparency: true;
-      box-shadow: 0 4px 12px rgba(13, 32, 58, 0.45);
-      border-bottom: 2px solid rgba(209, 195, 165, 0.1);
+      box-shadow: 0 4px 12px rgba(15, 25, 49, 0.45);
+      border-bottom: 2px solid rgba(226, 212, 187, 0.1);
     }
 
       .small header {
       position: relative;
-      background: linear-gradient(90deg, #0D203A, #243B53);
-      color: #FAF8F2;
+      background: linear-gradient(90deg, #0F1931, #2D4159);
+      color: #E2D4BB;
       padding: 15px 30px;
       display: flex;
       align-items: center;
@@ -27,8 +27,8 @@
       transparency: true;
       border-radius: 18px;
       
-      box-shadow: 0 4px 12px rgba(13, 32, 58, 0.45);
-      border-bottom: 2px solid rgba(209, 195, 165, 0.1);
+      box-shadow: 0 4px 12px rgba(15, 25, 49, 0.45);
+      border-bottom: 2px solid rgba(226, 212, 187, 0.1);
     }
 
     /* Decorative shape behind header */
@@ -39,7 +39,7 @@
       right: -40px;
       width: 160px;
       height: 160px;
-      background: radial-gradient(circle at center, rgba(209, 195, 165, 0.2), transparent 75%);
+      background: radial-gradient(circle at center, rgba(226, 212, 187, 0.2), transparent 75%);
       filter: blur(18px);
     }
 
@@ -50,13 +50,13 @@
       left: -40px;
       width: 160px;
       height: 160px;
-      background: radial-gradient(circle at center, rgba(209, 195, 165, 0.2), transparent 75%);
+      background: radial-gradient(circle at center, rgba(226, 212, 187, 0.2), transparent 75%);
       filter: blur(18px);
     }
 
     /* Brand name */
     .brand a {
-      color: #FAF8F2;
+      color: #E2D4BB;
       font-size: 1.6em;
       font-weight: bold;
       text-decoration: none;
@@ -67,8 +67,8 @@
     }
 
     .brand a:hover {
-      color: #243B53;
-      text-shadow: 0 0 10px #243B53, 0 0 20px #243B53;
+      color: #2D4159;
+      text-shadow: 0 0 10px #2D4159, 0 0 20px #2D4159;
     }
 
     /* Navigation */
@@ -81,7 +81,7 @@
 
     nav a {
       position: relative;
-      color: #FAF8F2;
+      color: #E2D4BB;
       text-decoration: none;
       font-weight: 500;
       letter-spacing: 0.5px;
@@ -98,7 +98,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, rgba(209, 195, 165, 0.2), rgba(209, 195, 165, 0.05));
+      background: linear-gradient(90deg, rgba(226, 212, 187, 0.2), rgba(226, 212, 187, 0.05));
       transition: all 0.4s ease;
       border-radius: 12px;
       z-index: -1;
@@ -109,8 +109,8 @@
     }
 
     nav a:hover {
-      color: #243B53;
-      text-shadow: 0 0 8px #FAF8F2, 0 0 18px #243B53;
+      color: #2D4159;
+      text-shadow: 0 0 8px #E2D4BB, 0 0 18px #2D4159;
     }
 
     /* Auth section (Login/Register) */
@@ -121,24 +121,24 @@
     }
 
     .auth-links a {
-      color: #FAF8F2;
+      color: #E2D4BB;
       text-decoration: none;
       font-weight: 500;
       letter-spacing: 0.5px;
       padding: 8px 14px;
       border-radius: 20px;
-      border: 1px solid rgba(209, 195, 165, 0.3);
+      border: 1px solid rgba(226, 212, 187, 0.3);
       transition: all 0.3s ease;
-      background: rgba(209, 195, 165, 0.05);
+      background: rgba(226, 212, 187, 0.05);
       backdrop-filter: blur(3px);
     }
 
     .auth-links a:hover {
-      background: rgba(209, 195, 165, 0.15);
-      color: #243B53;
-      border: 1px solid #243B53;
+      background: rgba(226, 212, 187, 0.15);
+      color: #2D4159;
+      border: 1px solid #2D4159;
       border-radius: 25px;
-      box-shadow: 0 0 10px #243B53, 0 0 20px rgba(209, 195, 165, 0.4);
+      box-shadow: 0 0 10px #2D4159, 0 0 20px rgba(226, 212, 187, 0.4);
       transform: translateY(-2px);
     }
 

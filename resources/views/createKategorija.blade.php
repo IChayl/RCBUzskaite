@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #FAF8F2;">Jauna kategorija</p>
+    <p style="color: #E2D4BB;">Jauna kategorija</p>
 
     <div class="auth-links">
         <a href="/kategorija" class="btn btn-secondary">Atpakal uz kategoriju sarakstu</a>
@@ -9,7 +9,7 @@
 
     <hr>
 
-    <h2 style="color: #FAF8F2;">Jauna kategorija</h2>
+    <h2 style="color: #E2D4BB;">Jauna kategorija</h2>
 
     @if($errors->any())
         <div class="alert alert-danger">

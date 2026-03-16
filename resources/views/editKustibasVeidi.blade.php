@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #FAF8F2;">Rediģēt kustības veidu</p>
+    <p style="color: #E2D4BB;">Rediģēt kustības veidu</p>
 
     <div class="auth-links">
         <a href="/kustibas_veidi" class="btn btn-secondary">Atpakaļ</a>
@@ -9,7 +9,7 @@
 
     <hr>
 
-    <h2 style="color: #FAF8F2;">Rediģēt kustības veidu</h2>
+    <h2 style="color: #E2D4BB;">Rediģēt kustības veidu</h2>
 
     <form method="POST" action="/kustibas_veidi/{{ $veids->kustibas_veids_id }}/editSubmit">
         @csrf

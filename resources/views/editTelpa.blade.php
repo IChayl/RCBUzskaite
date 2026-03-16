@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #FAF8F2;">Rediģēt telpu</p>
+    <p style="color: #E2D4BB;">Rediģēt telpu</p>
 
     <div class="auth-links">
         <a href="/telpa" class="btn btn-secondary">Atpakaļ</a>
@@ -9,7 +9,7 @@
 
     <hr>
 
-    <h2 style="color: #FAF8F2;">Rediģēt telpu</h2>
+    <h2 style="color: #E2D4BB;">Rediģēt telpu</h2>
 
     <form method="POST" action="/telpa/{{ $telpa->telpas_id }}/editSubmit">
         @csrf

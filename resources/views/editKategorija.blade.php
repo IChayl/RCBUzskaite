@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #FAF8F2;">Rediģēt kategoriju</p>
+    <p style="color: #E2D4BB;">Rediģēt kategoriju</p>
 
     <div class="auth-links">
         <a href="/kategorija" class="btn btn-secondary">Atpakaļ</a>
@@ -9,7 +9,7 @@
 
     <hr>
 
-    <h2 style="color: #FAF8F2;">Rediģēt kategoriju</h2>
+    <h2 style="color: #E2D4BB;">Rediģēt kategoriju</h2>
 
     <form method="POST" action="/kategorija/{{ $kategorija->kategorija_id }}/editSubmit">
         @csrf
