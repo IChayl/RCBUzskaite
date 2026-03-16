@@ -175,6 +175,10 @@
                 </div>
 
                 <button type="submit" class="btn btn-bloom w-100">Pieteikties</button>
+
+                Admins: Chay, Parole: 12345
+                Lietotājs: Test1, Parole: 12345
+
             </form>
 
             <div class="text-center mt-3">
