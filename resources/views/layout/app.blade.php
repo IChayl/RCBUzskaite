@@ -23,8 +23,8 @@
         :root{
             --navy: #0F1931;
             --navy-2: #2D4159;
-            --maroon: #594435;
-            --maroon-2: #C89768;
+            --maroon: #2D4159;
+            --maroon-2: #2D4159;
             --accent: #E2D4BB;
         }
 

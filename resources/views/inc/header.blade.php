@@ -98,7 +98,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, rgba(226, 212, 187, 0.2), rgba(226, 212, 187, 0.05));
+      background: linear-gradient(90deg, rgba(226, 212, 187, 0.35), rgba(226, 212, 187, 0.12));
       transition: all 0.4s ease;
       border-radius: 12px;
       z-index: -1;
@@ -109,8 +109,8 @@
     }
 
     nav a:hover {
-      color: #2D4159;
-      text-shadow: 0 0 8px #E2D4BB, 0 0 18px #2D4159;
+      color: #E2D4BB;
+      text-shadow: 0 0 10px #E2D4BB, 0 0 22px #E2D4BB;
     }
 
     /* Auth section (Login/Register) */
