@@ -178,7 +178,7 @@
         }
         .data-table th {
             font-weight: 600;
-            border-bottom: 2px solid rgba(144, 238, 144, 0.8);
+            border-bottom: 2px solid rgba(155,43,58,0.28);
             text-align: left;
             letter-spacing: 0.02em;
         }
@@ -213,7 +213,7 @@
             min-width: 240px;
         }
         .table-search-input:focus {
-            outline: 2px solid rgba(144, 238, 144, 0.7);
+            outline: 2px solid rgba(208, 144, 238, 0.7);
         }
 
         /* Form controls match the dark theme used on list pages */
@@ -227,7 +227,7 @@
 
         .form-control:focus,
         .form-select:focus {
-            outline: 2px solid rgba(144, 238, 144, 0.7);
+            outline: 2px solid rgba(155,43,58,0.28);
             box-shadow: none;
         }
 
