@@ -118,7 +118,7 @@ class InventaraKustibaController extends Controller
             $query->orderBy($sort, $direction);
         }
 
-        $kustibas = $query->paginate(15)->withQueryString();
+        $kustibas = $query->paginate(7)->withQueryString();
 
         return view('inventara_kustiba', compact('kustibas', 'sort', 'direction', 'q', 'column'));
     }

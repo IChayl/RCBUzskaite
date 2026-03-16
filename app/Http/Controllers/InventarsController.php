@@ -94,7 +94,7 @@ class InventarsController extends Controller
         }
 
         // Paginācija ar querystring, lai saglabātu meklēšanas un kārtošanas parametrus
-        $inventari = $query->paginate(15)->withQueryString();
+        $inventari = $query->paginate(7)->withQueryString();
 
         return view('inventars', compact('inventari', 'sort', 'direction', 'q', 'column'));
     }

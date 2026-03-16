@@ -48,7 +48,7 @@ class KategorijaController extends Controller
         }
 
         // Paginācija + kārtošana
-        $kategorija = $query->orderBy($sort, $direction)->paginate(15)->withQueryString();
+        $kategorija = $query->orderBy($sort, $direction)->paginate(7)->withQueryString();
 
         return view('kategorija', compact('kategorija', 'sort', 'direction', 'q', 'column'));
     }

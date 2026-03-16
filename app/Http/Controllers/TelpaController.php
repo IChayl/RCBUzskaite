@@ -51,7 +51,7 @@ class TelpaController extends Controller
         }
 
         // Paginācija + kārtošana pēc norādītajām kritērijiem
-        $telpas = $query->orderBy($sort, $direction)->paginate(15)->withQueryString();
+        $telpas = $query->orderBy($sort, $direction)->paginate(7)->withQueryString();
 
         // Nosūtām datus uz skatu
         return view('telpa', compact('telpas', 'sort', 'direction', 'q', 'column'));

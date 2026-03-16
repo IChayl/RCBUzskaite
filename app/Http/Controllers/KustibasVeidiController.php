@@ -49,7 +49,7 @@ class KustibasVeidiController extends Controller
         }
 
         // Paginate + kārtošana
-        $veidi = $query->orderBy($sort, $direction)->paginate(15)->withQueryString();
+        $veidi = $query->orderBy($sort, $direction)->paginate(7)->withQueryString();
         return view('kustibas_veidi', compact('veidi', 'sort', 'direction', 'q', 'column'));
     }
 
