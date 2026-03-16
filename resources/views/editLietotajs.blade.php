@@ -14,7 +14,7 @@
     @include('partials.validation-errors')
 
     <!-- Lietotāja datu rediģēšanas forma -->
-    <form method="POST" action="/lietotajs/{{ $lietotajs->lietotajs_id }}/editSubmit" enctype="multipart/form-data">
+    <form method="POST" action="/lietotajs/{{ $lietotajs->lietotajs_id }}/editSubmit" enctype="multipart/form-data" novalidate>
         @csrf
         <div class="mb-3">
             <label for="lietotajvards" class="form-label">Lietotājvārds</label>

@@ -14,7 +14,7 @@
     @include('partials.validation-errors')
 
     <!-- Inventāra kustības rediģēšanas forma -->
-    <form method="POST" action="/inventara_kustiba/{{ $kustiba->kustiba_id }}/editSubmit">
+    <form method="POST" action="/inventara_kustiba/{{ $kustiba->kustiba_id }}/editSubmit" novalidate>
         @csrf
         <div class="mb-3">
             <label for="datums" class="form-label">Datums</label>

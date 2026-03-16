@@ -14,7 +14,7 @@
     @include('partials.validation-errors')
 
     <!-- Telpas datu rediģēšanas forma -->
-    <form method="POST" action="/telpa/{{ $telpa->telpas_id }}/editSubmit">
+    <form method="POST" action="/telpa/{{ $telpa->telpas_id }}/editSubmit" novalidate>
         @csrf
         <div class="mb-3">
             <label for="nosaukums" class="form-label">Nosaukums</label>

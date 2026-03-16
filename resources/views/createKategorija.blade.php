@@ -14,7 +14,7 @@
     @include('partials.validation-errors')
 
     <!-- Jaunas kategorijas izveides forma -->
-    <form method="POST" action="{{ route('kategorijas.store') }}">
+    <form method="POST" action="{{ route('kategorijas.store') }}" novalidate>
         @csrf
         <div class="mb-3">
             <label for="nosaukums" class="form-label">Nosaukums</label>

@@ -14,7 +14,7 @@
     @include('partials.validation-errors')
 
     <!-- Jauna inventāra izveides forma -->
-    <form method="POST" action="{{ route('inventars.store') }}">
+    <form method="POST" action="{{ route('inventars.store') }}" novalidate>
         @csrf
         <div class="mb-3">
             <label for="nosaukums" class="form-label">Nosaukums</label>

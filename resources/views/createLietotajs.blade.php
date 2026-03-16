@@ -14,7 +14,7 @@
     @include('partials.validation-errors')
 
     <!-- Jauna lietotāja izveides forma -->
-    <form method="POST" action="{{ route('lietotajs.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('lietotajs.store') }}" enctype="multipart/form-data" novalidate>
         @csrf
         <div class="mb-3">
             <label for="lietotajvards" class="form-label">Lietotājvārds</label>

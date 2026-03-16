@@ -14,7 +14,7 @@
     @include('partials.validation-errors')
 
     <!-- Jaunas kustības izveides forma -->
-    <form method="POST" action="{{ route('inventara_kustiba.store') }}">
+    <form method="POST" action="{{ route('inventara_kustiba.store') }}" novalidate>
         @csrf
         <div class="mb-3">
             <label for="datums" class="form-label">Datums</label>

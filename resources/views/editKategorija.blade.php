@@ -14,7 +14,7 @@
     @include('partials.validation-errors')
 
     <!-- Kategorijas datu atjaunināšanas forma -->
-    <form method="POST" action="/kategorija/{{ $kategorija->kategorija_id }}/editSubmit">
+    <form method="POST" action="/kategorija/{{ $kategorija->kategorija_id }}/editSubmit" novalidate>
         @csrf
         <div class="mb-3">
             <label for="nosaukums" class="form-label">Nosaukums</label>

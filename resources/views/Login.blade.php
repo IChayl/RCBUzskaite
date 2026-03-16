@@ -161,7 +161,7 @@
             @endif
 
             <!-- Pieteikšanās forma -->
-            <form method="POST" action="/Login/submit">
+            <form method="POST" action="/Login/submit" novalidate>
                 @csrf
 
                 <div class="mb-3">

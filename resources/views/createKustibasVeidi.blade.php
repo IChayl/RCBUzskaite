@@ -14,7 +14,7 @@
     @include('partials.validation-errors')
 
     <!-- Forma jauna kustības veida pievienošanai -->
-    <form method="POST" action="{{ url('/kustibas_veidi') }}">
+    <form method="POST" action="{{ url('/kustibas_veidi') }}" novalidate>
         @csrf
         <div class="mb-3">
             <label for="nosaukums" class="form-label">Nosaukums</label>

@@ -14,7 +14,7 @@
     @include('partials.validation-errors')
 
     <!-- Forma jaunas telpas pievienošanai -->
-    <form method="POST" action="{{ route('telpa.store') }}">
+    <form method="POST" action="{{ route('telpa.store') }}" novalidate>
         @csrf
         <div class="mb-3">
             <label for="nosaukums" class="form-label">Nosaukums</label>

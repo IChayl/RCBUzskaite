@@ -151,7 +151,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('register.submit') }}">
+            <form method="POST" action="{{ route('register.submit') }}" novalidate>
                 @csrf
 
                 <div class="mb-3">
