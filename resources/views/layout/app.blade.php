@@ -595,7 +595,7 @@
                 initDatePickers();
                 initAllTableControls();
             }
-        });
+        })();
     </script>
 </body>
 </html>
