@@ -32,8 +32,8 @@
             height:100%;
             margin:0;
             font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            background: radial-gradient(1200px 800px at 10% 20%, rgba(200, 151, 104, 0.16), transparent 8%),
-                        radial-gradient(1000px 600px at 90% 80%, rgba(45, 65, 89, 0.24), transparent 10%),
+            background: radial-gradient(1200px 800px at 10% 20%, rgba(45, 65, 89, 0.24), transparent 8%),
+                        radial-gradient(1000px 600px at 90% 80%, rgba(45, 65, 89, 0.28), transparent 10%),
                         linear-gradient(180deg, var(--navy) 0%, var(--maroon) 100%);
             color: var(--accent);
             -webkit-font-smoothing:antialiased;
@@ -61,7 +61,7 @@
             height: 260px;
             left: 5%;
             top: 2%;
-            background: radial-gradient(circle at 30% 30%, rgba(200, 151, 104, 0.7), rgba(200, 151, 104, 0.2) 55%, transparent 85%);
+            background: radial-gradient(circle at 30% 30%, rgba(45, 65, 89, 0.72), rgba(45, 65, 89, 0.22) 55%, transparent 85%);
         }
         .page-shapes .b2{
             width: 240px;
@@ -75,7 +75,7 @@
             height: 180px;
             right: 8%;
             top: 15%;
-            background: radial-gradient(circle at 30% 70%, rgba(89, 68, 53, 0.6), rgba(89, 68, 53, 0.15) 60%, transparent 85%);
+            background: radial-gradient(circle at 30% 70%, rgba(45, 65, 89, 0.55), rgba(45, 65, 89, 0.16) 60%, transparent 85%);
             opacity: 0.35;
             filter: blur(16px);
         }
@@ -112,11 +112,10 @@
 
         /* Card style for main content to create shape */
         .card-surface{
-            //background: linear-gradient(180deg, rgba(226, 212, 187, 0.04), rgba(226, 212, 187, 0.02));
-            border: 1px solid rgba(226,212,187,0.22);
+            border: 1px solid rgba(45,65,89,0.42);
             border-radius: 18px;
             padding: 1.5rem;
-            box-shadow: 0 8px 30px rgba(15, 25, 49, 0.6), inset 0 1px 0 rgba(226,212,187,0.08);
+            box-shadow: 0 8px 30px rgba(15, 25, 49, 0.7), inset 0 1px 0 rgba(45,65,89,0.32);
             backdrop-filter: blur(6px) saturate(120%);
         }
 
@@ -207,8 +206,8 @@
         .table-search-input {
             padding: 10px 12px;
             border-radius: 999px;
-            border: 1px solid rgba(226,212,187,0.35);
-            background: rgba(45,65,89,0.35);
+            border: 1px solid rgba(45,65,89,0.65);
+            background: rgba(45,65,89,0.5);
             color: var(--accent);
             min-width: 240px;
         }
@@ -219,8 +218,8 @@
         /* Form controls match the dark theme used on list pages */
         .form-control,
         .form-select {
-            background: rgba(45,65,89,0.35);
-            border: 1px solid rgba(226,212,187,0.35);
+            background: rgba(45,65,89,0.5);
+            border: 1px solid rgba(45,65,89,0.65);
             color: var(--accent);
             border-radius: 999px;
         }
@@ -314,8 +313,8 @@
             justify-content: center;
             padding: 0.4rem 0.7rem;
             border-radius: 999px;
-            border: 1px solid rgba(226,212,187,0.28);
-            background: rgba(45,65,89,0.35);
+            border: 1px solid rgba(45,65,89,0.62);
+            background: rgba(45,65,89,0.5);
             color: var(--accent);
             text-decoration: none;
             min-width: 36px;
@@ -349,8 +348,8 @@
             align-items: center;
             padding: 12px 14px;
             border-radius: 14px;
-            border: 1px solid rgba(226,212,187,0.2);
-            background: rgba(89, 68, 53, 0.45);
+            border: 1px solid rgba(45,65,89,0.62);
+            background: rgba(45, 65, 89, 0.45);
             transition: background 0.2s ease, transform 0.2s ease;
         }
         .card-table-header {
@@ -359,7 +358,7 @@
             text-transform: uppercase;
             color: rgba(226,212,187,0.92);
             border-bottom: 2px solid rgba(200, 151, 104, 0.8);
-            background: rgba(89, 68, 53, 0.3);
+            background: rgba(45, 65, 89, 0.4);
         }
         .card-table-row:hover {
             background: rgba(45, 65, 89, 0.5);
@@ -374,8 +373,8 @@
 
         /* Card list rows styled like table rows */
         .table-card {
-            background: rgba(89, 68, 53, 0.45);
-            border: 1px solid rgba(226,212,187,0.2);
+            background: rgba(45, 65, 89, 0.45);
+            border: 1px solid rgba(45,65,89,0.62);
             border-radius: 16px;
             box-shadow: 0 6px 18px rgba(15,25,49,0.35);
             transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
