@@ -39,7 +39,7 @@
             <input type="text" class="form-control" id="telefons" name="telefons" value="{{ $lietotajs->telefons }}">
         </div>
             <div class="form-control" style="margin-bottom:16px;">
-            <label style="font-weight:700; display:block; margin-bottom:8px;">Loma:</label>
+            <label style="font-weight:700; display:block; margin-bottom:8px;">Amats:</label>
                 <select name="amats" style="width:90%; padding:10px; border-radius:6px;">
                     <option value="">-- izvēlēties --</option>
                     <option value="Direktors" {{ (old('amats', $lietotajs->amats ?? '')=='Direktors') ? 'selected' : '' }}>Direktors</option>
