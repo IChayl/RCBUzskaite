@@ -19,12 +19,12 @@
         <label style="display:flex; align-items:center; gap:8px;">
             <span style="color:#E2D4BB; font-size:0.9rem;">Meklēt pēc:</span>
             <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
-                <option value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
-                <option value="datums" {{ request('column') === 'datums' ? 'selected' : '' }}>Datums</option>
-                <option value="inventars" {{ request('column') === 'inventars' ? 'selected' : '' }}>Inventārs</option>
-                <option value="kustibas_veids" {{ request('column') === 'kustibas_veids' ? 'selected' : '' }}>Kustības veids</option>
-                <option value="lietotajs" {{ request('column') === 'lietotajs' ? 'selected' : '' }}>Atbildīgais</option>
-                <option value="veca_telpa" {{ request('column') === 'veca_telpa' ? 'selected' : '' }}>Vecā telpa</option>
+                <option style="color:#0F1931;" value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
+                <option style="color:#0F1931;" value="datums" {{ request('column') === 'datums' ? 'selected' : '' }}>Datums</option>
+                <option style="color:#0F1931;" value="inventars" {{ request('column') === 'inventars' ? 'selected' : '' }}>Inventārs</option>
+                <option style="color:#0F1931;" value="kustibas_veids" {{ request('column') === 'kustibas_veids' ? 'selected' : '' }}>Kustības veids</option>
+                <option style="color:#0F1931;" value="lietotajs" {{ request('column') === 'lietotajs' ? 'selected' : '' }}>Atbildīgais</option>
+                <option style="color:#0F1931;" value="veca_telpa" {{ request('column') === 'veca_telpa' ? 'selected' : '' }}>Vecā telpa</option>
                 <option value="jauna_telpa" {{ request('column') === 'jauna_telpa' ? 'selected' : '' }}>Jaunā telpa</option>
             </select>
         </label>

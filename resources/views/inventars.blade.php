@@ -20,12 +20,12 @@
         <label style="display:flex; align-items:center; gap:8px;">
             <span style="color:#E2D4BB; font-size:0.9rem;">Meklēt pēc:</span>
             <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
-                <option value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
-                <option value="nosaukums" {{ request('column') === 'nosaukums' ? 'selected' : '' }}>Nosaukums</option>
-                <option value="apraksts" {{ request('column') === 'apraksts' ? 'selected' : '' }}>Apraksts</option>
-                <option value="statuss" {{ request('column') === 'statuss' ? 'selected' : '' }}>Statuss</option>
-                <option value="kategorija" {{ request('column') === 'kategorija' ? 'selected' : '' }}>Kategorija</option>
-                <option value="telpa" {{ request('column') === 'telpa' ? 'selected' : '' }}>Telpa</option>
+                <option style="color:#0F1931;" value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
+                <option style="color:#0F1931;" value="nosaukums" {{ request('column') === 'nosaukums' ? 'selected' : '' }}>Nosaukums</option>
+                <option style="color:#0F1931;" value="apraksts" {{ request('column') === 'apraksts' ? 'selected' : '' }}>Apraksts</option>
+                <option style="color:#0F1931;" value="statuss" {{ request('column') === 'statuss' ? 'selected' : '' }}>Statuss</option>
+                <option style="color:#0F1931;" value="kategorija" {{ request('column') === 'kategorija' ? 'selected' : '' }}>Kategorija</option>
+                <option style="color:#0F1931;" value="telpa" {{ request('column') === 'telpa' ? 'selected' : '' }}>Telpa</option>
                 <option value="atbildigais" {{ request('column') === 'atbildigais' ? 'selected' : '' }}>Atbildīgais</option>
             </select>
         </label>
