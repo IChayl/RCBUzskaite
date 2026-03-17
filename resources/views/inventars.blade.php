@@ -107,7 +107,6 @@
                                         <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->inventars_id }}">Dzēst</a>
                                         <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm">Rediģēt</a>
                                     @endif
-                                    <a href="/inventars/{{ $item->inventars_id }}/details" class="bloom-button sm">Detalizēta</a>
                                 </div>
                             </td>
                         </tr>

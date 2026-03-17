@@ -74,7 +74,6 @@
                                         <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->kategorija_id }}">Dzēst</a>
                                         <a href="/kategorija/{{ $item->kategorija_id }}/edit" class="bloom-button sm">Rediģēt</a>
                                     @endif
-                                    <a href="/kategorija/{{ $item->kategorija_id }}/details" class="bloom-button sm">Detalizēta</a>
                                 </div>
                             </td>
                         </tr>
