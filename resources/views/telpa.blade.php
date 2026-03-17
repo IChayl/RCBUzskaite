@@ -29,11 +29,11 @@
         <label style="display:flex; align-items:center; gap:8px;">
             <span style="color:#E2D4BB; font-size:0.9rem;">Meklēt pēc:</span>
             <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
-                <option value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
-                <option value="nosaukums" {{ request('column') === 'nosaukums' ? 'selected' : '' }}>Nosaukums</option>
-                <option value="izmeri" {{ request('column') === 'izmeri' ? 'selected' : '' }}>Izmēri</option>
-                <option value="numurs" {{ request('column') === 'numurs' ? 'selected' : '' }}>Numurs</option>
-                <option value="stavs" {{ request('column') === 'stavs' ? 'selected' : '' }}>Stāvs</option>
+                <option style="color:#0F1931;" value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
+                <option style="color:#0F1931;" value="nosaukums" {{ request('column') === 'nosaukums' ? 'selected' : '' }}>Nosaukums</option>
+                <option style="color:#0F1931;" value="izmeri" {{ request('column') === 'izmeri' ? 'selected' : '' }}>Izmēri</option>
+                <option style="color:#0F1931;" value="numurs" {{ request('column') === 'numurs' ? 'selected' : '' }}>Numurs</option>
+                <option style="color:#0F1931;" value="stavs" {{ request('column') === 'stavs' ? 'selected' : '' }}>Stāvs</option>
             </select>
         </label>
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
