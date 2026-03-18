@@ -126,6 +126,7 @@ class TelpaController extends Controller
                 'nosaukums' => $data['nosaukums'],
                 'platiba' => $data['platiba'] ?? null,
                 'numurs' => $data['numurs'] ?? nullwith('success','Ieraksts atjaunināts');
+            ])
     }
 
     // Dzēš telpas ierakstu.
