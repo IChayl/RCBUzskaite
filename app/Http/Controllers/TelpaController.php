@@ -23,13 +23,13 @@ class TelpaController extends Controller
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
         // Drošība: atļautās kolonnas, pēc kurām drīkst kārtot
-        $allowedSort = ['telpas_id', 'nosaukums', 'platība', 'numurs'];
+        $allowedSort = ['telpas_id', 'nosaukums', 'platiba', 'numurs'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'telpas_id';
         }
 
         // Drošība: atļautās kolonnas meklēšanai
-        $allowedColumns = ['all', 'nosaukums', 'platība', 'numurs'];
+        $allowedColumns = ['all', 'nosaukums', 'platiba', 'numurs'];
         if (!in_array($column, $allowedColumns, true)) {
             $column = 'all';
         }
@@ -42,7 +42,7 @@ class TelpaController extends Controller
                 // Meklē visās kolonnās
                 $query->where(function ($query) use ($q) {
                     $query->where('nosaukums', 'like', "%{$q}%")
-                        ->orWhere('platība', 'like', "%{$q}%")
+                        ->orWhere('platiba', 'like', "%{$q}%")
                         ->orWhere('numurs', 'like', "%{$q}%");
                 });
             } else {
@@ -76,14 +76,14 @@ class TelpaController extends Controller
         $data = $req->validate([
             'nosaukums' => 'required|string|max:50',
             'izmeri' => 'nullable|string|max:10',
-            'platība' => 'nullable|string|max:10',
+            'platiba' => 'nullable|string|max:10',
             'numurs' => 'nullable|integer',
         ]);
 
         $t = new Telpa();
         $t->nosaukums = $data['nosaukums'];
-        $t->platība = $data['platība'] ?? null;
-        $t->numurs = $data['numurs'] ?? null
+        $t->platiba = $data['platiba'] ?? null;
+        $t->numurs = $data['numurs'] ?? null;
 
         return redirect()->to('/telpa')->with('success','Ieraksts pievienots');
     }
@@ -116,7 +116,7 @@ class TelpaController extends Controller
             'izmeri' => 'nullable|string|max:10',
             'numurs' => 'nullable|integer',
             'stavs' => 'required|integer',
-        ]);platība' => 'nullable|string|max:10',
+        ]);platiba' => 'nullable|string|max:10',
             'numurs' => 'nullable|integer',
         ]);
 
@@ -124,7 +124,7 @@ class TelpaController extends Controller
             ->where('telpas_id',$id)
             ->update([
                 'nosaukums' => $data['nosaukums'],
-                'platība' => $data['platība'] ?? null,
+                'platiba' => $data['platiba'] ?? null,
                 'numurs' => $data['numurs'] ?? nullwith('success','Ieraksts atjaunināts');
     }
 
