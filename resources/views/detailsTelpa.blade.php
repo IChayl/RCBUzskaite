@@ -15,9 +15,8 @@
     <div class="card mt-3" style="background: rgba(45, 65, 89, 0.65); border: 1px solid rgba(226, 212, 187, 0.2); color: #E2D4BB; max-width: 600px;">
         <div class="card-body">
             <h5 class="card-title">{{ $telpa->nosaukums }} (ID: {{ $telpa->telpas_id }})</h5>
-            <p class="card-text"><strong>Izmēri:</strong> {{ $telpa->izmeri ?? '-' }}</p>
+            <p class="card-text"><strong>Platība:</strong> {{ $telpa->platiba ?? '-' }}</p>
             <p class="card-text"><strong>Numurs:</strong> {{ $telpa->numurs ?? '-' }}</p>
-            <p class="card-text"><strong>Stāvs:</strong> {{ $telpa->stavs }}</p>
         </div>
     </div>
 @endsection

@@ -31,9 +31,8 @@
             <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
                 <option style="color:#0F1931;" value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
                 <option style="color:#0F1931;" value="nosaukums" {{ request('column') === 'nosaukums' ? 'selected' : '' }}>Nosaukums</option>
-                <option style="color:#0F1931;" value="izmeri" {{ request('column') === 'izmeri' ? 'selected' : '' }}>Izmēri</option>
+                <option style="color:#0F1931;" value="platiba" {{ request('column') === 'platiba' ? 'selected' : '' }}>Platība</option>
                 <option style="color:#0F1931;" value="numurs" {{ request('column') === 'numurs' ? 'selected' : '' }}>Numurs</option>
-                <option style="color:#0F1931;" value="stavs" {{ request('column') === 'stavs' ? 'selected' : '' }}>Stāvs</option>
             </select>
         </label>
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
@@ -56,24 +55,17 @@
                             @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'nosaukums', 'direction' => $dir]) }}">Nosaukums</a>
                         </th>
-                        <th class="sortable {{ request('sort') === 'izmeri' ? 'sorted-'.request('direction','asc') : '' }}">
+                        <th class="sortable {{ request('sort') === 'platiba' ? 'sorted-'.request('direction','asc') : '' }}">
                             @php
-                                $dir = request('sort') === 'izmeri' && request('direction') === 'asc' ? 'desc' : 'asc';
+                                $dir = request('sort') === 'platiba' && request('direction') === 'asc' ? 'desc' : 'asc';
                             @endphp
-                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'izmeri', 'direction' => $dir]) }}">Izmēri</a>
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'platiba', 'direction' => $dir]) }}">Platība</a>
                         </th>
                         <th class="sortable {{ request('sort') === 'numurs' ? 'sorted-'.request('direction','asc') : '' }}">
                             @php
                                 $dir = request('sort') === 'numurs' && request('direction') === 'asc' ? 'desc' : 'asc';
                             @endphp
-                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'numurs', 'direction' => $dir]) }}">Numurs</a>
-                        </th>
-                        <th class="sortable {{ request('sort') === 'stavs' ? 'sorted-'.request('direction','asc') : '' }}">
-                            @php
-                                $dir = request('sort') === 'stavs' && request('direction') === 'asc' ? 'desc' : 'asc';
-                            @endphp
-                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'stavs', 'direction' => $dir]) }}">Stāvs</a>
-                        </th>
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'numurs', 'direction' => $dir]) }}">Numur
                         <th>Darbības</th>
                     </tr>
                 </thead>

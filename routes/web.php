@@ -8,6 +8,7 @@ use App\Http\Controllers\KustibasVeidiController;
 use App\Http\Controllers\LietotajsController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TelpaController;
+use App\Http\Controllers\NorakstishanaController;
 
 // Publiskā sākumlapa
 Route::get('/', function () {
@@ -86,5 +87,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/telpa/{id}/details', [TelpaController::class, 'TelpaDetails'])->name('telpa.details');
     Route::get('/telpa/{id}/edit', [TelpaController::class, 'TelpaEdit'])->name('telpa.edit');
     Route::post('/telpa/{id}/editSubmit', [TelpaController::class, 'editSubmit'])->name('telpa.update');
+
+    // norakstishana
+    Route::get('/norakstishana', [NorakstishanaController::class, 'showAll'])->name('norakstishana.lapa');
+    Route::get('/norakstishana/create', [NorakstishanaController::class, 'create'])->name('norakstishana.create');
+    Route::post('/norakstishana', [NorakstishanaController::class, 'store'])->name('norakstishana.store');
+    Route::get('/norakstishana/{id}/details', [NorakstishanaController::class, 'details'])->name('norakstishana.details');
+    Route::get('/norakstishana/{id}/edit', [NorakstishanaController::class, 'edit'])->name('norakstishana.edit');
+    Route::post('/norakstishana/{id}/editSubmit', [NorakstishanaController::class, 'update'])->name('norakstishana.update');
+    Route::get('/norakstishana/{id}/delete', [NorakstishanaController::class, 'delete'])->name('norakstishana.delete');
     Route::get('/telpa/{id}/delete', [TelpaController::class, 'TelpaDelete'])->name('telpa.delete');
 });

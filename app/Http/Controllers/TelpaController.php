@@ -21,13 +21,13 @@ class TelpaController extends Controller
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
         // Drošība: atļautās kolonnas, pēc kurām drīkst kārtot
-        $allowedSort = ['telpas_id', 'nosaukums', 'izmeri', 'numurs', 'stavs'];
+        $allowedSort = ['telpas_id', 'nosaukums', 'platība', 'numurs'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'telpas_id';
         }
 
         // Drošība: atļautās kolonnas meklēšanai
-        $allowedColumns = ['all', 'nosaukums', 'izmeri', 'numurs', 'stavs'];
+        $allowedColumns = ['all', 'nosaukums', 'platība', 'numurs'];
         if (!in_array($column, $allowedColumns, true)) {
             $column = 'all';
         }
@@ -40,9 +40,8 @@ class TelpaController extends Controller
                 // Meklē visās kolonnās
                 $query->where(function ($query) use ($q) {
                     $query->where('nosaukums', 'like', "%{$q}%")
-                        ->orWhere('izmeri', 'like', "%{$q}%")
-                        ->orWhere('numurs', 'like', "%{$q}%")
-                        ->orWhere('stavs', 'like', "%{$q}%");
+                        ->orWhere('platība', 'like', "%{$q}%")
+                        ->orWhere('numurs', 'like', "%{$q}%");
                 });
             } else {
                 // Meklē tikai konkrētajā kolonnā
@@ -75,16 +74,14 @@ class TelpaController extends Controller
         $data = $req->validate([
             'nosaukums' => 'required|string|max:50',
             'izmeri' => 'nullable|string|max:10',
+            'platība' => 'nullable|string|max:10',
             'numurs' => 'nullable|integer',
-            'stavs' => 'required|integer',
         ]);
 
         $t = new Telpa();
         $t->nosaukums = $data['nosaukums'];
-        $t->izmeri = $data['izmeri'] ?? null;
-        $t->numurs = $data['numurs'] ?? null;
-        $t->stavs = $data['stavs'];
-        $t->save();
+        $t->platība = $data['platība'] ?? null;
+        $t->numurs = $data['numurs'] ?? null
 
         return redirect()->to('/telpa')->with('success','Ieraksts pievienots');
     }
@@ -117,18 +114,16 @@ class TelpaController extends Controller
             'izmeri' => 'nullable|string|max:10',
             'numurs' => 'nullable|integer',
             'stavs' => 'required|integer',
+        ]);platība' => 'nullable|string|max:10',
+            'numurs' => 'nullable|integer',
         ]);
 
         DB::table('telpa')
             ->where('telpas_id',$id)
             ->update([
                 'nosaukums' => $data['nosaukums'],
-                'izmeri' => $data['izmeri'] ?? null,
-                'numurs' => $data['numurs'] ?? null,
-                'stavs' => $data['stavs'],
-            ]);
-
-        return redirect()->to('/telpa')->with('success','Ieraksts atjaunināts');
+                'platība' => $data['platība'] ?? null,
+                'numurs' => $data['numurs'] ?? nullwith('success','Ieraksts atjaunināts');
     }
 
     // Dzēš telpas ierakstu.

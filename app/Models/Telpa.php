@@ -13,5 +13,5 @@ class Telpa extends Model
     public $timestamps = false;
 
     // Atļauj masveida piešķiršanu šīm kolonnām
-    protected $fillable = ['nosaukums', 'izmeri', 'numurs', 'stavs'];
+    protected $fillable = ['nosaukums', 'platiba', 'numurs'];
 }

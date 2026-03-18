@@ -16,8 +16,6 @@
     <div class="card mt-3" style="background: rgba(45, 65, 89, 0.65); border: 1px solid rgba(226, 212, 187, 0.2); color: #E2D4BB; max-width: 700px;">
         <div class="card-body">
             <h5 class="card-title">{{ $inventar->nosaukums }} (ID: {{ $inventar->inventars_id }})</h5>
-            <p class="card-text"><strong>Apraksts:</strong> {{ $inventar->apraksts ?? '-' }}</p>
-            <p class="card-text"><strong>Statuss:</strong> {{ $inventar->statuss ?? '-' }}</p>
             <p class="card-text"><strong>Kategorija:</strong> {{ $inventar->kategorija->nosaukums ?? ('ID: '.$inventar->kategorija_id) }}</p>
             <p class="card-text"><strong>Telpa:</strong> {{ optional($inventar->telpa)->nosaukums ?? ('ID: '.$inventar->telpas_id) }}</p>
             <p class="card-text"><strong>Atbildīgais:</strong> {{ optional($inventar->atbildigais)->lietotajvards ?? ('ID: '.$inventar->atbildigais_id) }}</p>

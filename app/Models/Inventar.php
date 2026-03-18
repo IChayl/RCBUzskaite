@@ -15,7 +15,7 @@ class Inventar extends Model
     public $timestamps = false;
 
     // Lauki, kuriem atļauta masveida aizpilde.
-    protected $fillable = ['nosaukums', 'apraksts', 'statuss', 'kategorija_id', 'telpas_id', 'atbildigais_id', 'inventara_numurs', 'iegades_datums'];
+    protected $fillable = ['nosaukums', 'kategorija_id', 'telpas_id', 'atbildigais_id', 'inventara_numurs', 'iegades_datums'];
 
     // Saite uz kategoriju, kurai inventārs pieder.
     public function kategorija()

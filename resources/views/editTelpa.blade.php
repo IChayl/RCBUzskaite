@@ -21,16 +21,12 @@
             <input type="text" class="form-control" id="nosaukums" name="nosaukums" value="{{ $telpa->nosaukums }}" required>
         </div>
         <div class="mb-3">
-            <label for="izmeri" class="form-label">Izmēri</label>
-            <input type="text" class="form-control" id="izmeri" name="izmeri" value="{{ $telpa->izmeri }}">
+            <label for="platība" class="form-label">Platība</label>
+            <input type="text" class="form-control" id="platība" name="platība" value="{{ $telpa->platība }}">
         </div>
         <div class="mb-3">
             <label for="numurs" class="form-label">Numurs</label>
             <input type="number" class="form-control" id="numurs" name="numurs" value="{{ $telpa->numurs }}">
-        </div>
-        <div class="mb-3">
-            <label for="stavs" class="form-label">Stāvs</label>
-            <input type="number" class="form-control" id="stavs" name="stavs" value="{{ $telpa->stavs }}" required>
         </div>
         <!-- Saglabā atjauninātos telpas datus -->
         <button type="submit" class="btn btn-primary">Atjaunināt</button>

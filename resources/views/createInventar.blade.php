@@ -21,14 +21,6 @@
             <input type="text" class="form-control" id="nosaukums" name="nosaukums" required>
         </div>
         <div class="mb-3">
-            <label for="apraksts" class="form-label">Apraksts</label>
-            <textarea class="form-control" id="apraksts" name="apraksts"></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="statuss" class="form-label">Statuss</label>
-            <input type="text" class="form-control" id="statuss" name="statuss">
-        </div>
-        <div class="mb-3">
             <label for="inventara_numurs" class="form-label">Inventāra numurs</label>
             <input type="text" class="form-control" id="inventara_numurs" name="inventara_numurs">
         </div>
