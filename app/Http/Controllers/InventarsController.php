@@ -7,11 +7,13 @@ use App\Models\Inventar;
 use App\Models\Telpa;
 use App\Models\KategorijaModel;
 use App\Models\Lietotajs;
+use App\Http\Controllers\Concerns\HandlesSafeDelete;
 use Illuminate\Support\Facades\DB;
 
 // Kontrolieris inventāra ierakstu sarakstam, izveidei, labošanai un dzēšanai.
 class InventarsController extends Controller
 {
+    use HandlesSafeDelete;
     /**
      * Parāda inventāra sarakstu ar meklēšanu, kārtošanu un lapošanu.
      */
@@ -200,7 +202,13 @@ class InventarsController extends Controller
         if (!auth()->user()->admina_tiesibas) {
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
-        DB::table('inventars')->where('inventars_id',$id)->delete();
-        return redirect('/inventars')->with('success','Ieraksts dzēsts');
+        $usedIn = $this->detectReferenceUsage($id, [
+            ['table' => 'inventara_kustiba', 'column' => 'inventars_id', 'label' => 'inventara_kustiba.inventars_id'],
+            ['table' => 'Norakstishana', 'column' => 'inventara_id', 'label' => 'Norakstishana.inventara_id'],
+        ]);
+
+        $this->deleteWithForeignKeyChecksDisabled('inventars', 'inventars_id', $id);
+
+        return redirect('/inventars')->with('success', $this->buildDeleteMessage('Inventāra', $usedIn));
     }
 }

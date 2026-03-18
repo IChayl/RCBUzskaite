@@ -8,11 +8,13 @@ use App\Models\Inventar;
 use App\Models\KustibasVeidi;
 use App\Models\Lietotajs;
 use App\Models\Telpa;
+use App\Http\Controllers\Concerns\HandlesSafeDelete;
 use Illuminate\Support\Facades\DB;
 
 // Kontrolieris inventāra kustību pārvaldībai.
 class InventaraKustibaController extends Controller
 {
+    use HandlesSafeDelete;
     /**
      * Parāda kustību sarakstu ar filtrēšanu, kārtošanu un lapošanu.
      */
@@ -230,7 +232,8 @@ class InventaraKustibaController extends Controller
         if (!auth()->user()->admina_tiesibas) {
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
-        DB::table('inventara_kustiba')->where('kustiba_id',$id)->delete();
-        return redirect('/inventara_kustiba')->with('success','Ieraksts dzēsts');
+        $this->deleteWithForeignKeyChecksDisabled('inventara_kustiba', 'kustiba_id', $id);
+
+        return redirect('/inventara_kustiba')->with('success', $this->buildDeleteMessage('Inventāra kustības', []));
     }
 }

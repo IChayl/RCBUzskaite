@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Norakstishana;
 use App\Models\Inventar;
+use App\Http\Controllers\Concerns\HandlesSafeDelete;
 use Illuminate\Support\Facades\DB;
 
 // Kontrolieris norakstīšanas ierakstu pārvaldībai.
 class NorakstishanaController extends Controller
 {
+    use HandlesSafeDelete;
     /**
      * Parāda norakstīšanas sarakstu ar meklēšanu, kārtošanu un lapošanu.
      */
@@ -158,7 +160,8 @@ class NorakstishanaController extends Controller
         if (!auth()->user()->admina_tiesibas) {
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
-        DB::table('Norakstishana')->where('norakstishana_id',$id)->delete();
-        return redirect('/norakstishana')->with('success','Ieraksts dzēsts');
+        $this->deleteWithForeignKeyChecksDisabled('Norakstishana', 'norakstishana_id', $id);
+
+        return redirect('/norakstishana')->with('success', $this->buildDeleteMessage('Norakstīšanas', []));
     }
 }

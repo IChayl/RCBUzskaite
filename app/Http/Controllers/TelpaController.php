@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Telpa;
+use App\Http\Controllers\Concerns\HandlesSafeDelete;
 use Illuminate\Support\Facades\DB;
 
 // Kontrolieris telpu ierakstu pārvaldībai.
 class TelpaController extends Controller
 {
+    use HandlesSafeDelete;
     // Rāda visu telpu sarakstu
     public function showAllTelpa(Request $request)
     {
@@ -132,7 +134,14 @@ class TelpaController extends Controller
         if (!auth()->user()->admina_tiesibas) {
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
-        DB::table('telpa')->where('telpas_id',$id)->delete();
-        return redirect('/telpa')->with('success','Ieraksts dzēsts');
+        $usedIn = $this->detectReferenceUsage($id, [
+            ['table' => 'inventars', 'column' => 'telpas_id', 'label' => 'inventars.telpas_id'],
+            ['table' => 'inventara_kustiba', 'column' => 'veca_telpa_id', 'label' => 'inventara_kustiba.veca_telpa_id'],
+            ['table' => 'inventara_kustiba', 'column' => 'jauna_telpa_id', 'label' => 'inventara_kustiba.jauna_telpa_id'],
+        ]);
+
+        $this->deleteWithForeignKeyChecksDisabled('telpa', 'telpas_id', $id);
+
+        return redirect('/telpa')->with('success', $this->buildDeleteMessage('Telpas', $usedIn));
     }
 }

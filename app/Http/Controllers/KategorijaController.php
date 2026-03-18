@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\KategorijaModel;
+use App\Http\Controllers\Concerns\HandlesSafeDelete;
 use Illuminate\Support\Facades\DB;
 
 class KategorijaController extends Controller
 {
+    use HandlesSafeDelete;
 
 // Rāda visu kategoriju sarakstu
    public function showAllKategorija(Request $request)
@@ -48,7 +50,7 @@ class KategorijaController extends Controller
         }
 
         // Paginācija + kārtošana
-        $kategorija = $query->orderBy($sort, $direction)->paginate(7)->withQueryString();
+        $kategorija = $query->orderBy($sort, $direction)->paginate(8)->withQueryString();
 
         return view('kategorija', compact('kategorija', 'sort', 'direction', 'q', 'column'));
     }
@@ -127,7 +129,12 @@ class KategorijaController extends Controller
         if (!auth()->user()->admina_tiesibas) {
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
-        DB::table('kategorija')->where('kategorija_id', $id)->delete();
-        return redirect('/kategorija')->with('success', 'Ieraksts dzēsts');
+        $usedIn = $this->detectReferenceUsage($id, [
+            ['table' => 'inventars', 'column' => 'kategorija_id', 'label' => 'inventars.kategorija_id'],
+        ]);
+
+        $this->deleteWithForeignKeyChecksDisabled('kategorija', 'kategorija_id', $id);
+
+        return redirect('/kategorija')->with('success', $this->buildDeleteMessage('Kategorijas', $usedIn));
     }
 }

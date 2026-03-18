@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Lietotajs;
+use App\Http\Controllers\Concerns\HandlesSafeDelete;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 // Kontrolieris lietotāju pārvaldībai (CRUD darbības).
 class LietotajsController extends Controller
 {
+    use HandlesSafeDelete;
     /**
      * Parāda visu lietotāju sarakstu.
      */
@@ -159,7 +161,13 @@ class LietotajsController extends Controller
         if (!auth()->user()->admina_tiesibas) {
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
-        DB::table('lietotajs')->where('lietotajs_id',$id)->delete();
-        return redirect('/lietotajs')->with('success','Ieraksts dzēsts');
+        $usedIn = $this->detectReferenceUsage($id, [
+            ['table' => 'inventars', 'column' => 'atbildigais_id', 'label' => 'inventars.atbildigais_id'],
+            ['table' => 'inventara_kustiba', 'column' => 'atbildigais_lietotajs_id', 'label' => 'inventara_kustiba.atbildigais_lietotajs_id'],
+        ]);
+
+        $this->deleteWithForeignKeyChecksDisabled('lietotajs', 'lietotajs_id', $id);
+
+        return redirect('/lietotajs')->with('success', $this->buildDeleteMessage('Lietotāja', $usedIn));
     }
 }

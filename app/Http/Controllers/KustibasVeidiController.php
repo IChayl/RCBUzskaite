@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\KustibasVeidi;
+use App\Http\Controllers\Concerns\HandlesSafeDelete;
 use Illuminate\Support\Facades\DB;
 
 // Kontrolieris kustību veidu datu pārvaldībai.
 class KustibasVeidiController extends Controller
 {
+    use HandlesSafeDelete;
     /**
      * Parāda kustību veidu sarakstu ar meklēšanu un kārtošanu.
      */
@@ -135,7 +137,12 @@ class KustibasVeidiController extends Controller
         if (!auth()->user()->admina_tiesibas) {
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
-        DB::table('kustibas_veidi')->where('kustibas_veids_id', $id)->delete();
-        return redirect('/kustibas_veidi')->with('success','Ieraksts dzēsts');
+        $usedIn = $this->detectReferenceUsage($id, [
+            ['table' => 'inventara_kustiba', 'column' => 'kustibas_veids_id', 'label' => 'inventara_kustiba.kustibas_veids_id'],
+        ]);
+
+        $this->deleteWithForeignKeyChecksDisabled('kustibas_veidi', 'kustibas_veids_id', $id);
+
+        return redirect('/kustibas_veidi')->with('success', $this->buildDeleteMessage('Kustības veida', $usedIn));
     }
 }
