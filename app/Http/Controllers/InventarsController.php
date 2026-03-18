@@ -181,7 +181,11 @@ class InventarsController extends Controller
         ]);
 
         DB::table('inventars')->where('inventars_id',$id)->update([
-            'nosaukums' => $data['nosaukums']a_numurs'] ?? null,
+            'nosaukums' => $data['nosaukums'],
+            'kategorija_id' => $data['kategorija_id'],
+            'telpas_id' => $data['telpas_id'],
+            'atbildigais_id' => $data['atbildigais_id'] ?? null,
+            'inventara_numurs' => $data['inventara_numurs'] ?? null,
             'iegades_datums' => $data['iegades_datums'] ?? null,
         ]);
 
