@@ -13,7 +13,7 @@
 
     <div style="color: #E2D4BB; margin-top: 20px;">
         @if(session('success'))
-            <div id="flash-message" style="background: #0F1931; color: #2D4159; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #2D4159; cursor: pointer;">
+            <div id="flash-message" style="background: #0F1931; color: #E2D4BB; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #2D4159; cursor: pointer;">
                 {{ session('success') }}
             </div>
         @endif
