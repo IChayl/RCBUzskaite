@@ -85,14 +85,14 @@
                             <td>{{ $item->kategorija->nosaukums ?? ('ID: '.$item->kategorija_id) }}</td>
                             <td>{{ optional($item->telpa)->nosaukums ?? ('ID: '.$item->telpas_id) }}</td>
                             <td>{{ optional($item->atbildigais)->lietotajvards ?? ('ID: '.$item->atbildigais_id) }}</td>
-                            <td>
-                                <div class="actions">
-                                    @if(Auth::user()->admina_tiesibas)
+                           @if(Auth::user()->admina_tiesibas)  <td>
+                                 <div class="actions">
+                                  
                                         <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->inventars_id }}">Dzēst</a>
                                         <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm">Rediģēt</a>
-                                    @endif
+                                 
                                 </div>
-                            </td>
+                            </td>   @endif
                         </tr>
                     @endforeach
                 </tbody>

@@ -68,14 +68,14 @@
                         <tr>
                             <td>{{ $item->nosaukums }}</td>
                             <td>{{ $item->apraksts ?? '-' }}</td>
-                            <td>
-                                <div class="actions">
-                                    @if(Auth::user()->admina_tiesibas)
+                               @if(Auth::user()->admina_tiesibas)   <td>
+                             <div class="actions">
+                                 
                                         <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->kategorija_id }}">Dzēst</a>
                                         <a href="/kategorija/{{ $item->kategorija_id }}/edit" class="bloom-button sm">Rediģēt</a>
-                                    @endif
+                                   
                                 </div>
-                            </td>
+                            </td> @endif
                         </tr>
                     @endforeach
                 </tbody>

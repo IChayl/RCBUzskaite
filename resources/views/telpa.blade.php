@@ -76,14 +76,14 @@
                             <td>{{ $item->nosaukums }}</td>
                             <td>{{ $item->platiba ?? '-' }}m²</td>
                             <td>{{ $item->numurs ?? '-' }}</td>
-                            <td>
+                           @if(Auth::user()->admina_tiesibas) <td>
                                 <div class="actions">
-                                    @if(Auth::user()->admina_tiesibas)
+                                    
                                         <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->telpas_id }}">Dzēst</a>
                                         <a href="/telpa/{{ $item->telpas_id }}/edit" class="bloom-button sm">Rediģēt</a>
-                                    @endif
+                                   
                                 </div>
-                            </td>
+                            </td> @endif
                         </tr>
                     @endforeach
                 </tbody>

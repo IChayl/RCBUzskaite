@@ -99,14 +99,14 @@
                             <td>{{ optional($item->vecaTelpa)->nosaukums ?? ('ID: '.$item->veca_telpa_id) }}</td>
                             <td>{{ optional($item->jaunaTelpa)->nosaukums ?? ('ID: '.$item->jauna_telpa_id) }}</td>
                             <td>{{ optional($item->lietotajs)->lietotajvards ?? ('ID: '.$item->atbildigais_lietotajs_id) }}</td>
-                            <td>
+                                 @if(Auth::user()->admina_tiesibas)  <td>
                                 <div class="actions">
-                                    @if(Auth::user()->admina_tiesibas)
+                             
                                         <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->kustiba_id }}">Dzēst</a>
                                         <a href="/inventara_kustiba/{{ $item->kustiba_id }}/edit" class="bloom-button sm">Rediģēt</a>
-                                    @endif
+                                   
                                 </div>
-                            </td>
+                            </td> @endif
                         </tr>
                     @endforeach
                 </tbody>

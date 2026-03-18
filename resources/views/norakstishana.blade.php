@@ -83,15 +83,15 @@
                             <td>{{ $item->norDatums }}</td>
                             <td>{{ $item->iemesls }}</td>
                             <td>{{ $item->talaka_riciba }}</td>
-                            <td>
+                               @if(Auth::user()->admina_tiesibas) <td>
                                 <div class="actions">
                                     <a href="/norakstishana/{{ $item->norakstishana_id }}/details" class="bloom-button sm">Skatīt</a>
-                                    @if(Auth::user()->admina_tiesibas)
+                                
                                         <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->norakstishana_id }}">Dzēst</a>
                                         <a href="/norakstishana/{{ $item->norakstishana_id }}/edit" class="bloom-button sm">Rediģēt</a>
-                                    @endif
+                                    
                                 </div>
-                            </td>
+                            </td>@endif
                         </tr>
                     @endforeach
                 </tbody>
