@@ -86,7 +86,7 @@
                             @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'lietotajs', 'direction' => $dir]) }}">Atbildīgais</a>
                         </th>
-                        <th>Darbības</th>
+                          @if(Auth::user()->admina_tiesibas) <th>Darbības</th> @endif
                     </tr>
                 </thead>
                 <tbody>

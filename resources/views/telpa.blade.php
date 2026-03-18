@@ -65,8 +65,9 @@
                             @php
                                 $dir = request('sort') === 'numurs' && request('direction') === 'asc' ? 'desc' : 'asc';
                             @endphp
-                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'numurs', 'direction' => $dir]) }}">Numur
-                        <th>Darbības</th>
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'numurs', 'direction' => $dir]) }}">Numurs</a>
+                        </th>
+                        @if(Auth::user()->admina_tiesibas) <th>Darbības</th> @endif
                     </tr>
                 </thead>
                 <tbody>
