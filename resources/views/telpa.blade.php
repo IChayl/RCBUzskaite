@@ -74,7 +74,7 @@
                     @foreach ($telpas as $item)
                         <tr>
                             <td>{{ $item->nosaukums }}</td>
-                            <td>{{ $item->platiba ?? '-' }}</td>
+                            <td>{{ $item->platiba ?? '-' }}m²</td>
                             <td>{{ $item->numurs ?? '-' }}</td>
                             <td>
                                 <div class="actions">
