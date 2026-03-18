@@ -116,7 +116,7 @@ class TelpaController extends Controller
             'izmeri' => 'nullable|string|max:10',
             'numurs' => 'nullable|integer',
             'stavs' => 'required|integer',
-        ]);platiba' => 'nullable|string|max:10',
+        'platiba' => 'nullable|string|max:10',
             'numurs' => 'nullable|integer',
         ]);
 
