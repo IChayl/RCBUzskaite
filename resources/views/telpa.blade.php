@@ -74,9 +74,8 @@
                     @foreach ($telpas as $item)
                         <tr>
                             <td>{{ $item->nosaukums }}</td>
-                            <td>{{ $item->izmeri ?? '-' }}</td>
+                            <td>{{ $item->platiba ?? '-' }}</td>
                             <td>{{ $item->numurs ?? '-' }}</td>
-                            <td>{{ $item->stavs ?? '-' }}</td>
                             <td>
                                 <div class="actions">
                                     @if(Auth::user()->admina_tiesibas)
