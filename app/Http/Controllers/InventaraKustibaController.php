@@ -19,8 +19,10 @@ class InventaraKustibaController extends Controller
      * Parāda kustību sarakstu ar filtrēšanu, kārtošanu un lapošanu.
      */
     public function showAllKustiba(Request $request)
+
     {
-        // Meklēšanas teksts un izvēlētā kolonna (vai "all" līdz meklēšanai visur)
+        $user = auth()->user();
+    // Meklēšanas teksts un izvēlētā kolonna (vai "all" līdz meklēšanai visur)
         $q = trim($request->input('q', ''));
         $column = $request->input('column', 'all');
 
@@ -42,6 +44,11 @@ class InventaraKustibaController extends Controller
 
         // Ielādējam saistītos modeļus, lai samazinātu papildus SQL pieprasījumus skatā.
         $query = InventaraKustiba::query()->with(['inventars', 'lietotajs', 'kustibasVeids']);
+
+        // Ja lietotājs nav admins, rādam tikai viņa kustības.
+        if (! $user->admina_tiesibas) {
+            $query->where('atbildigais_lietotajs_id', $user->lietotajs_id);
+        }   
 
         // Meklēšanas loģika pa vienu vai visām kolonnām.
         if ($q !== '') {
