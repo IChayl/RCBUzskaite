@@ -28,13 +28,13 @@ class InventarsController extends Controller
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
         // Atļautās kolonnas kārtošanai
-        $allowedSort = ['inventars_id', 'nosaukums', 'kategorija', 'telpa', 'atbildigais'];
+        $allowedSort = ['inventars_id', 'nosaukums', 'kategorija', 'telpa', 'atbildigais', 'inventara_numurs', 'iegades_datums'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'inventars_id';
         }
 
         // Atļautās kolonnas meklēšanai
-        $allowedColumns = ['all', 'nosaukums', 'kategorija', 'telpa', 'atbildigais'];
+        $allowedColumns = ['all', 'nosaukums', 'kategorija', 'telpa', 'atbildigais', 'inventara_numurs', 'iegades_datums'];
         if (!in_array($column, $allowedColumns, true)) {
             $column = 'all';
         }
@@ -73,6 +73,10 @@ class InventarsController extends Controller
                 $query->whereHas('atbildigais', function ($q2) use ($q) {
                     $q2->where('lietotajvards', 'like', "%{$q}%");
                 });
+            } elseif ($column === 'inventara_numurs') {
+                $query->where('inventara_numurs', 'like', "%{$q}%");
+            } elseif ($column === 'iegades_datums') {
+                $query->where('iegades_datums', 'like', "%{$q}%");
             }
         }
 
@@ -171,10 +175,6 @@ class InventarsController extends Controller
         }
         $data = $req->validate([
             'nosaukums' => 'required|string|max:30',
-            'apraksts' => 'nullable|string|max:200',
-            'statuss' => 'nullable|string|max:25',
-            'kategorija_id' => 'required|integer|exists:kategorija,kategorija_id',
-            'telpas_id' => 'required|integer|exists:telpa,telpas_id',
             'kategorija_id' => 'required|integer|exists:kategorija,kategorija_id',
             'telpas_id' => 'required|integer|exists:telpa,telpas_id',
             'atbildigais_id' => 'nullable|integer|exists:lietotajs,lietotajs_id',

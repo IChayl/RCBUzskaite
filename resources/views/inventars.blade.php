@@ -3,7 +3,7 @@
 @section('content')
     <p style="color: #E2D4BB;">Visi inventāri</p>
 
- <div class="auth-links">
+    <div class="auth-links">
         @if(Auth::user()->admina_tiesibas)
             <a href="/inventars/create">Jauns inventārs</a>
         @endif
@@ -13,7 +13,6 @@
     <hr>
     <h2 style="color: #E2D4BB;">Inventāri</h2>
 
-    <!-- Filtrēšanas forma: saglabā kārtošanas parametrus un meklēšanas frāzi -->
     <form method="GET" class="table-controls">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
@@ -24,7 +23,9 @@
                 <option style="color:#0F1931;" value="nosaukums" {{ request('column') === 'nosaukums' ? 'selected' : '' }}>Nosaukums</option>
                 <option style="color:#0F1931;" value="kategorija" {{ request('column') === 'kategorija' ? 'selected' : '' }}>Kategorija</option>
                 <option style="color:#0F1931;" value="telpa" {{ request('column') === 'telpa' ? 'selected' : '' }}>Telpa</option>
-                <option value="atbildigais" {{ request('column') === 'atbildigais' ? 'selected' : '' }}>Atbildīgais</option>
+                <option style="color:#0F1931;" value="atbildigais" {{ request('column') === 'atbildigais' ? 'selected' : '' }}>Atbildīgais</option>
+                <option style="color:#0F1931;" value="inventara_numurs" {{ request('column') === 'inventara_numurs' ? 'selected' : '' }}>Inventāra numurs</option>
+                <option style="color:#0F1931;" value="iegades_datums" {{ request('column') === 'iegades_datums' ? 'selected' : '' }}>Iegādes datums</option>
             </select>
         </label>
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
@@ -50,31 +51,30 @@
                 <thead>
                     <tr>
                         <th class="sortable {{ request('sort') === 'nosaukums' ? 'sorted-'.request('direction','asc') : '' }}">
-                            @php
-                                $dir = request('sort') === 'nosaukums' && request('direction') === 'asc' ? 'desc' : 'asc';
-                            @endphp
+                            @php $dir = request('sort') === 'nosaukums' && request('direction') === 'asc' ? 'desc' : 'asc'; @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'nosaukums', 'direction' => $dir]) }}">Nosaukums</a>
                         </th>
                         <th class="sortable {{ request('sort') === 'kategorija' ? 'sorted-'.request('direction','asc') : '' }}">
-                            @php
-                                $dir = request('sort') === 'kategorija' && request('direction') === 'asc' ? 'desc' : 'asc';
-                            @endphp
+                            @php $dir = request('sort') === 'kategorija' && request('direction') === 'asc' ? 'desc' : 'asc'; @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'kategorija', 'direction' => $dir]) }}">Kategorija</a>
                         </th>
                         <th class="sortable {{ request('sort') === 'telpa' ? 'sorted-'.request('direction','asc') : '' }}">
-                            @php
-                                $dir = request('sort') === 'telpa' && request('direction') === 'asc' ? 'desc' : 'asc';
-                            @endphp
+                            @php $dir = request('sort') === 'telpa' && request('direction') === 'asc' ? 'desc' : 'asc'; @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'telpa', 'direction' => $dir]) }}">Telpa</a>
                         </th>
-        
                         <th class="sortable {{ request('sort') === 'atbildigais' ? 'sorted-'.request('direction','asc') : '' }}">
-                            @php
-                                $dir = request('sort') === 'atbildigais' && request('direction') === 'asc' ? 'desc' : 'asc';
-                            @endphp
+                            @php $dir = request('sort') === 'atbildigais' && request('direction') === 'asc' ? 'desc' : 'asc'; @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'atbildigais', 'direction' => $dir]) }}">Atbildīgais</a>
                         </th>
-                       @if(Auth::user()->admina_tiesibas) <th>Darbības</th> @endif
+                        <th class="sortable {{ request('sort') === 'inventara_numurs' ? 'sorted-'.request('direction','asc') : '' }}">
+                            @php $dir = request('sort') === 'inventara_numurs' && request('direction') === 'asc' ? 'desc' : 'asc'; @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'inventara_numurs', 'direction' => $dir]) }}">Inventāra numurs</a>
+                        </th>
+                        <th class="sortable {{ request('sort') === 'iegades_datums' ? 'sorted-'.request('direction','asc') : '' }}">
+                            @php $dir = request('sort') === 'iegades_datums' && request('direction') === 'asc' ? 'desc' : 'asc'; @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'iegades_datums', 'direction' => $dir]) }}">Iegādes datums</a>
+                        </th>
+                        @if(Auth::user()->admina_tiesibas) <th>Darbības</th> @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -85,14 +85,16 @@
                             <td>{{ $item->kategorija->nosaukums ?? ('ID: '.$item->kategorija_id) }}</td>
                             <td>{{ optional($item->telpa)->nosaukums ?? ('ID: '.$item->telpas_id) }}</td>
                             <td>{{ optional($item->atbildigais)->lietotajvards ?? ('ID: '.$item->atbildigais_id) }}</td>
-                           @if(Auth::user()->admina_tiesibas)  <td>
-                                 <div class="actions">
-                                  
-                                        <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->inventars_id }}">Dzēst</a>
-                                        <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm">Rediģēt</a>
-                                 
+                            <td>{{ $item->inventara_numurs ?? '-' }}</td>
+                            <td>{{ $item->iegades_datums ?? '-' }}</td>
+                            @if(Auth::user()->admina_tiesibas)
+                            <td>
+                                <div class="actions">
+                                    <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->inventars_id }}">Dzēst</a>
+                                    <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm">Rediģēt</a>
                                 </div>
-                            </td>   @endif
+                            </td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>

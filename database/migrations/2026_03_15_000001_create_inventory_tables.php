@@ -48,17 +48,15 @@ return new class extends Migration
         Schema::create('inventars', function (Blueprint $table) {
             $table->increments('inventars_id');
             $table->string('nosaukums', 30);
-            $table->string('apraksts', 200)->nullable();
-            $table->string('statuss', 25)->nullable();
             $table->unsignedInteger('kategorija_id');
             $table->unsignedInteger('telpas_id');
             $table->unsignedInteger('atbildigais_id')->nullable();
             $table->string('inventara_numurs', 50)->nullable();
             $table->date('iegades_datums')->nullable();
 
-            $table->foreign('kategorija_id')->references('kategorija_id')->on('kategorija')->onDelete('cascade');
-            $table->foreign('telpas_id')->references('telpas_id')->on('telpa')->onDelete('cascade');
-            $table->foreign('atbildigais_id')->references('lietotajs_id')->on('lietotajs')->onDelete('set null');
+            $table->foreign('kategorija_id')->references('kategorija_id')->on('kategorija');
+            $table->foreign('telpas_id')->references('telpas_id')->on('telpa');
+            $table->foreign('atbildigais_id')->references('lietotajs_id')->on('lietotajs');
         });
 
         Schema::create('inventara_kustiba', function (Blueprint $table) {
