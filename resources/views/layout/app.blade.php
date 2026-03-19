@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>RCB Inventāra uzskaite</title>
  
-    <link rel="icon" href="{{ asset('favicon.ico') }}?v={{ filemtime(public_path('favicon.ico')) }}" sizes="any">
-   
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v={{ filemtime(public_path('favicon.ico')) }}">
+<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
    
     <meta name="theme-color" content="#0F1931">
     <!-- Iekļauta data-URI favicon (rezerves variants) -->
