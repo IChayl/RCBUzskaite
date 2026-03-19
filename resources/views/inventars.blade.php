@@ -18,7 +18,7 @@
         <input type="hidden" name="direction" value="{{ request('direction') }}">
         <label style="display:flex; align-items:center; gap:8px;">
             <span style="color:#E2D4BB; font-size:0.9rem;">Meklēt pēc:</span>
-            <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
+            <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#0F1931;">
                 <option style="color:#0F1931;" value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
                 <option style="color:#0F1931;" value="nosaukums" {{ request('column') === 'nosaukums' ? 'selected' : '' }}>Nosaukums</option>
                 <option style="color:#0F1931;" value="kategorija" {{ request('column') === 'kategorija' ? 'selected' : '' }}>Kategorija</option>
