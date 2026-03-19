@@ -25,7 +25,7 @@
                 <option style="color:#0F1931;" value="kustibas_veids" {{ request('column') === 'kustibas_veids' ? 'selected' : '' }}>Kustības veids</option>
                 <option style="color:#0F1931;" value="lietotajs" {{ request('column') === 'lietotajs' ? 'selected' : '' }}>Atbildīgais</option>
                 <option style="color:#0F1931;" value="veca_telpa" {{ request('column') === 'veca_telpa' ? 'selected' : '' }}>Vecā telpa</option>
-                <option value="jauna_telpa" {{ request('column') === 'jauna_telpa' ? 'selected' : '' }}>Jaunā telpa</option>
+                <option  style="color:#0F1931;" value="jauna_telpa" {{ request('column') === 'jauna_telpa' ? 'selected' : '' }}>Jaunā telpa</option>
             </select>
         </label>
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">

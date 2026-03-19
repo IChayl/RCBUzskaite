@@ -22,7 +22,7 @@
             <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
                 <option style="color:#0F1931;" value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
                 <option style="color:#0F1931;" value="nosaukums" {{ request('column') === 'nosaukums' ? 'selected' : '' }}>Nosaukums</option>
-                <option value="apraksts" {{ request('column') === 'apraksts' ? 'selected' : '' }}>Apraksts</option>
+                <option  style="color:#0F1931;" value="apraksts" {{ request('column') === 'apraksts' ? 'selected' : '' }}>Apraksts</option>
             </select>
         </label>
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
