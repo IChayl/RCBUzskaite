@@ -19,6 +19,8 @@ class InventarsController extends Controller
      */
     public function showAllInventars(Request $request)
     {
+        $user = auth()->user();
+
         // Meklēšanas teksta un kolonnas iestatījumi
         $q = trim($request->input('q', ''));
         $column = $request->input('column', 'all');
@@ -41,6 +43,10 @@ class InventarsController extends Controller
 
         $query = Inventar::query()
             ->with(['kategorija', 'telpa', 'atbildigais']);
+
+        if (! $user->admina_tiesibas) {
+            $query->where('atbildigais_id', $user->lietotajs_id);
+        }
 
         // Meklēšana kolonnā vai visās kolonnās
         if ($q !== '') {
@@ -99,7 +105,7 @@ class InventarsController extends Controller
 
         // Paginācija ar querystring, lai saglabātu meklēšanas un kārtošanas parametrus
         $inventari = $query->paginate(7)->withQueryString();
-
+// Nosūtām datus uz skatu
         return view('inventars', compact('inventari', 'sort', 'direction', 'q', 'column'));
     }
 
@@ -146,7 +152,12 @@ class InventarsController extends Controller
      */
     public function InventarDetails($id)
     {
-        $i = Inventar::find($id);
+        $i = Inventar::with(['kategorija', 'telpa', 'atbildigais'])->findOrFail($id);
+
+        if (! auth()->user()->admina_tiesibas && (int) $i->atbildigais_id !== (int) auth()->id()) {
+            abort(403, 'Jums nav piekļuves šim inventāram.');
+        }
+
         return view('detailsInventar', ['inventar' => $i]);
     }
 
