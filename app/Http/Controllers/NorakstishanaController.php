@@ -32,7 +32,7 @@ class NorakstishanaController extends Controller
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
         // Atļautās kolonnas kārtošanai
-        $allowedSort = ['norakstishana_id', 'inventars', 'norDatums', 'pieteikuma_datums', 'apstiprinasanas_datums', 'akceptets', 'iemesls', 'talaka_riciba'];
+        $allowedSort = ['norakstishana_id', 'inventars', 'norDatums', 'pieteikshanas_dat', 'apstiprinashanas_dat', 'akceptets', 'iemesls', 'talaka_riciba'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'norakstishana_id';
         }
@@ -131,10 +131,10 @@ class NorakstishanaController extends Controller
         $norakstishana = new Norakstishana();
         $norakstishana->inventara_id = $data['inventara_id'];
         $norakstishana->norDatums = $data['norDatums'];
-        $norakstishana->pieteikuma_datums = Carbon::today();
+        $norakstishana->pieteikshanas_dat = Carbon::today();
         $norakstishana->pieteica_lietotajs_id = $user->lietotajs_id;
         $norakstishana->akceptets = $user->admina_tiesibas;
-        $norakstishana->apstiprinasanas_datums = $user->admina_tiesibas ? Carbon::today() : null;
+        $norakstishana->apstiprinashanas_dat = $user->admina_tiesibas ? Carbon::today() : null;
         $norakstishana->iemesls = $data['iemesls'];
         $norakstishana->talaka_riciba = $data['talaka_riciba'];
         $norakstishana->save();
@@ -205,7 +205,7 @@ class NorakstishanaController extends Controller
 
         $norakstishana = Norakstishana::findOrFail($id);
         $norakstishana->akceptets = true;
-        $norakstishana->apstiprinasanas_datums = Carbon::today();
+        $norakstishana->apstiprinashanas_dat = Carbon::today();
         $norakstishana->save();
 
         return redirect()->to('/norakstishana')->with('success', 'Norakstīšanas pieteikums akceptēts.');
