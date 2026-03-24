@@ -9,7 +9,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        //
+        // Nav nepieciešams reģistrēt pakalpojumus.
     }
 
     public function boot(): void

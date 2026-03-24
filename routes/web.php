@@ -31,10 +31,10 @@ Route::middleware('guest')->group(function () {
 
 // Aizsargātie maršruti (nepieciešama pieteikšanās)
 Route::middleware('auth')->group(function () {
-    // Izrakstīšanās
+    // Izrakstīšanās maršruts
     Route::get('/Logout', [LoginController::class, 'logout'])->name('logout');
 
-    // kategorija
+    // Kategoriju pārvaldības maršruti
     Route::get('/kategorija', [KategorijaController::class, 'showAllKategorija'])->name('kategorijas.lapa');
     Route::get('/kategorija/create', [KategorijaController::class, 'createKategorija'])->name('kategorijas.create');
     Route::post('/kategorija', [KategorijaController::class, 'KatSubmit'])->name('kategorijas.store');
@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/kategorija/{id}/editSubmit', [KategorijaController::class, 'editSubmit'])->name('kategorijas.update');
     Route::get('/kategorija/{id}/delete', [KategorijaController::class, 'KatDelete'])->name('kategorijas.delete');
 
-    // inventara kustiba
+    // Inventāra kustību pārvaldības maršruti
     Route::get('/inventara_kustiba', [InventaraKustibaController::class,'showAllKustiba'])->name('inventara_kustiba.lapa');
     Route::get('/inventara_kustiba/create', [InventaraKustibaController::class,'createKustiba'])->name('inventara_kustiba.create');
     Route::post('/inventara_kustiba', [InventaraKustibaController::class,'KustibaSubmit'])->name('inventara_kustiba.store');
@@ -52,7 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/inventara_kustiba/{id}/editSubmit', [InventaraKustibaController::class,'editSubmit'])->name('inventara_kustiba.update');
     Route::get('/inventara_kustiba/{id}/delete', [InventaraKustibaController::class,'KustibaDelete'])->name('inventara_kustiba.delete');
 
-    // kustibas veidi
+    // Kustību veidu pārvaldības maršruti
     Route::get('/kustibas_veidi', [KustibasVeidiController::class,'showAll'])->name('kustibas_veidi.lapa');
     Route::get('/kustibas_veidi/create', [KustibasVeidiController::class,'create'])->name('kustibas_veidi.create');
     Route::post('/kustibas_veidi', [KustibasVeidiController::class,'store'])->name('kustibas_veidi.store');
@@ -61,7 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/kustibas_veidi/{id}/editSubmit', [KustibasVeidiController::class,'update'])->name('kustibas_veidi.update');
     Route::get('/kustibas_veidi/{id}/delete', [KustibasVeidiController::class,'delete'])->name('kustibas_veidi.delete');
 
-    // inventars
+    // Inventāra pārvaldības maršruti
     Route::get('/inventars', [InventarsController::class,'showAllInventars'])->name('inventars.lapa');
     Route::get('/inventars/create', [InventarsController::class,'createInventar'])->name('inventars.create');
     Route::post('/inventars', [InventarsController::class,'InventarSubmit'])->name('inventars.store');
@@ -70,7 +70,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/inventars/{id}/editSubmit', [InventarsController::class,'editSubmit'])->name('inventars.update');
     Route::get('/inventars/{id}/delete', [InventarsController::class,'InventarDelete'])->name('inventars.delete');
 
-    // lietotaji
+    // Lietotāju pārvaldības maršruti
     Route::get('/lietotajs', [LietotajsController::class,'showAllLietotaji'])->name('lietotaji.lapa');
     Route::get('/lietotajs/create', [LietotajsController::class,'createLietotajs'])->name('lietotajs.create');
     Route::post('/lietotajs', [LietotajsController::class,'LietotajsSubmit'])->name('lietotajs.store');
@@ -80,7 +80,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/lietotajs/{id}/editSubmit', [LietotajsController::class,'editSubmit'])->name('lietotajs.update');
     Route::get('/lietotajs/{id}/delete', [LietotajsController::class,'LietotajsDelete'])->name('lietotajs.delete');
 
-    // telpa
+    // Telpu pārvaldības maršruti
     Route::get('/telpa', [TelpaController::class, 'showAllTelpa'])->name('telpa.lapa');
     Route::get('/telpa/create', [TelpaController::class, 'createTelpa'])->name('telpa.create');
     Route::post('/telpa', [TelpaController::class, 'TelpaSubmit'])->name('telpa.store');
@@ -88,7 +88,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/telpa/{id}/edit', [TelpaController::class, 'TelpaEdit'])->name('telpa.edit');
     Route::post('/telpa/{id}/editSubmit', [TelpaController::class, 'editSubmit'])->name('telpa.update');
 
-    // norakstishana
+    // Norakstīšanu pārvaldības maršruti
     Route::get('/norakstishana', [NorakstishanaController::class, 'showAll'])->name('norakstishana.lapa');
     Route::get('/norakstishana/create', [NorakstishanaController::class, 'create'])->name('norakstishana.create');
     Route::post('/norakstishana', [NorakstishanaController::class, 'store'])->name('norakstishana.store');

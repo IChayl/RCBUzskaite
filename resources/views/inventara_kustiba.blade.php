@@ -12,10 +12,14 @@
     <hr>
     <h2 style="color: #E2D4BB;">Inventāra kustība</h2>
 
-    <!-- Filtrs un meklēšana kustību sarakstam -->
+    <!-- Meklēšana kustību sarakstam -->
     <form method="GET" class="table-controls">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
+        <input type="hidden" name="filter_veids" value="{{ request('filter_veids') }}">
+        <input type="hidden" name="filter_atbildigais" value="{{ request('filter_atbildigais') }}">
+        <input type="hidden" name="datums_no" value="{{ request('datums_no') }}">
+        <input type="hidden" name="datums_lidz" value="{{ request('datums_lidz') }}">
         <label style="display:flex; align-items:center; gap:8px;">
             <span style="color:#E2D4BB; font-size:0.9rem;">Meklēt pēc:</span>
             <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
@@ -24,6 +28,15 @@
             </select>
         </label>
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
+        <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
+    </form>
+
+    <!-- Filtrēšana kustību sarakstam -->
+    <form method="GET" class="table-controls" style="margin-top: 10px;">
+        <input type="hidden" name="sort" value="{{ request('sort') }}">
+        <input type="hidden" name="direction" value="{{ request('direction') }}">
+        <input type="hidden" name="column" value="{{ request('column', 'all') }}">
+        <input type="hidden" name="q" value="{{ request('q') }}">
         <select name="filter_veids" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
             <option style="color:#0F1931;" value="">Kustības veids (visi)</option>
             @foreach($kustibasVeidiFiltram as $veids)
@@ -38,7 +51,8 @@
         </select>
         <input type="date" name="datums_no" value="{{ request('datums_no') }}" class="table-search-input" style="max-width: 170px;" title="Datums no">
         <input type="date" name="datums_lidz" value="{{ request('datums_lidz') }}" class="table-search-input" style="max-width: 170px;" title="Datums līdz">
-        <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
+        <span style="color:#E2D4BB; font-size:0.85rem;">Piemēram: datums no - datums līdz</span>
+        <button type="submit" class="bloom-button sm" style="height: 36px;">Filtrēt</button>
         <a href="{{ url('/inventara_kustiba') }}" class="bloom-button sm" style="height: 36px;">Notīrīt</a>
         <span class="no-results-message" style="display:none; color:#2D4159;">Nav rezultātu.</span>
     </form>

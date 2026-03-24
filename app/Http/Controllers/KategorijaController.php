@@ -12,6 +12,8 @@ class KategorijaController extends Controller
 {
     use HandlesSafeDelete;
 
+// Kontrolieris kategoriju ierakstu pārvaldībai.
+
 // Rāda visu kategoriju sarakstu
    public function showAllKategorija(Request $request)
     {

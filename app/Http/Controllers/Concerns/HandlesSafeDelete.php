@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 trait HandlesSafeDelete
 {
     /**
+     * Pārbauda, vai ieraksts tiek izmantots citās tabulās pirms dzēšanas.
+     *
      * @param array<int, array{table:string,column:string,label:string}> $references
      * @return array<int, string>
      */
@@ -27,6 +29,9 @@ trait HandlesSafeDelete
         return $usedIn;
     }
 
+    /**
+     * Dzēš ierakstu no tabulas, īslaicīgi atspējojot ārējo atslēgu pārbaudes.
+     */
     protected function deleteWithForeignKeyChecksDisabled(string $table, string $primaryKey, int|string $id): void
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
@@ -39,6 +44,11 @@ trait HandlesSafeDelete
     }
 
     /**
+     * @param array<int, string> $usedIn
+     */
+    /**
+     * Izveido ziņojumu pēc ieraksta dzēšanas, brīdinot par saistītajām tabulām, ja tādas ir.
+     *
      * @param array<int, string> $usedIn
      */
     protected function buildDeleteMessage(string $entityName, array $usedIn): string
