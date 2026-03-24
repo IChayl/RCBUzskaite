@@ -29,7 +29,7 @@
         </div>
         <div class="mb-3">
             <label for="norDatums" class="form-label">Norakstīšanas datums</label>
-            <input type="date" class="form-control" id="norDatums" name="norDatums" value="{{ $norakstishana->norDatums }}" required lang="lv">
+            <input type="date" class="form-control" id="norDatums" name="norDatums" value="{{ $norakstishana->norDatums->toDateString() }}" required lang="lv">
         </div>
         <div class="mb-3">
             <label for="iemesls" class="form-label">Iemesls</label>

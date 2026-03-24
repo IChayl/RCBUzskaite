@@ -112,7 +112,7 @@
                                     <br><small>Inv. Nr.: {{ $item->inventars->inventara_numurs }}</small>
                                 @endif
                             </td>
-                            <td>{{ $item->norDatums }}</td>
+                            <td>{{ $item->norDatums->toDateString() }}</td>
                             <td>{{ $item->iemesls }}</td>
                             <td>{{ $item->talaka_riciba }}</td>
                             <td>{{ $item->pieteikshanas_dat ?? '-' }}</td>
