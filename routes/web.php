@@ -29,11 +29,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [LoginController::class, 'register'])->name('register.submit');
 });
 
-// E-pasta verifikācijas maršruti (pieejami arī neverificētiem lietotājiem)
-Route::get('/verify-email', [LoginController::class, 'showEmailVerification'])->name('verify-email.show');
-Route::post('/verify-email', [LoginController::class, 'verifyEmail'])->name('verify-email.submit');
-Route::post('/resend-verification-code', [LoginController::class, 'resendVerificationCode'])->name('verify-email.resend');
-
 // Aizsargātie maršruti (nepieciešama pieteikšanās)
 Route::middleware('auth')->group(function () {
     // Izrakstīšanās maršruts
