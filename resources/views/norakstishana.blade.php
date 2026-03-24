@@ -104,8 +104,8 @@
                             <td>{{ $item->norDatums }}</td>
                             <td>{{ $item->iemesls }}</td>
                             <td>{{ $item->talaka_riciba }}</td>
-                            <td>{{ $item->pieteikuma_datums ?? '-' }}</td>
-                            <td>{{ $item->apstiprinasanas_datums ?? '-' }}</td>
+                            <td>{{ $item->pieteikshanas_dat ?? '-' }}</td>
+                            <td>{{ $item->apstiprinashanas_dat ?? '-' }}</td>
                             <td>{{ $item->akceptets ? 'Jā' : 'Nē' }}</td>
                                @if(Auth::user()->admina_tiesibas) <td>
                                 <div class="actions">
