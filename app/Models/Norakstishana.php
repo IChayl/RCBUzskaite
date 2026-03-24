@@ -26,9 +26,9 @@ class Norakstishana extends Model
     ];
 
     protected $casts = [
-        'norDatums' => 'date',
-        'pieteikuma_datums' => 'date',
-        'apstiprinasanas_datums' => 'date',
+        'norDatums' => 'date:Y-m-d',
+        'pieteikuma_datums' => 'date:Y-m-d',
+        'apstiprinasanas_datums' => 'date:Y-m-d',
         'akceptets' => 'boolean',
     ];
 
