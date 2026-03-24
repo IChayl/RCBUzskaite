@@ -160,7 +160,6 @@
       <a href="/inventars">Inventārs</a>
       <a href="/inventara_kustiba">Kustības</a>
       <a href="/norakstishana">Norakstīšanas</a>
-      <a href="/kustibas_veidi">Kustības veidi</a>
       <a href="/kategorija">Kategorijas tabula</a>
       <a href="/telpa">Telpas</a>
       <a href="/lietotajs">Lietotāji</a>
