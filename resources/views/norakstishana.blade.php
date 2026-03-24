@@ -35,9 +35,8 @@
         <input type="hidden" name="direction" value="{{ request('direction') }}">
         <input type="hidden" name="column" value="{{ request('column', 'all') }}">
         <input type="hidden" name="q" value="{{ request('q') }}">
-        <input type="date" name="nor_datums_no" value="{{ request('nor_datums_no') }}" class="table-search-input" style="max-width: 170px;" title="Norakstīšanas datums no">
-        <input type="date" name="nor_datums_lidz" value="{{ request('nor_datums_lidz') }}" class="table-search-input" style="max-width: 170px;" title="Norakstīšanas datums līdz">
-        <span style="color:#E2D4BB; font-size:0.85rem;">Piemēram: datums no - datums līdz</span>
+        datums no <input type="date" name="nor_datums_no" value="{{ request('nor_datums_no') }}" class="table-search-input" style="max-width: 170px;" title="Norakstīšanas datums no">
+        datums līdz <input type="date" name="nor_datums_lidz" value="{{ request('nor_datums_lidz') }}" class="table-search-input" style="max-width: 170px;" title="Norakstīšanas datums līdz">
         <button type="submit" class="bloom-button sm" style="height: 36px;">Filtrēt</button>
         <a href="{{ url('/norakstishana') }}" class="bloom-button sm" style="height: 36px;">Notīrīt</a>
         <span class="no-results-message" style="display:none; color:#2D4159;">Nav rezultātu.</span>
