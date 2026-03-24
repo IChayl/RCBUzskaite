@@ -53,7 +53,7 @@
         <select name="filter_atbildigais" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
             <option style="color:#0F1931;" value="">Atbildīgais (visi)</option>
             @foreach($lietotaji as $lietotajs)
-                <option style="color:#0F1931;" value="{{ $lietotajs->lietotajs_id }}" {{ (string) request('filter_atbildigais') === (string) $lietotajs->lietotajs_id ? 'selected' : '' }}>{{ $lietotajs->lietotajvards }}</option>
+                <option style="color:#0F1931;" value="{{ $lietotajs->lietotajs_id }}" {{ (string) request('filter_atbildigais') === (string) $lietotajs->lietotajs_id ? 'selected' : '' }}>{{ $lietotajs->pilnais_vards }}</option>
             @endforeach
         </select>
         datums no <input type="date" name="iegades_datums_no" value="{{ request('iegades_datums_no') }}" class="table-search-input" style="max-width: 170px;" title="Iegādes datums no">
@@ -113,7 +113,7 @@
                             <td>{{ $item->nosaukums }}</td>
                             <td>{{ $item->kategorija->nosaukums ?? ('ID: '.$item->kategorija_id) }}</td>
                             <td>{{ optional($item->telpa)->nosaukums ?? ('ID: '.$item->telpas_id) }}</td>
-                            <td>{{ optional($item->atbildigais)->lietotajvards ?? ('ID: '.$item->atbildigais_id) }}</td>
+                            <td>{{ optional($item->atbildigais)->pilnais_vards ?? ('ID: '.$item->atbildigais_id) }}</td>
                             <td>{{ $item->inventara_numurs ?? '-' }}</td>
                             <td>{{ $item->iegades_datums ?? '-' }}</td>
                             @if(Auth::user()->admina_tiesibas)

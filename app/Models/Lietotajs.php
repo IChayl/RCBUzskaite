@@ -20,6 +20,16 @@ class Lietotajs extends Authenticatable
     protected $fillable = ['lietotajvards', 'parole', 'admina_tiesibas', 'avatar', 'vards', 'uzvards', 'epasts', 'telefons', 'amats', 'aktivs'];
 
     /**
+     * Atgriež lietotāja pilno vārdu (vārds + uzvārds) vai lietotājvārdu, ja pilns vārds nav aizpildīts.
+     */
+    public function getPilnaisVardsAttribute(): string
+    {
+        $fullName = trim((string) ($this->vards ?? '') . ' ' . (string) ($this->uzvards ?? ''));
+
+        return $fullName !== '' ? $fullName : (string) $this->lietotajvards;
+    }
+
+    /**
      * Atspējo noklusēto remember token kolonnu, jo tā neeksistē.
      */
     public function getRememberTokenName()
