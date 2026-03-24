@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Norakstishana;
 use App\Models\Inventar;
+use App\Models\Lietotajs;
 use App\Http\Controllers\Concerns\HandlesSafeDelete;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 // Kontrolieris norakstīšanas ierakstu pārvaldībai.
 class NorakstishanaController extends Controller
@@ -17,55 +19,77 @@ class NorakstishanaController extends Controller
      */
     public function showAll(Request $request)
     {
+        $user = auth()->user();
+
         // Meklēšanas teksta un kolonnas iestatījumi
         $q = trim($request->input('q', ''));
         $column = $request->input('column', 'all');
+        $dateFrom = $request->input('nor_datums_no');
+        $dateTo = $request->input('nor_datums_lidz');
 
         // Kārtošanas parametri
         $sort = $request->input('sort', 'norakstishana_id');
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
         // Atļautās kolonnas kārtošanai
-        $allowedSort = ['norakstishana_id', 'inventara_id', 'norDatums', 'iemesls', 'talaka_riciba'];
+        $allowedSort = ['norakstishana_id', 'inventars', 'norDatums', 'pieteikuma_datums', 'apstiprinasanas_datums', 'akceptets', 'iemesls', 'talaka_riciba'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'norakstishana_id';
         }
 
         // Atļautās kolonnas meklēšanai
-        $allowedColumns = ['all', 'inventara_id', 'norDatums', 'iemesls', 'talaka_riciba'];
+        $allowedColumns = ['all', 'nosaukums', 'inventara_numurs'];
         if (!in_array($column, $allowedColumns, true)) {
             $column = 'all';
         }
 
         $query = Norakstishana::query()
-            ->with(['inventars']);
+            ->with(['inventars', 'pieteicejs']);
+
+        if (! $user->admina_tiesibas) {
+            $query->where('pieteica_lietotajs_id', $user->lietotajs_id);
+        }
 
         // Meklēšana kolonnā vai visās kolonnās
         if ($q !== '') {
             if ($column === 'all') {
                 $query->where(function ($query) use ($q) {
-                    $query->where('norDatums', 'like', "%{$q}%")
-                        ->orWhere('iemesls', 'like', "%{$q}%")
-                        ->orWhere('talaka_riciba', 'like', "%{$q}%")
-                        ->orWhereHas('inventars', function ($q2) use ($q) {
-                            $q2->where('nosaukums', 'like', "%{$q}%");
+                    $query->whereHas('inventars', function ($q2) use ($q) {
+                            $q2->where('nosaukums', 'like', "%{$q}%")
+                                ->orWhere('inventara_numurs', 'like', "%{$q}%");
                         });
                 });
-            } elseif ($column === 'norDatums') {
-                $query->where('norDatums', 'like', "%{$q}%");
-            } elseif ($column === 'iemesls') {
-                $query->where('iemesls', 'like', "%{$q}%");
-            } elseif ($column === 'talaka_riciba') {
-                $query->where('talaka_riciba', 'like', "%{$q}%");
-            } elseif ($column === 'inventara_id') {
-                $query->where('inventara_id', 'like', "%{$q}%");
+            } elseif ($column === 'nosaukums') {
+                $query->whereHas('inventars', function ($q2) use ($q) {
+                    $q2->where('nosaukums', 'like', "%{$q}%");
+                });
+            } elseif ($column === 'inventara_numurs') {
+                $query->whereHas('inventars', function ($q2) use ($q) {
+                    $q2->where('inventara_numurs', 'like', "%{$q}%");
+                });
             }
         }
 
-        // Kārtošana
-        $norakstishanas = $query->orderBy($sort, $direction)->paginate(7)->withQueryString();
+        if (!empty($dateFrom)) {
+            $query->whereDate('norDatums', '>=', $dateFrom);
+        }
 
-        return view('norakstishana', compact('norakstishanas', 'sort', 'direction', 'q', 'column'));
+        if (!empty($dateTo)) {
+            $query->whereDate('norDatums', '<=', $dateTo);
+        }
+
+        // Kārtošana
+        if ($sort === 'inventars') {
+            $query->leftJoin('inventars', 'Norakstishana.inventara_id', '=', 'inventars.inventars_id')
+                ->orderBy('inventars.nosaukums', $direction)
+                ->select('Norakstishana.*');
+        } else {
+            $query->orderBy($sort, $direction);
+        }
+
+        $norakstishanas = $query->paginate(7)->withQueryString();
+
+        return view('norakstishana', compact('norakstishanas', 'sort', 'direction', 'q', 'column', 'dateFrom', 'dateTo'));
     }
 
     /**
@@ -73,10 +97,15 @@ class NorakstishanaController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->admina_tiesibas) {
-            abort(403, 'Ir nepieciešamas administratora tiesības.');
-        }
-        $inventari = Inventar::orderBy('inventars_id','asc')->get();
+        $user = auth()->user();
+
+        $inventari = Inventar::query()
+            ->when(! $user->admina_tiesibas, function ($query) use ($user) {
+                $query->where('atbildigais_id', $user->lietotajs_id);
+            })
+            ->orderBy('nosaukums', 'asc')
+            ->get();
+
         return view('createNorakstishana', ['inventari' => $inventari]);
     }
 
@@ -85,9 +114,8 @@ class NorakstishanaController extends Controller
      */
     public function store(Request $req)
     {
-        if (!auth()->user()->admina_tiesibas) {
-            abort(403, 'Ir nepieciešamas administratora tiesības.');
-        }
+        $user = auth()->user();
+
         $data = $req->validate([
             'inventara_id' => 'required|integer|exists:inventars,inventars_id',
             'norDatums' => 'required|date',
@@ -95,14 +123,23 @@ class NorakstishanaController extends Controller
             'talaka_riciba' => 'required|string|max:50',
         ]);
 
+        $inventars = Inventar::findOrFail($data['inventara_id']);
+        if (! $user->admina_tiesibas && (int) $inventars->atbildigais_id !== (int) $user->lietotajs_id) {
+            abort(403, 'Jums nav tiesību pieteikt norakstīšanu šim inventāram.');
+        }
+
         $norakstishana = new Norakstishana();
         $norakstishana->inventara_id = $data['inventara_id'];
         $norakstishana->norDatums = $data['norDatums'];
+        $norakstishana->pieteikuma_datums = Carbon::today();
+        $norakstishana->pieteica_lietotajs_id = $user->lietotajs_id;
+        $norakstishana->akceptets = $user->admina_tiesibas;
+        $norakstishana->apstiprinasanas_datums = $user->admina_tiesibas ? Carbon::today() : null;
         $norakstishana->iemesls = $data['iemesls'];
         $norakstishana->talaka_riciba = $data['talaka_riciba'];
         $norakstishana->save();
 
-        return redirect()->to('/norakstishana')->with('success','Ieraksts pievienots');
+        return redirect()->to('/norakstishana')->with('success', $user->admina_tiesibas ? 'Ieraksts pievienots un akceptēts.' : 'Norakstīšanas pieteikums iesniegts.');
     }
 
     /**
@@ -110,7 +147,12 @@ class NorakstishanaController extends Controller
      */
     public function details($id)
     {
-        $norakstishana = Norakstishana::find($id);
+        $norakstishana = Norakstishana::with(['inventars', 'pieteicejs'])->findOrFail($id);
+
+        if (! auth()->user()->admina_tiesibas && (int) $norakstishana->pieteica_lietotajs_id !== (int) auth()->user()->lietotajs_id) {
+            abort(403, 'Jums nav piekļuves šim pieteikumam.');
+        }
+
         return view('detailsNorakstishana', ['norakstishana' => $norakstishana]);
     }
 
@@ -122,8 +164,8 @@ class NorakstishanaController extends Controller
         if (!auth()->user()->admina_tiesibas) {
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
-        $norakstishana = Norakstishana::find($id);
-        $inventari = Inventar::orderBy('inventars_id','asc')->get();
+        $norakstishana = Norakstishana::findOrFail($id);
+        $inventari = Inventar::orderBy('nosaukums','asc')->get();
         return view('editNorakstishana', ['norakstishana' => $norakstishana, 'inventari' => $inventari]);
     }
 
@@ -150,6 +192,23 @@ class NorakstishanaController extends Controller
         ]);
 
         return redirect()->to('/norakstishana')->with('success','Ieraksts atjaunināts');
+    }
+
+    /**
+     * Akceptē norakstīšanas pieteikumu (tikai administratoram).
+     */
+    public function accept($id)
+    {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
+
+        $norakstishana = Norakstishana::findOrFail($id);
+        $norakstishana->akceptets = true;
+        $norakstishana->apstiprinasanas_datums = Carbon::today();
+        $norakstishana->save();
+
+        return redirect()->to('/norakstishana')->with('success', 'Norakstīšanas pieteikums akceptēts.');
     }
 
     /**

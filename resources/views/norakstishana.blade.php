@@ -4,9 +4,7 @@
     <p style="color: #E2D4BB;">Norakstīšanas</p>
 
     <div class="auth-links">
-        @if(Auth::user()->admina_tiesibas)
-            <a href="/norakstishana/create">Jauna norakstīšana</a>
-        @endif
+        <a href="/norakstishana/create">Pieteikt norakstīšanu</a>
         <a type="button" class="auth-links" onclick="window.print()">Printēt</a>
     </div>
 
@@ -21,13 +19,13 @@
             <span style="color:#E2D4BB; font-size:0.9rem;">Meklēt pēc:</span>
             <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
                 <option style="color:#0F1931;" value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
-                <option style="color:#0F1931;" value="inventara_id" {{ request('column') === 'inventara_id' ? 'selected' : '' }}>Inventars</option>
-                <option style="color:#0F1931;" value="norDatums" {{ request('column') === 'norDatums' ? 'selected' : '' }}>Datums</option>
-                <option style="color:#0F1931;" value="iemesls" {{ request('column') === 'iemesls' ? 'selected' : '' }}>Iemesls</option>
-                <option style="color:#0F1931;" value="talaka_riciba" {{ request('column') === 'talaka_riciba' ? 'selected' : '' }}>Tālākā rīcība</option>
+                <option style="color:#0F1931;" value="nosaukums" {{ request('column') === 'nosaukums' ? 'selected' : '' }}>Inventāra nosaukums</option>
+                <option style="color:#0F1931;" value="inventara_numurs" {{ request('column') === 'inventara_numurs' ? 'selected' : '' }}>Inv. numurs</option>
             </select>
         </label>
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
+        <input type="date" name="nor_datums_no" value="{{ request('nor_datums_no') }}" class="table-search-input" style="max-width: 170px;" title="Norakstīšanas datums no">
+        <input type="date" name="nor_datums_lidz" value="{{ request('nor_datums_lidz') }}" class="table-search-input" style="max-width: 170px;" title="Norakstīšanas datums līdz">
         <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
         <a href="{{ url('/norakstishana') }}" class="bloom-button sm" style="height: 36px;">Notīrīt</a>
         <span class="no-results-message" style="display:none; color:#2D4159;">Nav rezultātu.</span>
@@ -49,11 +47,11 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th class="sortable {{ request('sort') === 'inventara_id' ? 'sorted-'.request('direction','asc') : '' }}">
+                        <th class="sortable {{ request('sort') === 'inventars' ? 'sorted-'.request('direction','asc') : '' }}">
                             @php
-                                $dir = request('sort') === 'inventara_id' && request('direction') === 'asc' ? 'desc' : 'asc';
+                                $dir = request('sort') === 'inventars' && request('direction') === 'asc' ? 'desc' : 'asc';
                             @endphp
-                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'inventara_id', 'direction' => $dir]) }}">Inventars</a>
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'inventars', 'direction' => $dir]) }}">Inventārs</a>
                         </th>
                         <th class="sortable {{ request('sort') === 'norDatums' ? 'sorted-'.request('direction','asc') : '' }}">
                             @php
@@ -73,23 +71,53 @@
                             @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'talaka_riciba', 'direction' => $dir]) }}">Tālākā rīcība</a>
                         </th>
+                        <th class="sortable {{ request('sort') === 'pieteikuma_datums' ? 'sorted-'.request('direction','asc') : '' }}">
+                            @php
+                                $dir = request('sort') === 'pieteikuma_datums' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'pieteikuma_datums', 'direction' => $dir]) }}">Pieteikuma datums</a>
+                        </th>
+                        <th class="sortable {{ request('sort') === 'apstiprinasanas_datums' ? 'sorted-'.request('direction','asc') : '' }}">
+                            @php
+                                $dir = request('sort') === 'apstiprinasanas_datums' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'apstiprinasanas_datums', 'direction' => $dir]) }}">Apstiprināšanas datums</a>
+                        </th>
+                        <th class="sortable {{ request('sort') === 'akceptets' ? 'sorted-'.request('direction','asc') : '' }}">
+                            @php
+                                $dir = request('sort') === 'akceptets' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'akceptets', 'direction' => $dir]) }}">Akceptēts</a>
+                        </th>
                       @if(Auth::user()->admina_tiesibas) <th>Darbības</th> @endif
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($norakstishanas as $item)
                         <tr>
-                            <td>{{ optional($item->inventars)->nosaukums ?? ('ID: '.$item->inventara_id) }}</td>
+                            <td>
+                                {{ optional($item->inventars)->nosaukums ?? ('ID: '.$item->inventara_id) }}
+                                @if(optional($item->inventars)->inventara_numurs)
+                                    <br><small>Inv. Nr.: {{ $item->inventars->inventara_numurs }}</small>
+                                @endif
+                            </td>
                             <td>{{ $item->norDatums }}</td>
                             <td>{{ $item->iemesls }}</td>
                             <td>{{ $item->talaka_riciba }}</td>
+                            <td>{{ $item->pieteikuma_datums ?? '-' }}</td>
+                            <td>{{ $item->apstiprinasanas_datums ?? '-' }}</td>
+                            <td>{{ $item->akceptets ? 'Jā' : 'Nē' }}</td>
                                @if(Auth::user()->admina_tiesibas) <td>
                                 <div class="actions">
                                     <a href="/norakstishana/{{ $item->norakstishana_id }}/details" class="bloom-button sm">Skatīt</a>
-                                
+                                    @if(!$item->akceptets)
+                                        <form method="POST" action="{{ route('norakstishana.accept', $item->norakstishana_id) }}" style="display:inline;">
+                                            @csrf
+                                            <button type="submit" class="bloom-button sm">Akceptēt</button>
+                                        </form>
+                                    @endif
                                         <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->norakstishana_id }}">Dzēst</a>
                                         <a href="/norakstishana/{{ $item->norakstishana_id }}/edit" class="bloom-button sm">Rediģēt</a>
-                                    
                                 </div>
                             </td>@endif
                         </tr>

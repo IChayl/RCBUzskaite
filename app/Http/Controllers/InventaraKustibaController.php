@@ -25,6 +25,10 @@ class InventaraKustibaController extends Controller
     // Meklēšanas teksts un izvēlētā kolonna (vai "all" līdz meklēšanai visur)
         $q = trim($request->input('q', ''));
         $column = $request->input('column', 'all');
+        $filterVeids = $request->input('filter_veids');
+        $filterAtbildigais = $request->input('filter_atbildigais');
+        $dateFrom = $request->input('datums_no');
+        $dateTo = $request->input('datums_lidz');
 
         // Kārtošanas iestatījumi: kolonna un virziens (asc/desc)
         $sort = $request->input('sort', 'kustiba_id');
@@ -37,7 +41,7 @@ class InventaraKustibaController extends Controller
         }
 
         // Atļautās kolonnas meklēšanai.
-        $allowedColumns = ['all', 'datums', 'inventars', 'kustibas_veids', 'lietotajs', 'veca_telpa', 'jauna_telpa'];
+        $allowedColumns = ['all', 'inventars'];
         if (!in_array($column, $allowedColumns, true)) {
             $column = 'all';
         }
@@ -54,52 +58,31 @@ class InventaraKustibaController extends Controller
         if ($q !== '') {
             if ($column === 'all') {
                 $query->where(function ($query) use ($q) {
-                    $query->where('datums', 'like', "%{$q}%")
-                        ->orWhereHas('inventars', function ($q2) use ($q) {
+                    $query->whereHas('inventars', function ($q2) use ($q) {
                             $q2->where('nosaukums', 'like', "%{$q}%");
-                        })
-                        ->orWhereHas('kustibasVeids', function ($q2) use ($q) {
-                            $q2->where('nosaukums', 'like', "%{$q}%");
-                        })
-                                ->orWhereHas('lietotajs', function ($q2) use ($q) {
-                            $q2->where('lietotajvards', 'like', "%{$q}%");
-                        })
-                        ->orWhereHas('vecaTelpa', function ($q2) use ($q) {
-                            $q2->where('nosaukums', 'like', "%{$q}%");
-                        })
-                        ->orWhereHas('jaunaTelpa', function ($q2) use ($q) {
-                            $q2->where('nosaukums', 'like', "%{$q}%");
-                        })
-                        ->orWhere('piezimes', 'like', "%{$q}%")
-                        ->orWhere('dokuments', 'like', "%{$q}%");
+                        });
                 });
-            } elseif ($column === 'datums') {
-                $query->where('datums', 'like', "%{$q}%");
             } elseif ($column === 'inventars') {
                 $query->whereHas('inventars', function ($q2) use ($q) {
                     $q2->where('nosaukums', 'like', "%{$q}%");
                 });
-            } elseif ($column === 'kustibas_veids') {
-                $query->whereHas('kustibasVeids', function ($q2) use ($q) {
-                    $q2->where('nosaukums', 'like', "%{$q}%");
-                });
-            } elseif ($column === 'lietotajs') {
-                $query->whereHas('lietotajs', function ($q2) use ($q) {
-                    $q2->where('lietotajvards', 'like', "%{$q}%");
-                });
-            } elseif ($column === 'veca_telpa') {
-                $query->whereHas('vecaTelpa', function ($q2) use ($q) {
-                    $q2->where('nosaukums', 'like', "%{$q}%");
-                });
-            } elseif ($column === 'jauna_telpa') {
-                $query->whereHas('jaunaTelpa', function ($q2) use ($q) {
-                    $q2->where('nosaukums', 'like', "%{$q}%");
-                });
-            } elseif ($column === 'piezimes') {
-                $query->where('piezimes', 'like', "%{$q}%");
-            } elseif ($column === 'dokuments') {
-                $query->where('dokuments', 'like', "%{$q}%");
             }
+        }
+
+        if (!empty($filterVeids)) {
+            $query->where('kustibas_veids_id', (int) $filterVeids);
+        }
+
+        if (!empty($filterAtbildigais)) {
+            $query->where('atbildigais_lietotajs_id', (int) $filterAtbildigais);
+        }
+
+        if (!empty($dateFrom)) {
+            $query->whereDate('datums', '>=', $dateFrom);
+        }
+
+        if (!empty($dateTo)) {
+            $query->whereDate('datums', '<=', $dateTo);
         }
 
         // Kārtošana pēc saistītajiem modeļiem (jāizmanto join, lai var kārtot pēc saistītajām tabulām)
@@ -129,7 +112,22 @@ class InventaraKustibaController extends Controller
 
         $kustibas = $query->paginate(7)->withQueryString();
 
-        return view('inventara_kustiba', compact('kustibas', 'sort', 'direction', 'q', 'column'));
+        $kustibasVeidiFiltram = KustibasVeidi::orderBy('nosaukums')->get();
+        $lietotajiFiltram = Lietotajs::orderBy('lietotajvards')->get();
+
+        return view('inventara_kustiba', compact(
+            'kustibas',
+            'sort',
+            'direction',
+            'q',
+            'column',
+            'kustibasVeidiFiltram',
+            'lietotajiFiltram',
+            'filterVeids',
+            'filterAtbildigais',
+            'dateFrom',
+            'dateTo'
+        ));
     }
 
     /**

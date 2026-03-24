@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Inventar;
+use App\Models\Lietotajs;
 
 // Modelis norakstīšanas ierakstiem.
 class Norakstishana extends Model
@@ -13,11 +14,33 @@ class Norakstishana extends Model
     public $timestamps = false;
 
     // Lauki, kuriem atļauta masveida aizpilde.
-    protected $fillable = ['inventara_id', 'norDatums', 'iemesls', 'talaka_riciba'];
+    protected $fillable = [
+        'inventara_id',
+        'norDatums',
+        'pieteikuma_datums',
+        'apstiprinasanas_datums',
+        'akceptets',
+        'pieteica_lietotajs_id',
+        'iemesls',
+        'talaka_riciba',
+    ];
+
+    protected $casts = [
+        'norDatums' => 'date',
+        'pieteikuma_datums' => 'date',
+        'apstiprinasanas_datums' => 'date',
+        'akceptets' => 'boolean',
+    ];
 
     // Saite uz inventāru, kas norakstīts.
     public function inventars()
     {
         return $this->belongsTo(Inventar::class, 'inventara_id', 'inventars_id');
+    }
+
+    // Saite uz lietotāju, kurš iesniedza pieteikumu.
+    public function pieteicejs()
+    {
+        return $this->belongsTo(Lietotajs::class, 'pieteica_lietotajs_id', 'lietotajs_id');
     }
 }

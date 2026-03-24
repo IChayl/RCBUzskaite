@@ -21,21 +21,23 @@
             <select class="form-control" id="inventara_id" name="inventara_id" required>
                 <option value="">-- Izvēlieties inventāru --</option>
                 @foreach($inventari as $inv)
-                    <option value="{{ $inv->inventars_id }}">{{ $inv->nosaukums }} (ID: {{ $inv->inventars_id }})</option>
+                    <option value="{{ $inv->inventars_id }}" {{ old('inventara_id') == $inv->inventars_id ? 'selected' : '' }}>
+                        {{ $inv->nosaukums }} (Inv. Nr.: {{ $inv->inventara_numurs ?? '-' }})
+                    </option>
                 @endforeach
             </select>
         </div>
         <div class="mb-3">
             <label for="norDatums" class="form-label">Norakstīšanas datums</label>
-            <input type="date" class="form-control" id="norDatums" name="norDatums" required lang="lv">
+            <input type="date" class="form-control" id="norDatums" name="norDatums" required lang="lv" value="{{ old('norDatums') }}">
         </div>
         <div class="mb-3">
             <label for="iemesls" class="form-label">Iemesls</label>
-            <input type="text" class="form-control" id="iemesls" name="iemesls" required maxlength="30">
+            <input type="text" class="form-control" id="iemesls" name="iemesls" required maxlength="30" value="{{ old('iemesls') }}">
         </div>
         <div class="mb-3">
             <label for="talaka_riciba" class="form-label">Tālākā rīcība</label>
-            <input type="text" class="form-control" id="talaka_riciba" name="talaka_riciba" required maxlength="50">
+            <input type="text" class="form-control" id="talaka_riciba" name="talaka_riciba" required maxlength="50" value="{{ old('talaka_riciba') }}">
         </div>
         <!-- Saglabā norakstīšanas ierakstu -->
         <button type="submit" class="btn btn-primary">Saglabāt</button>

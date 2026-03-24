@@ -26,16 +26,7 @@
     <form method="GET" class="table-controls">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
-        <label style="display:flex; align-items:center; gap:8px;">
-            <span style="color:#E2D4BB; font-size:0.9rem;">Meklēt pēc:</span>
-            <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
-                <option style="color:#0F1931;" value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
-                <option style="color:#0F1931;" value="nosaukums" {{ request('column') === 'nosaukums' ? 'selected' : '' }}>Nosaukums</option>
-                <option style="color:#0F1931;" value="platiba" {{ request('column') === 'platiba' ? 'selected' : '' }}>Platība</option>
-                <option style="color:#0F1931;" value="numurs" {{ request('column') === 'numurs' ? 'selected' : '' }}>Numurs</option>
-            </select>
-        </label>
-        <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
+        <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt pēc telpas nosaukuma...">
         <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
         <a href="{{ url('/telpa') }}" class="bloom-button sm" style="height: 36px;">Notīrīt</a>
         <span class="no-results-message" style="display:none; color:#2D4159;">Nav rezultātu.</span>

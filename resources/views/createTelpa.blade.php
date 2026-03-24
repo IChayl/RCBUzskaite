@@ -22,7 +22,7 @@
         </div>
         <div class="mb-3">
             <label for="platiba" class="form-label">Platība</label>
-            <input type="text" class="form-control" id="platiba" name="platība">
+            <input type="text" class="form-control" id="platiba" name="platiba">
         </div>
         <div class="mb-3">
             <label for="numurs" class="form-label">Numurs</label>

@@ -44,10 +44,10 @@
             <label style="font-weight:700; display:block; margin-bottom:8px;">Amats:</label>
                 <select name="amats" style="width:90%; padding:10px; border-radius:6px;">
                     <option value="">-- izvēlēties --</option>
-                    <option value="Direktors" {{ (old('amats', $lietotajs->amats ?? '')=='Direktors') ? 'selected' : '' }}>Direktors</option>
-                    <option value="Dir.Vietnieks" {{ (old('amats', $lietotajs->amats ?? '')=='Dir.Vietnieks') ? 'selected' : '' }}>Dir.Vietnieks</option>
-                    <option value="Vecākais bibliotekārs" {{ (old('amats', $lietotajs->amats ?? '')=='Vecākais bibliotekārs') ? 'selected' : '' }}>Vecākais bibliotekārs</option>
-                    <option value="Bibliotekārs" {{ (old('amats', $lietotajs->amats ?? '')=='Bibliotekārs') ? 'selected' : '' }}>Bibliotekārs</option>
+                    <option value="Direktors" {{ old('amats') == 'Direktors' ? 'selected' : '' }}>Direktors</option>
+                    <option value="Dir.Vietnieks" {{ old('amats') == 'Dir.Vietnieks' ? 'selected' : '' }}>Dir.Vietnieks</option>
+                    <option value="Vecākais bibliotekārs" {{ old('amats') == 'Vecākais bibliotekārs' ? 'selected' : '' }}>Vecākais bibliotekārs</option>
+                    <option value="Bibliotekārs" {{ old('amats') == 'Bibliotekārs' ? 'selected' : '' }}>Bibliotekārs</option>
                 </select>
         </div>
         <div class="form-check mb-3">

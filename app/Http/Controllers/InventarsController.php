@@ -9,6 +9,7 @@ use App\Models\KategorijaModel;
 use App\Models\Lietotajs;
 use App\Http\Controllers\Concerns\HandlesSafeDelete;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 // Kontrolieris inventāra ierakstu sarakstam, izveidei, labošanai un dzēšanai.
 class InventarsController extends Controller
@@ -36,13 +37,19 @@ class InventarsController extends Controller
         }
 
         // Atļautās kolonnas meklēšanai
-        $allowedColumns = ['all', 'nosaukums', 'kategorija', 'telpa', 'atbildigais', 'inventara_numurs', 'iegades_datums'];
+        $allowedColumns = ['all', 'nosaukums', 'inventara_numurs'];
         if (!in_array($column, $allowedColumns, true)) {
             $column = 'all';
         }
 
         $query = Inventar::query()
             ->with(['kategorija', 'telpa', 'atbildigais']);
+
+        $filterKategorija = $request->input('filter_kategorija');
+        $filterTelpa = $request->input('filter_telpa');
+        $filterAtbildigais = $request->input('filter_atbildigais');
+        $dateFrom = $request->input('iegades_datums_no');
+        $dateTo = $request->input('iegades_datums_lidz');
 
         if (! $user->admina_tiesibas) {
             $query->where('atbildigais_id', $user->lietotajs_id);
@@ -53,37 +60,33 @@ class InventarsController extends Controller
             if ($column === 'all') {
                 $query->where(function ($query) use ($q) {
                     $query->where('nosaukums', 'like', "%{$q}%")
-                        ->orWhereHas('kategorija', function ($q2) use ($q) {
-                            $q2->where('nosaukums', 'like', "%{$q}%");
-                        })
-                        ->orWhereHas('telpa', function ($q2) use ($q) {
-                            $q2->where('nosaukums', 'like', "%{$q}%");
-                        })
-                        ->orWhereHas('atbildigais', function ($q2) use ($q) {
-                            $q2->where('lietotajvards', 'like', "%{$q}%");
-                        })
-                        ->orWhere('inventara_numurs', 'like', "%{$q}%")
-                        ->orWhere('iegades_datums', 'like', "%{$q}%");
+                        ->orWhere('inventara_numurs', 'like', "%{$q}%");
                 });
             } elseif ($column === 'nosaukums') {
                 $query->where('nosaukums', 'like', "%{$q}%");
-            } elseif ($column === 'kategorija') {
-                $query->whereHas('kategorija', function ($q2) use ($q) {
-                    $q2->where('nosaukums', 'like', "%{$q}%");
-                });
-            } elseif ($column === 'telpa') {
-                $query->whereHas('telpa', function ($q2) use ($q) {
-                    $q2->where('nosaukums', 'like', "%{$q}%");
-                });
-            } elseif ($column === 'atbildigais') {
-                $query->whereHas('atbildigais', function ($q2) use ($q) {
-                    $q2->where('lietotajvards', 'like', "%{$q}%");
-                });
             } elseif ($column === 'inventara_numurs') {
                 $query->where('inventara_numurs', 'like', "%{$q}%");
-            } elseif ($column === 'iegades_datums') {
-                $query->where('iegades_datums', 'like', "%{$q}%");
             }
+        }
+
+        if (!empty($filterKategorija)) {
+            $query->where('kategorija_id', (int) $filterKategorija);
+        }
+
+        if (!empty($filterTelpa)) {
+            $query->where('telpas_id', (int) $filterTelpa);
+        }
+
+        if (!empty($filterAtbildigais)) {
+            $query->where('atbildigais_id', (int) $filterAtbildigais);
+        }
+
+        if (!empty($dateFrom)) {
+            $query->whereDate('iegades_datums', '>=', $dateFrom);
+        }
+
+        if (!empty($dateTo)) {
+            $query->whereDate('iegades_datums', '<=', $dateTo);
         }
 
         // Kārtošana pēc saistīto modeļu lauka
@@ -105,8 +108,27 @@ class InventarsController extends Controller
 
         // Paginācija ar querystring, lai saglabātu meklēšanas un kārtošanas parametrus
         $inventari = $query->paginate(7)->withQueryString();
-// Nosūtām datus uz skatu
-        return view('inventars', compact('inventari', 'sort', 'direction', 'q', 'column'));
+
+        $kategorijas = KategorijaModel::orderBy('nosaukums')->get();
+        $telpas = Telpa::orderBy('nosaukums')->get();
+        $lietotaji = Lietotajs::orderBy('lietotajvards')->get();
+
+        // Nosūtām datus uz skatu
+        return view('inventars', compact(
+            'inventari',
+            'sort',
+            'direction',
+            'q',
+            'column',
+            'kategorijas',
+            'telpas',
+            'lietotaji',
+            'filterKategorija',
+            'filterTelpa',
+            'filterAtbildigais',
+            'dateFrom',
+            'dateTo'
+        ));
     }
 
     /**
@@ -130,7 +152,7 @@ class InventarsController extends Controller
             'kategorija_id' => 'required|integer|exists:kategorija,kategorija_id',
             'telpas_id' => 'required|integer|exists:telpa,telpas_id',
             'atbildigais_id' => 'nullable|integer|exists:lietotajs,lietotajs_id',
-            'inventara_numurs' => 'nullable|string|max:50',
+            'inventara_numurs' => ['nullable', 'string', 'max:50', Rule::unique('inventars', 'inventara_numurs')],
             'iegades_datums' => 'nullable|date',
         ]);
 
@@ -154,7 +176,7 @@ class InventarsController extends Controller
     {
         $i = Inventar::with(['kategorija', 'telpa', 'atbildigais'])->findOrFail($id);
 
-        if (! auth()->user()->admina_tiesibas && (int) $i->atbildigais_id !== (int) auth()->id()) {
+        if (! auth()->user()->admina_tiesibas && (int) $i->atbildigais_id !== (int) auth()->user()->lietotajs_id) {
             abort(403, 'Jums nav piekļuves šim inventāram.');
         }
 
@@ -189,7 +211,7 @@ class InventarsController extends Controller
             'kategorija_id' => 'required|integer|exists:kategorija,kategorija_id',
             'telpas_id' => 'required|integer|exists:telpa,telpas_id',
             'atbildigais_id' => 'nullable|integer|exists:lietotajs,lietotajs_id',
-            'inventara_numurs' => 'nullable|string|max:50',
+            'inventara_numurs' => ['nullable', 'string', 'max:50', Rule::unique('inventars', 'inventara_numurs')->ignore($id, 'inventars_id')],
             'iegades_datums' => 'nullable|date',
         ]);
 

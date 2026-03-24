@@ -21,7 +21,9 @@
             <select class="form-control" id="inventara_id" name="inventara_id" required>
                 <option value="">-- Izvēlieties inventāru --</option>
                 @foreach($inventari as $inv)
-                    <option value="{{ $inv->inventars_id }}" @if($norakstishana->inventara_id == $inv->inventars_id) selected @endif>{{ $inv->nosaukums }} (ID: {{ $inv->inventars_id }})</option>
+                    <option value="{{ $inv->inventars_id }}" @if($norakstishana->inventara_id == $inv->inventars_id) selected @endif>
+                        {{ $inv->nosaukums }} (Inv. Nr.: {{ $inv->inventara_numurs ?? '-' }})
+                    </option>
                 @endforeach
             </select>
         </div>

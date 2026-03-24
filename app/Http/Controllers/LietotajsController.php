@@ -7,6 +7,7 @@ use App\Models\Lietotajs;
 use App\Http\Controllers\Concerns\HandlesSafeDelete;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 // Kontrolieris lietotāju pārvaldībai (CRUD darbības).
 class LietotajsController extends Controller
@@ -46,7 +47,7 @@ class LietotajsController extends Controller
             'avatar' => 'nullable|image|max:2048',
             'vards' => 'nullable|string|max:50',
             'uzvards' => 'nullable|string|max:50',
-            'epasts' => 'nullable|email|max:100',
+            'epasts' => ['nullable', 'email', 'max:100', Rule::unique('lietotajs', 'epasts')],
             'telefons' => ['nullable', 'string', 'max:20', 'regex:/^[0-9]+$/'],
             'amats' => 'nullable|string|max:50',
             'aktivs' => 'nullable|boolean',
@@ -109,7 +110,7 @@ class LietotajsController extends Controller
             'avatar' => 'nullable|image|max:2048',
             'vards' => 'nullable|string|max:50',
             'uzvards' => 'nullable|string|max:50',
-            'epasts' => 'nullable|email|max:100',
+            'epasts' => ['nullable', 'email', 'max:100', Rule::unique('lietotajs', 'epasts')->ignore($id, 'lietotajs_id')],
             'telefons' => ['nullable', 'string', 'max:20', 'regex:/^[0-9]+$/'],
             'amats' => 'nullable|string|max:50',
             'aktivs' => 'nullable|boolean',

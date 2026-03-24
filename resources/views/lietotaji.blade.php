@@ -25,41 +25,54 @@
     @if($lietotaji->isEmpty())
         <p style="color: #E2D4BB;">Nav lietotāju.</p>
     @else
-        <!-- Kartīšu izkārtojums lietotāju sarakstam (ne-tabulas skats) -->
-        <div style="display: flex; flex-wrap: wrap; gap: 16px;">
-        @foreach ($lietotaji as $item)
-            <!-- Viena lietotāja kartīte ar pamatinformāciju un darbībām -->
-            <div class="card mt-3 table-card" style="background: rgba(45, 65, 89, 0.55); color: #E2D4BB; width: 100%; max-width: 340px;">
-                <div class="card-body">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <div style="width: 50px; height: 50px; border-radius: 12px; overflow: hidden; background: rgba(226, 212, 187, 0.06); display:flex; align-items:center; justify-content:center;">
-                            <!-- Ja ir avatar, rāda attēlu; pretējā gadījumā — rezerves ikonu -->
-                            @if($item->hasAvatarFile())
-                                <img src="{{ route('lietotajs.avatar', $item->lietotajs_id) }}" alt="Avatar" style="width: 48px; height: 48px; object-fit: cover;">
-                            @else
-                                <span style="color: rgba(226, 212, 187, 0.5); font-size: 20px;">👤</span>
-                            @endif
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <div class="card-text" style="font-weight: 700; color: #E2D4BB;">{{ $item->lietotajvards }}</div>
-                            <div class="card-text" style="color: #E2D4BB; font-size: 0.9rem;">Vārds: {{ $item->vards ?? '-' }}</div>
-                            <div class="card-text" style="color: #E2D4BB; font-size: 0.9rem;">Uzvārds: {{ $item->uzvards ?? '-' }}</div>
-                            <div class="card-text" style="color: #E2D4BB; font-size: 0.9rem;">E-pasts: {{ $item->epasts ?? '-' }}</div>
-                            <div class="card-text" style="color: #E2D4BB; font-size: 0.9rem;">Telefons: {{ $item->telefons ?? '-' }}</div>
-                            <div class="card-text" style="color: #E2D4BB; font-size: 0.9rem;">Amats: {{ $item->amats ?? '-' }}</div>
-                            <div class="card-text" style="color: #E2D4BB; font-size: 0.9rem;">Admina tiesības: <span style="font-weight: 600;">{{ $item->admina_tiesibas ? 'Jā' : 'Nē' }}</span></div>
-                            <div class="card-text" style="color: #E2D4BB; font-size: 0.9rem;">Aktīvs: <span style="font-weight: 600;">{{ $item->aktivs ? 'Jā' : 'Nē' }}</span></div>
-                        </div>
-                    </div>
-                    <div class="auth-links" style="margin-top: 12px;">
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Avatar</th>
+                        <th>Lietotājvārds</th>
+                        <th>Vārds</th>
+                        <th>Uzvārds</th>
+                        <th>E-pasts</th>
+                        <th>Telefons</th>
+                        <th>Amats</th>
+                        <th>Admins</th>
+                        <th>Aktīvs</th>
                         @if(Auth::user()->admina_tiesibas)
-                            <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->lietotajs_id }}">Dzēst</a>
-                            <a href="/lietotajs/{{ $item->lietotajs_id }}/edit" class="bloom-button sm">Rediģēt</a>
+                            <th>Darbības</th>
                         @endif
-                    </div>
-                </div>
-            </div>
-        @endforeach
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($lietotaji as $item)
+                        <tr>
+                            <td>
+                                @if($item->hasAvatarFile())
+                                    <img src="{{ route('lietotajs.avatar', $item->lietotajs_id) }}" alt="Avatar" style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;">
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td>{{ $item->lietotajvards }}</td>
+                            <td>{{ $item->vards ?? '-' }}</td>
+                            <td>{{ $item->uzvards ?? '-' }}</td>
+                            <td>{{ $item->epasts ?? '-' }}</td>
+                            <td>{{ $item->telefons ?? '-' }}</td>
+                            <td>{{ $item->amats ?? '-' }}</td>
+                            <td>{{ $item->admina_tiesibas ? 'Jā' : 'Nē' }}</td>
+                            <td>{{ $item->aktivs ? 'Jā' : 'Nē' }}</td>
+                            @if(Auth::user()->admina_tiesibas)
+                                <td>
+                                    <div class="actions">
+                                        <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->lietotajs_id }}">Dzēst</a>
+                                        <a href="/lietotajs/{{ $item->lietotajs_id }}/edit" class="bloom-button sm">Rediģēt</a>
+                                    </div>
+                                </td>
+                            @endif
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     @endif
 

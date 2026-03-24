@@ -95,6 +95,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/norakstishana/{id}/details', [NorakstishanaController::class, 'details'])->name('norakstishana.details');
     Route::get('/norakstishana/{id}/edit', [NorakstishanaController::class, 'edit'])->name('norakstishana.edit');
     Route::post('/norakstishana/{id}/editSubmit', [NorakstishanaController::class, 'update'])->name('norakstishana.update');
+    Route::post('/norakstishana/{id}/accept', [NorakstishanaController::class, 'accept'])->name('norakstishana.accept');
     Route::get('/norakstishana/{id}/delete', [NorakstishanaController::class, 'delete'])->name('norakstishana.delete');
     Route::get('/telpa/{id}/delete', [TelpaController::class, 'TelpaDelete'])->name('telpa.delete');
 });
