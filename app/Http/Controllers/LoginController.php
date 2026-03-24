@@ -35,6 +35,17 @@ class LoginController extends Controller
             return back()->withErrors(['name' => 'Nekorekts lietotājvārds vai parole'])->withInput();
         }
 
+        // Ja lietotāja e-pasts vēl nav apstiprināts, neielaižam sistēmā,
+        // bet nosūtām jaunu kodu un novirzām uz apstiprināšanas formu.
+        if (! $user->isEmailVerified()) {
+            // Ģenerē vienreiz lietojamu kodu un nosūta to uz lietotāja e-pastu.
+            $user->generateAndSendVerificationCode();
+            
+            return redirect()->route('verify-email.show')
+                ->with('info', 'Pārbaudei sūtīts verifikācijas kods uz jūsu e-pastu')
+                ->with('user_id', $user->lietotajs_id);
+        }
+
         Auth::login($user);
         $request->session()->regenerate();
 
@@ -59,19 +70,24 @@ class LoginController extends Controller
     {
         $request->validate([
             'name' => 'required|string|unique:lietotajs,lietotajvards',
+            'email' => 'required|email|unique:lietotajs,epasts',
             'password' => 'required|string|min:4',
         ]);
 
         $user = Lietotajs::create([
             'lietotajvards' => $request->input('name'),
+            'epasts' => $request->input('email'),
             'parole' => $request->input('password'),
             'admina_tiesibas' => 0,
         ]);
 
-        Session::put('user_id', $user->lietotajs_id);
-        Session::put('user_name', $user->lietotajvards);
+        // Pēc reģistrācijas konts vēl nav pilnībā aktīvs,
+        // tāpēc uzreiz nosūtām e-pasta apstiprināšanas kodu.
+        $user->generateAndSendVerificationCode();
 
-        return redirect('/')->with('success', 'Reģistrācija veiksmīga');
+        return redirect()->route('verify-email.show')
+            ->with('info', 'Reģistrācija veiksmīga! Pārbaudei sūtīts verifikācijas kods uz jūsu e-pastu')
+            ->with('user_id', $user->lietotajs_id);
     }
 
     /**
@@ -88,5 +104,80 @@ class LoginController extends Controller
         Session::forget(['user_id', 'user_name']);
 
         return redirect('/Login')->with('success', 'Jūs esat atvienots');
+    }
+
+    /**
+     * Parāda e-pasta verifikācijas formu.
+     */
+    public function showEmailVerification(Request $request)
+    {
+        // Lietotāja identifikatoru pieņemam gan no adreses parametra,
+        // gan no sesijas, lai forma darbotos pēc pāradresācijas.
+        $userId = $request->query('user_id') ?? session('user_id');
+        
+        if (! $userId) {
+            return redirect('/Login')->withErrors(['error' => 'Sesija ir beigusies. Lūdzu, pierakstieties atkārtoti.']);
+        }
+
+        $user = Lietotajs::find($userId);
+        
+        if (! $user) {
+            return redirect('/Login')->withErrors(['error' => 'Lietotājs nav atrasts.']);
+        }
+
+        return view('verify-email', [
+            'user' => $user,
+            'message' => session('info'),
+        ]);
+    }
+
+    /**
+     * Apstrādā e-pasta verifikācijas kodu.
+     */
+    public function verifyEmail(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:lietotajs,lietotajs_id',
+            'verification_code' => 'required|string|size:6',
+        ]);
+
+        $user = Lietotajs::find($request->input('user_id'));
+
+        if (! $user) {
+            return back()->withErrors(['error' => 'Lietotājs nav atrasts.']);
+        }
+
+        // Salīdzina lietotāja ievadīto kodu ar saglabāto kodu datubāzē.
+        if (! $user->verifyEmailCode($request->input('verification_code'))) {
+            return back()->withErrors(['verification_code' => 'Kods ir nepareizs vai ir beidzies tā derīgums.'])->withInput();
+        }
+
+        // Pēc veiksmīgas apstiprināšanas pabeidzam ielogošanos kā parastā plūsmā.
+        Auth::login($user);
+        $request->session()->regenerate();
+        Session::put('user_name', $user->lietotajvards);
+
+        return redirect('/home')->with('success', 'E-pasts ir verifikāts! Jūs esat pieteicies sistēmā.');
+    }
+
+    /**
+     * Atkārtoti sūta verifikācijas kodu.
+     */
+    public function resendVerificationCode(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:lietotajs,lietotajs_id',
+        ]);
+
+        $user = Lietotajs::find($request->input('user_id'));
+
+        if (! $user) {
+            return back()->withErrors(['error' => 'Lietotājs nav atrasts.']);
+        }
+
+        // Atkārtotas nosūtīšanas gadījumā vecais kods tiek aizstāts ar jaunu.
+        $user->generateAndSendVerificationCode();
+
+        return back()->with('success', 'Verifikācijas kods atkārtoti sūtīts uz jūsu e-pastu.');
     }
 }
