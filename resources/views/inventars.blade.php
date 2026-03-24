@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #E2D4BB;">Visi inventāri</p>
+    <p style="color: #E2D4BB;">Viss inventārs</p>
 
     <div class="auth-links">
         @if(Auth::user()->admina_tiesibas)
@@ -11,7 +11,7 @@
     </div>
 
     <hr>
-    <h2 style="color: #E2D4BB;">Inventāri</h2>
+    <h2 style="color: #E2D4BB;">Inventārs</h2>
 
     <form method="GET" class="table-controls">
         <input type="hidden" name="sort" value="{{ request('sort') }}">

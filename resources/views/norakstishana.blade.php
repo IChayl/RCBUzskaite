@@ -62,7 +62,7 @@
                             @php
                                 $dir = request('sort') === 'inventars' && request('direction') === 'asc' ? 'desc' : 'asc';
                             @endphp
-                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'inventars', 'direction' => $dir]) }}">Inventārs</a>
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'inventars', 'direction' => $dir]) }}">Nosaukums</a>
                         </th>
                         <th class="sortable {{ request('sort') === 'norDatums' ? 'sorted-'.request('direction','asc') : '' }}">
                             @php
