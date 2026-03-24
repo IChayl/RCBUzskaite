@@ -435,16 +435,169 @@
             }
         }
         @media print {
-            body, html { background: #E2D4BB !important; color: #0F1931 !important; }
-            .page-shapes, header, footer, .auth-links a, .bloom-button, .btn { display: none !important; }
-            .card-surface { border: none !important; box-shadow: none !important; background: transparent !important; }
-            .data-table, .data-table th, .data-table td { color: #0F1931 !important; border-color: #2D4159 !important; }
-            .data-table th.sortable::after { content: '' !important; }
-            .no-results-message { display: none !important; }
-            * { text-shadow: none !important; box-shadow: none !important; filter: none !important; }
-            .container { padding: 0 !important; margin: 0 !important; }
-            main { padding: 0 !important; }
-            .card-surface { margin: 0 !important; border: 1px solid #2D4159 !important; border-radius: 0 !important; }
+            /* Document-like styling for print */
+            *, *::before, *::after {
+                background: transparent !important;
+                color: #000 !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+                filter: none !important;
+            }
+
+            html, body {
+                background: white !important;
+                color: black !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100%;
+                height: auto;
+            }
+
+            /* Hide non-printable elements */
+            .page-shapes,
+            header,
+            footer,
+            .auth-links,
+            .bloom-button,
+            .btn,
+            button,
+            .table-controls,
+            .pagination,
+            .no-results-message,
+            .actions a,
+            a[onclick*="print"] {
+                display: none !important;
+            }
+
+            /* Document header styling */
+            main {
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100%;
+            }
+
+            .container {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 20px !important;
+                margin: 0 !important;
+            }
+
+            .card-surface {
+                border: none !important;
+                background: white !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+            }
+
+            /* Document title styling */
+            p:first-of-type {
+                font-size: 16pt !important;
+                font-weight: bold !important;
+                margin-bottom: 20px !important;
+                margin-top: 0 !important;
+            }
+
+            h2 {
+                font-size: 14pt !important;
+                font-weight: bold !important;
+                margin-top: 0 !important;
+                margin-bottom: 12px !important;
+                border-bottom: 2px solid #000 !important;
+                padding-bottom: 8px !important;
+            }
+
+            /* Professional table styling */
+            .data-table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                margin: 20px 0 !important;
+                font-size: 11pt !important;
+            }
+
+            .data-table th {
+                background: #333 !important;
+                color: white !important;
+                padding: 10px 8px !important;
+                text-align: left !important;
+                font-weight: bold !important;
+                border: 1px solid #000 !important;
+                page-break-inside: avoid;
+            }
+
+            .data-table th.sortable::after {
+                content: '' !important;
+            }
+
+            .data-table td {
+                padding: 8px !important;
+                border: 1px solid #ccc !important;
+                color: #000 !important;
+            }
+
+            .data-table tbody tr:nth-child(even) {
+                background: #f9f9f9 !important;
+            }
+
+            .data-table tbody tr {
+                page-break-inside: avoid;
+            }
+
+            /* Hide action columns in print */
+            .data-table td:last-child,
+            .data-table th:last-child {
+                display: none !important;
+            }
+
+            /* Card styling for detail pages */
+            .card {
+                border: 1px solid #000 !important;
+                background: white !important;
+                color: black !important;
+                margin: 20px 0 !important;
+                page-break-inside: avoid;
+            }
+
+            .card-body {
+                padding: 16px !important;
+            }
+
+            .card-title {
+                font-size: 12pt !important;
+                font-weight: bold !important;
+                margin-bottom: 12px !important;
+                border-bottom: 1px solid #000 !important;
+                padding-bottom: 8px !important;
+            }
+
+            .card-text {
+                margin: 6px 0 !important;
+                font-size: 11pt !important;
+            }
+
+            .card-text strong {
+                font-weight: bold !important;
+            }
+
+            /* Page breaks and margins */
+            @page {
+                margin: 15mm;
+                size: A4;
+            }
+
+            /* Ensure good print quality */
+            img {
+                max-width: 100% !important;
+                page-break-inside: avoid;
+            }
+
+            hr {
+                border: none !important;
+                border-top: 1px solid #000 !important;
+                margin: 12px 0 !important;
+            }
         }
     </style>
 </head>

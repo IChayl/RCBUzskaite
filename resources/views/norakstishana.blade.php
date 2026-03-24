@@ -5,7 +5,7 @@
 
     <div class="auth-links">
         <a href="/norakstishana/create">Pieteikt norakstīšanu</a>
-        <a type="button" class="auth-links" onclick="window.print()">Printēt</a>
+        <a type="button" class="auth-links" onclick="window.print()" title="Printēt dokumentu"><i class="fas fa-print"></i> Printēt</a>
     </div>
 
     <hr>

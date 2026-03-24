@@ -7,7 +7,7 @@
         @if(Auth::user()->admina_tiesibas)
             <a href="/kategorija/create">Jauna kategorija</a>
         @endif
-        <a type="button" class="auth-links" onclick="window.print()">Printēt</a>
+        <a type="button" class="auth-links" onclick="window.print()" title="Printēt dokumentu"><i class="fas fa-print"></i> Printēt</a>
     </div>
 
     <hr>

@@ -6,7 +6,7 @@
         @if(Auth::user()->admina_tiesibas)
             <a href="/kustibas_veidi/create">Jauns kustību veids</a>
         @endif
-        <a type="button" class="auth-links" onclick="window.print()">Printēt</a>
+        <a type="button" class="auth-links" onclick="window.print()" title="Printēt dokumentu"><i class="fas fa-print"></i> Printēt</a>
     </div>
 
     <hr>
