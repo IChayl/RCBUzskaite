@@ -30,7 +30,7 @@
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
         <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
     </form>
-
+ <hr>
     <!-- Filtrēšana kustību sarakstam -->
     <form method="GET" class="table-controls" style="margin-top: 10px;">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
