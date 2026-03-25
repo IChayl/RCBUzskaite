@@ -32,7 +32,7 @@
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
         <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
     </form>
-
+ <hr>
     <form method="GET" class="table-controls" style="margin-top: 10px;">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
@@ -56,6 +56,7 @@
                 <option style="color:#0F1931;" value="{{ $lietotajs->lietotajs_id }}" {{ (string) request('filter_atbildigais') === (string) $lietotajs->lietotajs_id ? 'selected' : '' }}>{{ $lietotajs->pilnais_vards }}</option>
             @endforeach
         </select>
+        <br>
         datums no <input type="date" name="iegades_datums_no" value="{{ request('iegades_datums_no') }}" class="table-search-input" style="max-width: 170px;" title="Iegādes datums no">
         datums līdz <input type="date" name="iegades_datums_lidz" value="{{ request('iegades_datums_lidz') }}" class="table-search-input" style="max-width: 170px;" title="Iegādes datums līdz">
         <button type="submit" class="bloom-button sm" style="height: 36px;">Filtrēt</button>
