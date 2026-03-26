@@ -75,7 +75,10 @@
                                         , iemesls: {{ $pendingItem->iemesls }}
                                     </div>
                                 </div>
-                                <a href="{{ route('norakstishana.details', $pendingItem->norakstishana_id) }}" class="bloom-button sm">Atvērt pieteikumu</a>
+                                <form method="POST" action="{{ route('norakstishana.accept', $pendingItem->norakstishana_id) }}" style="margin:0;">
+                                    @csrf
+                                    <button type="submit" class="bloom-button sm">Akceptēt pieteikumu</button>
+                                </form>
                             </div>
                         </div>
                     @endforeach
