@@ -17,6 +17,8 @@ class Norakstishana extends Model
     protected $fillable = [
         'inventara_id',
         'norDatums',
+        'pieteikshanas_dat',
+        'apstiprinashanas_dat',
         'pieteikuma_datums',
         'apstiprinasanas_datums',
         'akceptets',
@@ -27,6 +29,8 @@ class Norakstishana extends Model
 
     protected $casts = [
         'norDatums' => 'date:Y-m-d',
+        'pieteikshanas_dat' => 'date:Y-m-d',
+        'apstiprinashanas_dat' => 'date:Y-m-d',
         'pieteikuma_datums' => 'date:Y-m-d',
         'apstiprinasanas_datums' => 'date:Y-m-d',
         'akceptets' => 'boolean',

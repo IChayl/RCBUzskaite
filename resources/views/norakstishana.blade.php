@@ -149,8 +149,8 @@
                             <td>{{ $item->norDatums->toDateString() }}</td>
                             <td>{{ $item->iemesls }}</td>
                             <td>{{ $item->talaka_riciba }}</td>
-                            <td>{{ $item->pieteikshanas_dat ?? '-' }}</td>
-                            <td>{{ $item->apstiprinashanas_dat ?? '-' }}</td>
+                            <td>{{ $item->pieteikshanas_dat?->format('Y-m-d') ?? $item->pieteikshanas_dat ?? '-' }}</td>
+                            <td>{{ $item->akceptets ? ($item->apstiprinashanas_dat?->format('Y-m-d') ?? $item->apstiprinashanas_dat ?? '-') : '-' }}</td>
                             <td>{{ $item->akceptets ? 'Jā' : 'Nē' }}</td>
                                @if(Auth::user()->admina_tiesibas) <td>
                                 <div class="actions">

@@ -18,10 +18,10 @@
             <h5 class="card-title">Norakstīšana #{{ $norakstishana->norakstishana_id }}</h5>
             <p class="card-text"><strong>Inventars:</strong> {{ optional($norakstishana->inventars)->nosaukums ?? ('ID: '.$norakstishana->inventara_id) }}</p>
             <p class="card-text"><strong>Inv. numurs:</strong> {{ optional($norakstishana->inventars)->inventara_numurs ?? '-' }}</p>
-            <p class="card-text"><strong>Pieteica:</strong> {{ optional($norakstishana->pieteicejs)->lietotajvards ?? '-' }}</p>
+            <p class="card-text"><strong>Pieteica:</strong> {{ optional($norakstishana->pieteicejs)->pilnais_vards ?? optional($norakstishana->pieteicejs)->lietotajvards ?? '-' }}</p>
             <p class="card-text"><strong>Datums:</strong> {{ $norakstishana->norDatums->toDateString() }}</p>
-            <p class="card-text"><strong>Pieteikuma datums:</strong> {{ $norakstishana->pieteikuma_datums?->toDateString() ?? '-' }}</p>
-            <p class="card-text"><strong>Apstiprināšanas datums:</strong> {{ $norakstishana->apstiprinasanas_datums?->toDateString() ?? '-' }}</p>
+            <p class="card-text"><strong>Pieteikuma datums:</strong> {{ $norakstishana->pieteikshanas_dat?->toDateString() ?? $norakstishana->pieteikshanas_dat ?? '-' }}</p>
+            <p class="card-text"><strong>Apstiprināšanas datums:</strong> {{ $norakstishana->akceptets ? ($norakstishana->apstiprinashanas_dat?->toDateString() ?? $norakstishana->apstiprinashanas_dat ?? '-') : '-' }}</p>
             <p class="card-text"><strong>Akceptēts:</strong> {{ $norakstishana->akceptets ? 'Jā' : 'Nē' }}</p>
             <p class="card-text"><strong>Iemesls:</strong> {{ $norakstishana->iemesls }}</p>
             <p class="card-text"><strong>Tālākā rīcība:</strong> {{ $norakstishana->talaka_riciba }}</p>

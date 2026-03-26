@@ -158,7 +158,7 @@ class NorakstishanaController extends Controller
         $norakstishana->pieteikshanas_dat = Carbon::today();
         $norakstishana->pieteica_lietotajs_id = $user->lietotajs_id;
         $norakstishana->akceptets = $user->admina_tiesibas;
-        $norakstishana->apstiprinashanas_dat = $user->admina_tiesibas ? Carbon::today() : null;
+        $norakstishana->apstiprinashanas_dat = $this->resolveApprovalDateForStore($user->admina_tiesibas);
         $norakstishana->iemesls = $data['iemesls'];
         $norakstishana->talaka_riciba = $data['talaka_riciba'];
         $norakstishana->save();
@@ -246,5 +246,30 @@ class NorakstishanaController extends Controller
         $this->deleteWithForeignKeyChecksDisabled('Norakstishana', 'norakstishana_id', $id);
 
         return redirect('/norakstishana')->with('success', $this->buildDeleteMessage('Norakstīšanas', []));
+    }
+
+    /**
+     * Nodrošina saderību ar vidi, kur apstiprināšanas datums kļūdaini definēts kā NOT NULL.
+     */
+    private function resolveApprovalDateForStore(bool $isAdmin): ?Carbon
+    {
+        if ($isAdmin) {
+            return Carbon::today();
+        }
+
+        try {
+            $columnMetadata = DB::selectOne(
+                'SELECT IS_NULLABLE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ? LIMIT 1',
+                ['Norakstishana', 'apstiprinashanas_dat']
+            );
+        } catch (\Throwable $exception) {
+            return Carbon::today();
+        }
+
+        if ($columnMetadata && strtoupper((string) $columnMetadata->IS_NULLABLE) === 'NO') {
+            return Carbon::today();
+        }
+
+        return null;
     }
 }
