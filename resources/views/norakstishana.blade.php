@@ -50,6 +50,40 @@
         @endif
     </div>
 
+    @if(Auth::user()->admina_tiesibas && $pendingNorakstishanaCount > 0)
+        <div style="margin: 20px 0; padding: 18px 20px; border-radius: 16px; border: 1px solid rgba(226, 212, 187, 0.3); background: rgba(226, 212, 187, 0.08); color: #E2D4BB; box-shadow: 0 10px 24px rgba(15, 25, 49, 0.22);">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; align-items:center; margin-bottom: 14px;">
+                <div>
+                    <strong style="font-size: 1.05rem;">Administratora paziņojums</strong>
+                    <div style="opacity: 0.9; margin-top: 4px;">Ir saņemti {{ $pendingNorakstishanaCount }} neakceptēti inventāra norakstīšanas pieteikumi.</div>
+                </div>
+                <span style="display:inline-flex; align-items:center; justify-content:center; min-width:38px; height:38px; padding:0 12px; border-radius:999px; background:#E2D4BB; color:#0F1931; font-weight:700;">
+                    {{ $pendingNorakstishanaCount }}
+                </span>
+            </div>
+
+            @if($pendingNorakstishanaRequests->isNotEmpty())
+                <div style="display:grid; gap:10px;">
+                    @foreach($pendingNorakstishanaRequests as $pendingItem)
+                        <div style="padding: 12px 14px; border-radius: 12px; background: rgba(15, 25, 49, 0.35); border: 1px solid rgba(226, 212, 187, 0.14);">
+                            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; align-items:center;">
+                                <div>
+                                    <strong>{{ optional($pendingItem->inventars)->nosaukums ?? ('Inventārs ID: '.$pendingItem->inventara_id) }}</strong>
+                                    <div style="opacity:0.88; margin-top:4px;">
+                                        Pieteica: {{ optional($pendingItem->pieteicejs)->pilnais_vards ?? optional($pendingItem->pieteicejs)->lietotajvards ?? 'Nezināms lietotājs' }}
+                                        , datums: {{ optional($pendingItem->pieteikshanas_dat)->format('Y-m-d') ?? $pendingItem->pieteikshanas_dat ?? '-' }}
+                                        , iemesls: {{ $pendingItem->iemesls }}
+                                    </div>
+                                </div>
+                                <a href="{{ route('norakstishana.details', $pendingItem->norakstishana_id) }}" class="bloom-button sm">Atvērt pieteikumu</a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    @endif
+
     @if($norakstishanas->isEmpty())
         <p style="color: #E2D4BB;">Nav ierakstu.</p>
     @else

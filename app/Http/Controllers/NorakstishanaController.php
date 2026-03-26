@@ -20,6 +20,8 @@ class NorakstishanaController extends Controller
     public function showAll(Request $request)
     {
         $user = auth()->user();
+        $pendingNorakstishanaCount = 0;
+        $pendingNorakstishanaRequests = collect();
 
         // Meklēšanas teksta un kolonnas iestatījumi
         $q = trim($request->input('q', ''));
@@ -48,6 +50,18 @@ class NorakstishanaController extends Controller
 
         if (! $user->admina_tiesibas) {
             $query->where('pieteica_lietotajs_id', $user->lietotajs_id);
+        } else {
+            $pendingNorakstishanaCount = Norakstishana::query()
+                ->where('akceptets', false)
+                ->count();
+
+            $pendingNorakstishanaRequests = Norakstishana::query()
+                ->with(['inventars', 'pieteicejs'])
+                ->where('akceptets', false)
+                ->orderByDesc('pieteikshanas_dat')
+                ->orderByDesc('norakstishana_id')
+                ->limit(5)
+                ->get();
         }
 
         // Meklēšana kolonnā vai visās kolonnās
@@ -89,7 +103,17 @@ class NorakstishanaController extends Controller
 
         $norakstishanas = $query->paginate(7)->withQueryString();
 
-        return view('norakstishana', compact('norakstishanas', 'sort', 'direction', 'q', 'column', 'dateFrom', 'dateTo'));
+        return view('norakstishana', compact(
+            'norakstishanas',
+            'sort',
+            'direction',
+            'q',
+            'column',
+            'dateFrom',
+            'dateTo',
+            'pendingNorakstishanaCount',
+            'pendingNorakstishanaRequests'
+        ));
     }
 
     /**

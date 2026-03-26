@@ -113,6 +113,28 @@
       text-shadow: 0 0 10px #E2D4BB, 0 0 22px #E2D4BB;
     }
 
+    .nav-link-with-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 7px;
+      border-radius: 999px;
+      background: #E2D4BB;
+      color: #0F1931;
+      font-size: 0.75rem;
+      font-weight: 700;
+      line-height: 1;
+      box-shadow: 0 0 0 1px rgba(15, 25, 49, 0.15);
+    }
+
     /* Autentifikācijas sadaļa (Ielogoties/Reģistrēties) */
     .auth-links {
       display: flex;
@@ -159,7 +181,12 @@
        @if(Auth::check())
       <a href="/inventars">Inventārs</a>
       <a href="/inventara_kustiba">Kustības</a>
-      <a href="/norakstishana">Norakstīšanas</a>
+        <a href="/norakstishana" class="nav-link-with-badge">
+          <span>Norakstīšanas</span>
+          @if(Auth::user()->admina_tiesibas && ($pendingNorakstishanaCount ?? 0) > 0)
+            <span class="nav-badge" title="Neakceptēti norakstīšanas pieteikumi">{{ $pendingNorakstishanaCount }}</span>
+          @endif
+        </a>
       <a href="/kategorija">Kategorijas tabula</a>
       <a href="/telpa">Telpas</a>
       <a href="/lietotajs">Lietotāji</a>
