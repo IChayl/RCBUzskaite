@@ -116,7 +116,7 @@
                             <td>{{ optional($item->telpa)->nosaukums ?? ('ID: '.$item->telpas_id) }}</td>
                             <td>{{ optional($item->atbildigais)->pilnais_vards ?? ('ID: '.$item->atbildigais_id) }}</td>
                             <td>{{ $item->inventara_numurs ?? '-' }}</td>
-                            <td>{{ $item->iegades_datums ?? '-' }}</td>
+                            <td>@lvDate($item->iegades_datums)</td>
                             @if(Auth::user()->admina_tiesibas)
                             <td>
                                 <div class="actions">

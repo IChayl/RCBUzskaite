@@ -71,7 +71,7 @@
                                     <strong>{{ optional($pendingItem->inventars)->nosaukums ?? ('Inventārs ID: '.$pendingItem->inventara_id) }}</strong>
                                     <div style="opacity:0.88; margin-top:4px;">
                                         Pieteica: {{ optional($pendingItem->pieteicejs)->pilnais_vards ?? optional($pendingItem->pieteicejs)->lietotajvards ?? 'Nezināms lietotājs' }}
-                                        , datums: {{ optional($pendingItem->pieteikshanas_dat)->format('Y-m-d') ?? $pendingItem->pieteikshanas_dat ?? '-' }}
+                                        , datums: @lvDate($pendingItem->pieteikshanas_dat)
                                         , iemesls: {{ $pendingItem->iemesls }}
                                     </div>
                                 </div>
@@ -149,11 +149,17 @@
                                     <br><small>Inv. Nr.: {{ $item->inventars->inventara_numurs }}</small>
                                 @endif
                             </td>
-                            <td>{{ $item->norDatums->toDateString() }}</td>
+                            <td>@lvDate($item->norDatums)</td>
                             <td>{{ $item->iemesls }}</td>
                             <td>{{ $item->talaka_riciba }}</td>
-                            <td>{{ $item->pieteikshanas_dat?->format('Y-m-d') ?? $item->pieteikshanas_dat ?? '-' }}</td>
-                            <td>{{ $item->akceptets ? ($item->apstiprinashanas_dat?->format('Y-m-d') ?? $item->apstiprinashanas_dat ?? '-') : '-' }}</td>
+                            <td>@lvDate($item->pieteikshanas_dat)</td>
+                            <td>
+                                @if($item->akceptets)
+                                    @lvDate($item->apstiprinashanas_dat)
+                                @else
+                                    -
+                                @endif
+                            </td>
                             <td>{{ $item->akceptets ? 'Jā' : 'Nē' }}</td>
                                @if(Auth::user()->admina_tiesibas) <td>
                                 <div class="actions">
