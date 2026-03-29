@@ -22,6 +22,7 @@ class InventarsController extends Controller
     {
         $user = auth()->user();
         $inventoryStatus = $request->input('inventory_status', 'active');
+        $inventoryScope = $request->input('inventory_scope', $user->admina_tiesibas ? 'all' : 'responsible');
 
         // Meklēšanas teksta un kolonnas iestatījumi
         $q = trim($request->input('q', ''));
@@ -48,8 +49,17 @@ class InventarsController extends Controller
             $inventoryStatus = 'active';
         }
 
-        if (! $user->admina_tiesibas) {
-            $inventoryStatus = 'active';
+        $allowedInventoryScopes = ['responsible', 'all'];
+        if (! in_array($inventoryScope, $allowedInventoryScopes, true)) {
+            $inventoryScope = $user->admina_tiesibas ? 'all' : 'responsible';
+        }
+
+        if ($user->admina_tiesibas) {
+            $inventoryScope = 'all';
+        }
+
+        if (! $user->admina_tiesibas && $inventoryStatus === 'written_off') {
+            $inventoryScope = 'all';
         }
 
         $query = Inventar::query()
@@ -61,7 +71,7 @@ class InventarsController extends Controller
         $dateFrom = $request->input('iegades_datums_no');
         $dateTo = $request->input('iegades_datums_lidz');
 
-        if (! $user->admina_tiesibas) {
+        if ($inventoryScope === 'responsible') {
             $query->where('atbildigais_id', $user->lietotajs_id);
         }
 
@@ -144,7 +154,8 @@ class InventarsController extends Controller
             'filterAtbildigais',
             'dateFrom',
             'dateTo',
-            'inventoryStatus'
+            'inventoryStatus',
+            'inventoryScope'
         ));
     }
 

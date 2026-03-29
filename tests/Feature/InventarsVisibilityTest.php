@@ -85,6 +85,14 @@ beforeEach(function () {
         'uzvards' => 'Lietotajs',
     ]);
 
+    $this->citsDarbinieks = Lietotajs::query()->create([
+        'lietotajvards' => 'citsdarbinieks',
+        'parole' => bcrypt('secret'),
+        'admina_tiesibas' => false,
+        'vards' => 'Cits',
+        'uzvards' => 'Darbinieks',
+    ]);
+
     $kategorijaId = DB::table('kategorija')->insertGetId([
         'nosaukums' => 'Datori',
         'apraksts' => 'Testa kategorija',
@@ -124,6 +132,24 @@ beforeEach(function () {
         'iegades_datums' => '2026-03-03',
     ]);
 
+    $otherUserInventarId = DB::table('inventars')->insertGetId([
+        'nosaukums' => 'Svešs projektors',
+        'kategorija_id' => $kategorijaId,
+        'telpas_id' => $telpaId,
+        'atbildigais_id' => $this->citsDarbinieks->lietotajs_id,
+        'inventara_numurs' => 'INV-004',
+        'iegades_datums' => '2026-03-04',
+    ]);
+
+    $otherUserWrittenOffInventarId = DB::table('inventars')->insertGetId([
+        'nosaukums' => 'Svešs norakstīts printeris',
+        'kategorija_id' => $kategorijaId,
+        'telpas_id' => $telpaId,
+        'atbildigais_id' => $this->citsDarbinieks->lietotajs_id,
+        'inventara_numurs' => 'INV-005',
+        'iegades_datums' => '2026-03-05',
+    ]);
+
     DB::table('Norakstishana')->insert([
         [
             'inventara_id' => $hiddenInventarId,
@@ -144,6 +170,16 @@ beforeEach(function () {
             'pieteica_lietotajs_id' => $this->atbildigais->lietotajs_id,
             'iemesls' => 'Nolietots',
             'talaka_riciba' => 'Pārskatīt',
+        ],
+        [
+            'inventara_id' => $otherUserWrittenOffInventarId,
+            'norDatums' => '2026-03-23',
+            'pieteikshanas_dat' => '2026-03-23',
+            'apstiprinashanas_dat' => '2026-03-24',
+            'akceptets' => true,
+            'pieteica_lietotajs_id' => $this->citsDarbinieks->lietotajs_id,
+            'iemesls' => 'Saplīsis',
+            'talaka_riciba' => 'Izvest',
         ],
     ]);
 });
@@ -173,4 +209,38 @@ it('shows only written-off inventory for admin when requested', function () {
     $response->assertDontSee('Redzams monitors');
     $response->assertDontSee('Gaidošs portatīvais');
     $response->assertSee('Norakstīts dators');
+    $response->assertSee('Svešs norakstīts printeris');
+});
+
+it('shows only responsible active inventory by default for employee', function () {
+    $response = $this->actingAs($this->atbildigais)->get('/inventars');
+
+    $response->assertOk();
+    $response->assertSee('Redzams monitors');
+    $response->assertSee('Gaidošs portatīvais');
+    $response->assertDontSee('Norakstīts dators');
+    $response->assertDontSee('Svešs projektors');
+    $response->assertDontSee('Svešs norakstīts printeris');
+});
+
+it('shows all active inventory for employee when all scope is requested', function () {
+    $response = $this->actingAs($this->atbildigais)->get('/inventars?inventory_scope=all');
+
+    $response->assertOk();
+    $response->assertSee('Redzams monitors');
+    $response->assertSee('Gaidošs portatīvais');
+    $response->assertSee('Svešs projektors');
+    $response->assertDontSee('Norakstīts dators');
+    $response->assertDontSee('Svešs norakstīts printeris');
+});
+
+it('shows all written-off inventory for employee when requested', function () {
+    $response = $this->actingAs($this->atbildigais)->get('/inventars?inventory_status=written_off');
+
+    $response->assertOk();
+    $response->assertDontSee('Redzams monitors');
+    $response->assertDontSee('Gaidošs portatīvais');
+    $response->assertDontSee('Svešs projektors');
+    $response->assertSee('Norakstīts dators');
+    $response->assertSee('Svešs norakstīts printeris');
 });
