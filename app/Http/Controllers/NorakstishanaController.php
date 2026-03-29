@@ -49,9 +49,7 @@ class NorakstishanaController extends Controller
         $query = Norakstishana::query()
             ->with(['inventars', 'pieteicejs']);
 
-        if (! $user->admina_tiesibas) {
-            $query->where('pieteica_lietotajs_id', $user->lietotajs_id);
-        } else {
+        if ($user->admina_tiesibas) {
             $pendingNorakstishanaCount = Norakstishana::query()
                 ->where('akceptets', false)
                 ->count();
