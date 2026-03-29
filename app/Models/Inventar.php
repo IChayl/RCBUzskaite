@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\KategorijaModel;
 use App\Models\Telpa;
 use App\Models\Lietotajs;
+use App\Models\Norakstishana;
 
 // Modelis inventāra vienībām.
 class Inventar extends Model
@@ -33,5 +35,26 @@ class Inventar extends Model
     public function atbildigais()
     {
         return $this->belongsTo(Lietotajs::class, 'atbildigais_id', 'lietotajs_id');
+    }
+
+    // Saite uz inventāra norakstīšanas ierakstiem.
+    public function norakstishanas()
+    {
+        return $this->hasMany(Norakstishana::class, 'inventara_id', 'inventars_id');
+    }
+
+    // Atstāj tikai inventāru, kam nav akceptēta norakstīšana.
+    public function scopeWithoutAcceptedNorakstishana(Builder $query): Builder
+    {
+        return $query->whereDoesntHave('norakstishanas', function (Builder $subQuery) {
+            $subQuery->where('akceptets', true);
+        });
+    }
+
+    public function scopeOnlyAcceptedNorakstishana(Builder $query): Builder
+    {
+        return $query->whereHas('norakstishanas', function (Builder $subQuery) {
+            $subQuery->where('akceptets', true);
+        });
     }
 }

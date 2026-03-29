@@ -13,7 +13,16 @@
     <hr>
     <h2 style="color: #E2D4BB;">Inventārs</h2>
 
+    @if(Auth::user()->admina_tiesibas)
+        <div class="table-controls" style="margin-bottom: 16px;">
+            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'all']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'all' ? 'box-shadow: 0 0 0 2px rgba(226, 212, 187, 0.45), 0 16px 40px rgba(15, 25, 49, 0.45);' : '' }}">Viss inventārs</a>
+            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'written_off']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'written_off' ? 'box-shadow: 0 0 0 2px rgba(226, 212, 187, 0.45), 0 16px 40px rgba(15, 25, 49, 0.45);' : '' }}">Tikai norakstītais</a>
+            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'active']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'active' ? 'box-shadow: 0 0 0 2px rgba(226, 212, 187, 0.45), 0 16px 40px rgba(15, 25, 49, 0.45);' : '' }}">Tikai nenorakstītais</a>
+        </div>
+    @endif
+
     <form method="GET" class="table-controls">
+        <input type="hidden" name="inventory_status" value="{{ $inventoryStatus }}">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
         <input type="hidden" name="filter_kategorija" value="{{ request('filter_kategorija') }}">
@@ -34,6 +43,7 @@
     </form>
  <hr>
     <form method="GET" class="table-controls" style="margin-top: 10px;">
+        <input type="hidden" name="inventory_status" value="{{ $inventoryStatus }}">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
         <input type="hidden" name="column" value="{{ request('column', 'all') }}">

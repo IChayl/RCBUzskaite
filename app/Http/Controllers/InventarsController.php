@@ -21,6 +21,7 @@ class InventarsController extends Controller
     public function showAllInventars(Request $request)
     {
         $user = auth()->user();
+        $inventoryStatus = $request->input('inventory_status', 'active');
 
         // Meklēšanas teksta un kolonnas iestatījumi
         $q = trim($request->input('q', ''));
@@ -42,6 +43,15 @@ class InventarsController extends Controller
             $column = 'all';
         }
 
+        $allowedInventoryStatuses = ['active', 'written_off', 'all'];
+        if (! in_array($inventoryStatus, $allowedInventoryStatuses, true)) {
+            $inventoryStatus = 'active';
+        }
+
+        if (! $user->admina_tiesibas) {
+            $inventoryStatus = 'active';
+        }
+
         $query = Inventar::query()
             ->with(['kategorija', 'telpa', 'atbildigais']);
 
@@ -53,6 +63,12 @@ class InventarsController extends Controller
 
         if (! $user->admina_tiesibas) {
             $query->where('atbildigais_id', $user->lietotajs_id);
+        }
+
+        if ($inventoryStatus === 'active') {
+            $query->withoutAcceptedNorakstishana();
+        } elseif ($inventoryStatus === 'written_off') {
+            $query->onlyAcceptedNorakstishana();
         }
 
         // Meklēšana kolonnā vai visās kolonnās
@@ -127,7 +143,8 @@ class InventarsController extends Controller
             'filterTelpa',
             'filterAtbildigais',
             'dateFrom',
-            'dateTo'
+            'dateTo',
+            'inventoryStatus'
         ));
     }
 
