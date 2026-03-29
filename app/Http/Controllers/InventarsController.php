@@ -21,7 +21,7 @@ class InventarsController extends Controller
     public function showAllInventars(Request $request)
     {
         $user = auth()->user();
-        $inventoryStatus = $request->input('inventory_status', 'active');
+        $inventoryStatus = $request->input('inventory_status', $user->admina_tiesibas ? 'active' : 'all');
         $inventoryScope = $request->input('inventory_scope', $user->admina_tiesibas ? 'all' : 'responsible');
 
         // Meklēšanas teksta un kolonnas iestatījumi
@@ -71,7 +71,14 @@ class InventarsController extends Controller
         $dateFrom = $request->input('iegades_datums_no');
         $dateTo = $request->input('iegades_datums_lidz');
 
-        if ($inventoryScope === 'responsible') {
+        if ($inventoryScope === 'responsible' && ! $user->admina_tiesibas && $inventoryStatus === 'all') {
+            $query->where(function ($responsibleQuery) use ($user) {
+                $responsibleQuery->where('atbildigais_id', $user->lietotajs_id)
+                    ->orWhereHas('norakstishanas', function ($subQuery) {
+                        $subQuery->where('akceptets', true);
+                    });
+            });
+        } elseif ($inventoryScope === 'responsible') {
             $query->where('atbildigais_id', $user->lietotajs_id);
         }
 

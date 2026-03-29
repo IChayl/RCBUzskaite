@@ -212,26 +212,37 @@ it('shows only written-off inventory for admin when requested', function () {
     $response->assertSee('Svešs norakstīts printeris');
 });
 
-it('shows only responsible active inventory by default for employee', function () {
+it('shows responsible inventory and all written-off inventory by default for employee', function () {
     $response = $this->actingAs($this->atbildigais)->get('/inventars');
 
     $response->assertOk();
     $response->assertSee('Redzams monitors');
     $response->assertSee('Gaidošs portatīvais');
-    $response->assertDontSee('Norakstīts dators');
+    $response->assertSee('Norakstīts dators');
     $response->assertDontSee('Svešs projektors');
-    $response->assertDontSee('Svešs norakstīts printeris');
+    $response->assertSee('Svešs norakstīts printeris');
 });
 
-it('shows all active inventory for employee when all scope is requested', function () {
+it('shows only responsible active inventory for employee when requested', function () {
+    $response = $this->actingAs($this->atbildigais)->get('/inventars?inventory_status=active');
+
+    $response->assertOk();
+    $response->assertSee('Redzams monitors');
+    $response->assertSee('Gaidošs portatīvais');
+    $response->assertDontSee('Norakstīts dators');
+    $response->assertDontSee('Svešs norakstīts printeris');
+    $response->assertDontSee('Svešs projektors');
+});
+
+it('shows all inventory for employee when all scope is requested', function () {
     $response = $this->actingAs($this->atbildigais)->get('/inventars?inventory_scope=all');
 
     $response->assertOk();
     $response->assertSee('Redzams monitors');
     $response->assertSee('Gaidošs portatīvais');
+    $response->assertSee('Norakstīts dators');
     $response->assertSee('Svešs projektors');
-    $response->assertDontSee('Norakstīts dators');
-    $response->assertDontSee('Svešs norakstīts printeris');
+    $response->assertSee('Svešs norakstīts printeris');
 });
 
 it('shows all written-off inventory for employee when requested', function () {

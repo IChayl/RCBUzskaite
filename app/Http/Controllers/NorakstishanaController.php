@@ -9,6 +9,7 @@ use App\Models\Lietotajs;
 use App\Http\Controllers\Concerns\HandlesSafeDelete;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\ValidationException;
 
 // Kontrolieris norakstīšanas ierakstu pārvaldībai.
 class NorakstishanaController extends Controller
@@ -123,10 +124,7 @@ class NorakstishanaController extends Controller
     {
         $user = auth()->user();
 
-        $inventari = Inventar::query()
-            ->when(! $user->admina_tiesibas, function ($query) use ($user) {
-                $query->where('atbildigais_id', $user->lietotajs_id);
-            })
+        $inventari = $this->buildAvailableInventarsQuery($user)
             ->orderBy('nosaukums', 'asc')
             ->get();
 
@@ -151,6 +149,8 @@ class NorakstishanaController extends Controller
         if (! $user->admina_tiesibas && (int) $inventars->atbildigais_id !== (int) $user->lietotajs_id) {
             abort(403, 'Jums nav tiesību pieteikt norakstīšanu šim inventāram.');
         }
+
+        $this->ensureInventarIsNotAlreadyWrittenOff((int) $data['inventara_id']);
 
         $norakstishana = new Norakstishana();
         $norakstishana->inventara_id = $data['inventara_id'];
@@ -189,7 +189,9 @@ class NorakstishanaController extends Controller
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
         $norakstishana = Norakstishana::findOrFail($id);
-        $inventari = Inventar::orderBy('nosaukums','asc')->get();
+        $inventari = $this->buildAvailableInventarsQuery(auth()->user(), $norakstishana)
+            ->orderBy('nosaukums', 'asc')
+            ->get();
         return view('editNorakstishana', ['norakstishana' => $norakstishana, 'inventari' => $inventari]);
     }
 
@@ -207,6 +209,8 @@ class NorakstishanaController extends Controller
             'iemesls' => 'required|string|max:30',
             'talaka_riciba' => 'required|string|max:50',
         ]);
+
+        $this->ensureInventarIsNotAlreadyWrittenOff((int) $data['inventara_id'], (int) $id);
 
         DB::table('Norakstishana')->where('norakstishana_id',$id)->update([
             'inventara_id' => $data['inventara_id'],
@@ -228,6 +232,7 @@ class NorakstishanaController extends Controller
         }
 
         $norakstishana = Norakstishana::findOrFail($id);
+        $this->ensureInventarIsNotAlreadyWrittenOff((int) $norakstishana->inventara_id, (int) $norakstishana->norakstishana_id);
         $norakstishana->akceptets = true;
         $norakstishana->apstiprinashanas_dat = Carbon::today();
         $norakstishana->save();
@@ -271,5 +276,37 @@ class NorakstishanaController extends Controller
         }
 
         return null;
+    }
+
+    private function buildAvailableInventarsQuery(Lietotajs $user, ?Norakstishana $currentNorakstishana = null)
+    {
+        return Inventar::query()
+            ->when(! $user->admina_tiesibas, function ($query) use ($user) {
+                $query->where('atbildigais_id', $user->lietotajs_id);
+            })
+            ->where(function ($query) use ($currentNorakstishana) {
+                $query->withoutAcceptedNorakstishana();
+
+                if ($currentNorakstishana) {
+                    $query->orWhere('inventars_id', $currentNorakstishana->inventara_id);
+                }
+            });
+    }
+
+    private function ensureInventarIsNotAlreadyWrittenOff(int $inventaraId, ?int $ignoreNorakstishanaId = null): void
+    {
+        $alreadyWrittenOff = Norakstishana::query()
+            ->where('inventara_id', $inventaraId)
+            ->where('akceptets', true)
+            ->when($ignoreNorakstishanaId !== null, function ($query) use ($ignoreNorakstishanaId) {
+                $query->where('norakstishana_id', '!=', $ignoreNorakstishanaId);
+            })
+            ->exists();
+
+        if ($alreadyWrittenOff) {
+            throw ValidationException::withMessages([
+                'inventara_id' => 'Šis inventārs jau ir norakstīts.',
+            ]);
+        }
     }
 }
