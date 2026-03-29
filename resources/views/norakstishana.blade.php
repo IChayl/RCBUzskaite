@@ -163,7 +163,7 @@
                             <td>{{ $item->akceptets ? 'Jā' : 'Nē' }}</td>
                                @if(Auth::user()->admina_tiesibas) <td>
                                 <div class="actions">
-                                    <a href="/norakstishana/{{ $item->norakstishana_id }}/details" class="bloom-button sm">Skatīt</a>
+                                 
                                     @if(!$item->akceptets)
                                         <form method="POST" action="{{ route('norakstishana.accept', $item->norakstishana_id) }}" style="display:inline;">
                                             @csrf
