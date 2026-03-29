@@ -13,12 +13,7 @@
     <hr>
     <h2 style="color: #E2D4BB;">Inventārs</h2>
 
-    @if(!Auth::user()->admina_tiesibas)
-        <div class="table-controls" style="margin-bottom: 16px;">
-            <a href="{{ request()->fullUrlWithQuery(['inventory_scope' => 'responsible']) }}" class="bloom-button sm" style="{{ $inventoryScope === 'responsible' ? 'box-shadow: 0 0 0 2px rgba(226, 212, 187, 0.45), 0 16px 40px rgba(15, 25, 49, 0.45);' : '' }}">Mans inventārs</a>
-            <a href="{{ request()->fullUrlWithQuery(['inventory_scope' => 'all']) }}" class="bloom-button sm" style="{{ $inventoryScope === 'all' ? 'box-shadow: 0 0 0 2px rgba(226, 212, 187, 0.45), 0 16px 40px rgba(15, 25, 49, 0.45);' : '' }}">Viss inventārs</a>
-        </div>
-    @endif
+
 
     <div class="table-controls" style="margin-bottom: 16px;">
         @if(Auth::user()->admina_tiesibas)
