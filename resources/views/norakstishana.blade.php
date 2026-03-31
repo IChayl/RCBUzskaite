@@ -48,6 +48,11 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if(session('error'))
+            <div id="flash-error" style="background: #3b1010; color: #F9D8D8; padding: 12px 16px; border-radius: 4px; border-left: 4px solid #a94442; cursor: pointer; margin-top: 8px;">
+                {{ session('error') }}
+            </div>
+        @endif
     </div>
 
     @if(Auth::user()->admina_tiesibas && $pendingNorakstishanaCount > 0)
@@ -78,6 +83,10 @@
                                 <form method="POST" action="{{ route('norakstishana.accept', $pendingItem->norakstishana_id) }}" style="margin:0;">
                                     @csrf
                                     <button type="submit" class="bloom-button sm">Akceptēt pieteikumu</button>
+                                </form>
+                                <form method="POST" action="{{ route('norakstishana.cancel', $pendingItem->norakstishana_id) }}" style="margin:0;" onsubmit="return confirm('Vai tiešām vēlaties atcelt šo pieteikumu?');">
+                                    @csrf
+                                    <button type="submit" class="bloom-button sm" style="background:#5a1b1b; border-color:#7d2d2d;">Atcelt pieteikumu</button>
                                 </form>
                             </div>
                         </div>
@@ -169,6 +178,10 @@
                                             @csrf
                                             <button type="submit" class="bloom-button sm">Akceptēt</button>
                                         </form>
+                                        <form method="POST" action="{{ route('norakstishana.cancel', $item->norakstishana_id) }}" style="display:inline;" onsubmit="return confirm('Vai tiešām vēlaties atcelt šo pieteikumu?');">
+                                            @csrf
+                                            <button type="submit" class="bloom-button sm" style="background:#5a1b1b; border-color:#7d2d2d;">Atcelt pieteikumu</button>
+                                        </form>
                                     @endif
                                         <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->norakstishana_id }}">Dzēst</a>
                                         <a href="/norakstishana/{{ $item->norakstishana_id }}/edit" class="bloom-button sm">Rediģēt</a>
@@ -191,6 +204,13 @@
         const flash = document.getElementById('flash-message');
         if (flash) {
             flash.addEventListener('click', function() {
+                this.remove();
+            });
+        }
+
+        const flashError = document.getElementById('flash-error');
+        if (flashError) {
+            flashError.addEventListener('click', function() {
                 this.remove();
             });
         }

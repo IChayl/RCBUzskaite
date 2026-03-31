@@ -239,6 +239,26 @@ class NorakstishanaController extends Controller
     }
 
     /**
+     * Atceļ neakceptētu norakstīšanas pieteikumu (tikai administratoram).
+     */
+    public function cancel($id)
+    {
+        if (!auth()->user()->admina_tiesibas) {
+            abort(403, 'Ir nepieciešamas administratora tiesības.');
+        }
+
+        $norakstishana = Norakstishana::findOrFail($id);
+
+        if ($norakstishana->akceptets) {
+            return redirect()->to('/norakstishana')->with('error', 'Akceptētu pieteikumu nevar atcelt.');
+        }
+
+        $norakstishana->delete();
+
+        return redirect()->to('/norakstishana')->with('success', 'Norakstīšanas pieteikums atcelts.');
+    }
+
+    /**
      * Dzēš norakstīšanas ierakstu (tikai administratoram).
      */
     public function delete($id)
