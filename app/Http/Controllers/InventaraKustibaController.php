@@ -164,7 +164,6 @@ class InventaraKustibaController extends Controller
             'veca_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
             'jauna_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
             'piezimes' => 'nullable|string|max:255',
-            'dokuments' => 'nullable|string|max:255',
         ]);
 
         $data['datums'] = now()->toDateString();
@@ -222,7 +221,6 @@ class InventaraKustibaController extends Controller
         $i->veca_telpa_id = $data['veca_telpa_id'] ?? null;
         $i->jauna_telpa_id = $data['jauna_telpa_id'] ?? null;
         $i->piezimes = $data['piezimes'] ?? null;
-        $i->dokuments = $data['dokuments'] ?? null;
         $i->save();
 
         return redirect()->to('/inventara_kustiba')->with('success','Ieraksts pievienots');
@@ -269,7 +267,6 @@ class InventaraKustibaController extends Controller
             'veca_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
             'jauna_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
             'piezimes' => 'nullable|string|max:255',
-            'dokuments' => 'nullable|string|max:255',
         ]);
 
         $existingKustiba = InventaraKustiba::findOrFail($id);
@@ -300,7 +297,6 @@ class InventaraKustibaController extends Controller
             'veca_telpa_id' => $data['veca_telpa_id'] ?? null,
             'jauna_telpa_id' => $data['jauna_telpa_id'] ?? null,
             'piezimes' => $data['piezimes'] ?? null,
-            'dokuments' => $data['dokuments'] ?? null,
         ]);
         return redirect()->to('/inventara_kustiba')->with('success','Ieraksts atjaunināts');
     }

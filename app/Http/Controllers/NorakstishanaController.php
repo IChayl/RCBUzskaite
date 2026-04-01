@@ -369,10 +369,10 @@ class NorakstishanaController extends Controller
             return;
         }
 
-        $documentRef = 'NORAKSTISHANA:' . $norakstishana->norakstishana_id;
+        $documentRef = '[NORAKSTISHANA:' . $norakstishana->norakstishana_id . ']';
 
         $alreadyExists = InventaraKustiba::query()
-            ->where('dokuments', $documentRef)
+            ->where('piezimes', 'like', '%' . $documentRef . '%')
             ->exists();
 
         if ($alreadyExists) {
@@ -392,7 +392,7 @@ class NorakstishanaController extends Controller
             'kustibas_veids_id' => (int) $norakstisanaVeidsId,
             'veca_telpa_id' => $inventars->telpas_id,
             'jauna_telpa_id' => null,
-            'piezimes' => 'Automātiski izveidots no norakstīšanas pieteikuma.',
+            'piezimes' => 'Automātiski izveidots no norakstīšanas pieteikuma. ' . $documentRef,
             
         ]);
     }
