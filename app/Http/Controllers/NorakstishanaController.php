@@ -35,7 +35,7 @@ class NorakstishanaController extends Controller
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
         // Atļautās kolonnas kārtošanai
-        $allowedSort = ['norakstishana_id', 'inventars', 'norDatums', 'pieteikshanas_dat', 'apstiprinashanas_dat', 'akceptets', 'iemesls', 'talaka_riciba'];
+        $allowedSort = ['norakstishana_id', 'inventara_numurs', 'inventars', 'norDatums', 'pieteikshanas_dat', 'apstiprinashanas_dat', 'akceptets', 'iemesls', 'talaka_riciba'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'norakstishana_id';
         }
@@ -96,7 +96,11 @@ class NorakstishanaController extends Controller
         }
 
         // Kārtošana
-        if ($sort === 'inventars') {
+        if ($sort === 'inventara_numurs') {
+            $query->leftJoin('inventars', 'Norakstishana.inventara_id', '=', 'inventars.inventars_id')
+                ->orderBy('inventars.inventara_numurs', $direction)
+                ->select('Norakstishana.*');
+        } elseif ($sort === 'inventars') {
             $query->leftJoin('inventars', 'Norakstishana.inventara_id', '=', 'inventars.inventars_id')
                 ->orderBy('inventars.nosaukums', $direction)
                 ->select('Norakstishana.*');

@@ -100,7 +100,12 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>InvNumurs</th>
+                        <th class="sortable {{ request('sort') === 'inventara_numurs' ? 'sorted-'.request('direction','asc') : '' }}">
+                            @php
+                                $dir = request('sort') === 'inventara_numurs' && request('direction') === 'asc' ? 'desc' : 'asc';
+                            @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'inventara_numurs', 'direction' => $dir]) }}">InvNumurs</a>
+                        </th>
                         <th class="sortable {{ request('sort') === 'inventars' ? 'sorted-'.request('direction','asc') : '' }}">
                             @php
                                 $dir = request('sort') === 'inventars' && request('direction') === 'asc' ? 'desc' : 'asc';
