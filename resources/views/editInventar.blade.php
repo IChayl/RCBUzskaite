@@ -33,7 +33,7 @@
             <select class="form-control" id="kategorija_id" name="kategorija_id" required>
                 <option value="">-- Izvēlieties kategoriju --</option>
                 @foreach($kategorijas as $k)
-                    <option value="{{ $k->kategorija_id }}" @if($inventar->kategorija_id == $k->kategorija_id) selected @endif>{{ $k->nosaukums }} (ID: {{ $k->kategorija_id }})</option>
+                    <option value="{{ $k->kategorija_id }}" @if($inventar->kategorija_id == $k->kategorija_id) selected @endif>{{ $k->nosaukums }}</option>
                 @endforeach
             </select>
         </div>
@@ -42,7 +42,7 @@
             <select class="form-control" id="telpas_id" name="telpas_id" required>
                 <option value="">-- Izvēlieties telpu --</option>
                 @foreach($telpas as $t)
-                    <option value="{{ $t->telpas_id }}" @if($inventar->telpas_id == $t->telpas_id) selected @endif>{{ $t->nosaukums }} (ID: {{ $t->telpas_id }})</option>
+                    <option value="{{ $t->telpas_id }}" @if($inventar->telpas_id == $t->telpas_id) selected @endif>{{ $t->nosaukums }}</option>
                 @endforeach
             </select>
         </div>
@@ -51,7 +51,7 @@
             <select class="form-control" id="atbildigais_id" name="atbildigais_id">
                 <option value="">-- Izvēlieties darbinieku (pēc izvēles) --</option>
                 @foreach($lietotaji as $lt)
-                    <option value="{{ $lt->lietotajs_id }}" @if($inventar->atbildigais_id == $lt->lietotajs_id) selected @endif>{{ $lt->lietotajvards }} (ID: {{ $lt->lietotajs_id }})</option>
+                    <option value="{{ $lt->lietotajs_id }}" @if($inventar->atbildigais_id == $lt->lietotajs_id) selected @endif>{{ $lt->pilnais_vards }}</option>
                 @endforeach
             </select>
         </div>

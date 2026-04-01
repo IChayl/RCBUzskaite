@@ -25,7 +25,7 @@
             <select class="form-control" id="inventars_id" name="inventars_id" required>
                 <option value="">-- Izvēlieties inventāru --</option>
                 @foreach($inventari as $inv)
-                    <option value="{{ $inv->inventars_id }}" data-current-telpa-id="{{ $inv->telpas_id ?? '' }}">{{ $inv->nosaukums }} (ID: {{ $inv->inventars_id }})</option>
+                    <option style="color: #0F1931;" value="{{ $inv->inventars_id }}" data-current-telpa-id="{{ $inv->telpas_id ?? '' }}" data-current-atbildigais-id="{{ $inv->atbildigais_id ?? '' }}">{{ $inv->nosaukums }}</option>
                 @endforeach
             </select>
         </div>
@@ -34,7 +34,7 @@
             <select class="form-control" id="kustibas_veids_id" name="kustibas_veids_id">
                 <option value="">-- Izvēlieties kustības veidu --</option>
                 @foreach($kustibasVeidi as $kv)
-                    <option value="{{ $kv->kustibas_veids_id }}">{{ $kv->nosaukums }} (ID: {{ $kv->kustibas_veids_id }})</option>
+                    <option value="{{ $kv->kustibas_veids_id }}">{{ $kv->nosaukums }}</option>
                 @endforeach
             </select>
         </div>
@@ -43,7 +43,7 @@
             <select class="form-control" id="veca_telpa_id" name="veca_telpa_id">
                 <option value="">-- Nav --</option>
                 @foreach($telpas as $t)
-                    <option value="{{ $t->telpas_id }}">{{ $t->nosaukums }} (ID: {{ $t->telpas_id }})</option>
+                    <option value="{{ $t->telpas_id }}">{{ $t->nosaukums }}</option>
                 @endforeach
             </select>
             <small id="veca-telpa-lock-note" style="display:none; color:#E2D4BB; opacity:0.85;">Pie veida "Pārvietošana" vecā telpa tiek iestatīta automātiski no izvēlētā inventāra.</small>
@@ -53,7 +53,7 @@
             <select class="form-control" id="jauna_telpa_id" name="jauna_telpa_id">
                 <option value="">-- Nav --</option>
                 @foreach($telpas as $t)
-                    <option value="{{ $t->telpas_id }}">{{ $t->nosaukums }} (ID: {{ $t->telpas_id }})</option>
+                    <option value="{{ $t->telpas_id }}">{{ $t->nosaukums }}</option>
                 @endforeach
             </select>
         </div>
@@ -67,9 +67,10 @@
             <select class="form-control" id="atbildigais_lietotajs_id" name="atbildigais_lietotajs_id" required>
                 <option value="">-- Izvēlieties darbinieku --</option>
                 @foreach($lietotaji as $lt)
-                    <option value="{{ $lt->lietotajs_id }}">{{ $lt->lietotajvards }} (ID: {{ $lt->lietotajs_id }})</option>
+                    <option style="color: #0F1931;" value="{{ $lt->lietotajs_id }}">{{ $lt->pilnais_vards }}</option>
                 @endforeach
             </select>
+            <small id="atbildigais-lock-note" style="display:none; color:#E2D4BB; opacity:0.85;">Pie veida "Pārvietošana" atbildīgais darbinieks tiek iestatīts automātiski no izvēlētā inventāra.</small>
         </div>
         <!-- Saglabā kustības ierakstu -->
         <button type="submit" class="btn btn-primary">Saglabāt</button>
@@ -81,7 +82,9 @@
         const inventarsSelect = document.getElementById('inventars_id');
         const kustibasVeidsSelect = document.getElementById('kustibas_veids_id');
         const vecaTelpaSelect = document.getElementById('veca_telpa_id');
-        const lockNote = document.getElementById('veca-telpa-lock-note');
+        const vecaTelpaLockNote = document.getElementById('veca-telpa-lock-note');
+        const atbildigaisSelect = document.getElementById('atbildigais_lietotajs_id');
+        const atbildigaisLockNote = document.getElementById('atbildigais-lock-note');
 
         const isParvietosanaSelected = () => {
             const selected = kustibasVeidsSelect.options[kustibasVeidsSelect.selectedIndex];
@@ -91,24 +94,31 @@
             return text.includes('pārvietošan') || text.includes('parvietosan');
         };
 
-        const applyVecaTelpaRule = () => {
+        const applyParvietosanaRules = () => {
             if (!isParvietosanaSelected()) {
                 vecaTelpaSelect.disabled = false;
-                lockNote.style.display = 'none';
+                vecaTelpaLockNote.style.display = 'none';
+                atbildigaisSelect.disabled = false;
+                atbildigaisLockNote.style.display = 'none';
                 return;
             }
 
             const selectedInventars = inventarsSelect.options[inventarsSelect.selectedIndex];
             const currentTelpaId = selectedInventars ? selectedInventars.getAttribute('data-current-telpa-id') : '';
+            const currentAtbildigaisId = selectedInventars ? selectedInventars.getAttribute('data-current-atbildigais-id') : '';
 
             vecaTelpaSelect.value = currentTelpaId || '';
             vecaTelpaSelect.disabled = true;
-            lockNote.style.display = 'block';
+            vecaTelpaLockNote.style.display = 'block';
+
+            atbildigaisSelect.value = currentAtbildigaisId || '';
+            atbildigaisSelect.disabled = true;
+            atbildigaisLockNote.style.display = 'block';
         };
 
-        inventarsSelect.addEventListener('change', applyVecaTelpaRule);
-        kustibasVeidsSelect.addEventListener('change', applyVecaTelpaRule);
+        inventarsSelect.addEventListener('change', applyParvietosanaRules);
+        kustibasVeidsSelect.addEventListener('change', applyParvietosanaRules);
 
-        applyVecaTelpaRule();
+        applyParvietosanaRules();
     });
 </script>

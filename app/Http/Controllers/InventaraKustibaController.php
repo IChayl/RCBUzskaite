@@ -169,6 +169,12 @@ class InventaraKustibaController extends Controller
         $inventars = Inventar::findOrFail((int) $data['inventars_id']);
         if ($this->isParvietosanaMovement($data['kustibas_veids_id'] ?? null)) {
             $data['veca_telpa_id'] = $inventars->telpas_id;
+            if (empty($inventars->atbildigais_id)) {
+                return back()->withInput()->withErrors([
+                    'atbildigais_lietotajs_id' => 'Izvēlētajam inventāram nav norādīts atbildīgais darbinieks.',
+                ]);
+            }
+            $data['atbildigais_lietotajs_id'] = (int) $inventars->atbildigais_id;
         }
 
         $i = new InventaraKustiba();
@@ -232,6 +238,12 @@ class InventaraKustibaController extends Controller
         $inventars = Inventar::findOrFail((int) $data['inventars_id']);
         if ($this->isParvietosanaMovement($data['kustibas_veids_id'] ?? null)) {
             $data['veca_telpa_id'] = $inventars->telpas_id;
+            if (empty($inventars->atbildigais_id)) {
+                return back()->withInput()->withErrors([
+                    'atbildigais_lietotajs_id' => 'Izvēlētajam inventāram nav norādīts atbildīgais darbinieks.',
+                ]);
+            }
+            $data['atbildigais_lietotajs_id'] = (int) $inventars->atbildigais_id;
         }
 
         DB::table('inventara_kustiba')->where('kustiba_id',$id)->update([

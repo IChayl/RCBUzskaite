@@ -33,7 +33,7 @@
             <select class="form-control" id="kategorija_id" name="kategorija_id" required>
                 <option value="">-- Izvēlieties kategoriju --</option>
                 @foreach($kategorijas as $k)
-                    <option value="{{ $k->kategorija_id }}">{{ $k->nosaukums }} (ID: {{ $k->kategorija_id }})</option>
+                    <option value="{{ $k->kategorija_id }}">{{ $k->nosaukums }}</option>
                 @endforeach
             </select>
         </div>
@@ -42,7 +42,7 @@
             <select class="form-control" id="telpas_id" name="telpas_id" required>
                 <option value="">-- Izvēlieties telpu --</option>
                 @foreach($telpas as $t)
-                    <option value="{{ $t->telpas_id }}">{{ $t->nosaukums }} (ID: {{ $t->telpas_id }})</option>
+                    <option value="{{ $t->telpas_id }}">{{ $t->nosaukums }}</option>
                 @endforeach
             </select>
         </div>
@@ -51,7 +51,7 @@
             <select class="form-control" id="atbildigais_id" name="atbildigais_id">
                 <option value="">-- Izvēlieties darbinieku (pēc izvēles) --</option>
                 @foreach($lietotaji as $lt)
-                    <option value="{{ $lt->lietotajs_id }}">{{ $lt->lietotajvards }} (ID: {{ $lt->lietotajs_id }})</option>
+                    <option value="{{ $lt->lietotajs_id }}">{{ $lt->pilnais_vards }}</option>
                 @endforeach
             </select>
         </div>
