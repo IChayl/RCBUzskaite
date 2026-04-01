@@ -1,11 +1,11 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #E2D4BB;">Visi lietotāji</p>
+    <p style="color: #E2D4BB;">Visi darbinieki</p>
 
    <div class="auth-links">
         @if(Auth::user()->admina_tiesibas)
-            <a href="/lietotajs/create">Jauns lietotājs</a>
+            <a href="/lietotajs/create">Jauns darbinieks</a>
         @endif
         <a type="button" class="auth-links" onclick="window.print()" title="Printēt dokumentu"><i class="fas fa-print"></i> Printēt</a>
     </div>
@@ -20,7 +20,7 @@
         @endif
     </div>
 
-    <h2 style="color: #E2D4BB;">Lietotāji</h2>
+    <h2 style="color: #E2D4BB;">Darbinieki</h2>
 
     @if($lietotaji->isEmpty())
         <p style="color: #E2D4BB;">Nav lietotāju.</p>

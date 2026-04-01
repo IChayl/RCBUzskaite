@@ -21,7 +21,7 @@ class InventarsController extends Controller
     public function showAllInventars(Request $request)
     {
         $user = auth()->user();
-        $inventoryStatus = $request->input('inventory_status', $user->admina_tiesibas ? 'active' : 'all');
+        $inventoryStatus = $request->input('inventory_status', $user->admina_tiesibas ? 'in_use' : 'all');
         $inventoryScope = $request->input('inventory_scope', $user->admina_tiesibas ? 'all' : 'responsible');
 
         // Meklēšanas teksta un kolonnas iestatījumi
@@ -44,9 +44,9 @@ class InventarsController extends Controller
             $column = 'all';
         }
 
-        $allowedInventoryStatuses = ['active', 'written_off', 'all'];
+        $allowedInventoryStatuses = ['in_use', 'in_repair', 'written_off', 'all'];
         if (! in_array($inventoryStatus, $allowedInventoryStatuses, true)) {
-            $inventoryStatus = 'active';
+            $inventoryStatus = 'in_use';
         }
 
         $allowedInventoryScopes = ['responsible', 'all'];
@@ -82,10 +82,14 @@ class InventarsController extends Controller
             $query->where('atbildigais_id', $user->lietotajs_id);
         }
 
-        if ($inventoryStatus === 'active') {
-            $query->withoutAcceptedNorakstishana();
-        } elseif ($inventoryStatus === 'written_off') {
+        if ($inventoryStatus === 'written_off') {
             $query->onlyAcceptedNorakstishana();
+        } elseif ($inventoryStatus === 'in_repair') {
+            $query->withoutAcceptedNorakstishana();
+            $this->applyRepairStatusFilter($query);
+        } elseif ($inventoryStatus === 'in_use') {
+            $query->withoutAcceptedNorakstishana();
+            $this->applyNotInRepairStatusFilter($query);
         }
 
         // Meklēšana kolonnā vai visās kolonnās
@@ -164,6 +168,30 @@ class InventarsController extends Controller
             'inventoryStatus',
             'inventoryScope'
         ));
+    }
+
+    private function applyRepairStatusFilter($query): void
+    {
+        $query->whereExists(function ($subQuery) {
+            $subQuery->selectRaw('1')
+                ->from('inventara_kustiba as ik')
+                ->join('kustibas_veidi as kv', 'kv.kustibas_veids_id', '=', 'ik.kustibas_veids_id')
+                ->whereColumn('ik.inventars_id', 'inventars.inventars_id')
+                ->whereRaw('LOWER(kv.nosaukums) LIKE ?', ['%remont%'])
+                ->whereRaw('ik.kustiba_id = (SELECT ik2.kustiba_id FROM inventara_kustiba ik2 WHERE ik2.inventars_id = inventars.inventars_id ORDER BY ik2.datums DESC, ik2.kustiba_id DESC LIMIT 1)');
+        });
+    }
+
+    private function applyNotInRepairStatusFilter($query): void
+    {
+        $query->whereNotExists(function ($subQuery) {
+            $subQuery->selectRaw('1')
+                ->from('inventara_kustiba as ik')
+                ->join('kustibas_veidi as kv', 'kv.kustibas_veids_id', '=', 'ik.kustibas_veids_id')
+                ->whereColumn('ik.inventars_id', 'inventars.inventars_id')
+                ->whereRaw('LOWER(kv.nosaukums) LIKE ?', ['%remont%'])
+                ->whereRaw('ik.kustiba_id = (SELECT ik2.kustiba_id FROM inventara_kustiba ik2 WHERE ik2.inventars_id = inventars.inventars_id ORDER BY ik2.datums DESC, ik2.kustiba_id DESC LIMIT 1)');
+        });
     }
 
     /**
