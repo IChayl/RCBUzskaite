@@ -27,7 +27,7 @@
             <select class="form-control" id="inventars_id" name="inventars_id" required>
                 <option value="">-- Izvēlieties inventāru --</option>
                 @foreach($inventari as $inv)
-                    <option style="color: #0F1931;" value="{{ $inv->inventars_id }}" data-current-telpa-id="{{ $inv->telpas_id ?? '' }}" data-current-atbildigais-id="{{ $inv->atbildigais_id ?? '' }}">{{ $inv->nosaukums }}</option>
+                    <option style="color: #0F1931;" value="{{ $inv->inventars_id }}" data-current-telpa-id="{{ $inv->telpas_id ?? '' }}" data-current-atbildigais-id="{{ $inv->atbildigais_id ?? '' }}">{{ $inv->nosaukums }} (Inv. Nr.: {{ $inv->inventara_numurs ?? '-' }})</option>
                 @endforeach
             </select>
         </div>

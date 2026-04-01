@@ -25,7 +25,7 @@
             <select class="form-control" id="inventars_id" name="inventars_id" required>
                 <option value="">-- Izvēlieties inventāru --</option>
                 @foreach($inventari as $inv)
-                    <option value="{{ $inv->inventars_id }}" data-current-telpa-id="{{ $inv->telpas_id ?? '' }}" data-current-atbildigais-id="{{ $inv->atbildigais_id ?? '' }}" @if($kustiba->inventars_id == $inv->inventars_id) selected @endif>{{ $inv->nosaukums }}</option>
+                    <option value="{{ $inv->inventars_id }}" data-current-telpa-id="{{ $inv->telpas_id ?? '' }}" data-current-atbildigais-id="{{ $inv->atbildigais_id ?? '' }}" @if($kustiba->inventars_id == $inv->inventars_id) selected @endif>{{ $inv->nosaukums }} (Inv. Nr.: {{ $inv->inventara_numurs ?? '-' }})</option>
                 @endforeach
             </select>
         </div>
