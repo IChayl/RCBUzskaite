@@ -158,8 +158,9 @@ class InventaraKustibaController extends Controller
         $data = $req->validate([
             'datums' => 'nullable|date',
             'inventars_id' => 'required|integer|exists:inventars,inventars_id',
-            'kustibas_veids_id' => 'nullable|integer|exists:kustibas_veidi,kustibas_veids_id',
-            'atbildigais_lietotajs_id' => 'required|integer|exists:lietotajs,lietotajs_id',
+            'kustibas_veids_id' => 'required|integer|exists:kustibas_veidi,kustibas_veids_id',
+            'atbildigais_lietotajs_id' => 'nullable|integer|exists:lietotajs,lietotajs_id',
+            'Jatbildigais_lietotajs_id' => 'nullable|integer|exists:lietotajs,lietotajs_id',
             'veca_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
             'jauna_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
             'piezimes' => 'nullable|string|max:255',
@@ -183,11 +184,41 @@ class InventaraKustibaController extends Controller
         }
         $data['atbildigais_lietotajs_id'] = (int) $inventars->atbildigais_id;
 
+        $isParvietosana = $this->isParvietosanaMovement($data['kustibas_veids_id']);
+        $isNodosana = $this->isNodosanaMovement($data['kustibas_veids_id']);
+
+        if ($isParvietosana && empty($data['jauna_telpa_id'])) {
+            return back()->withInput()->withErrors([
+                'jauna_telpa_id' => 'Kustības veidam "Pārvietošana" ir obligāti jānorāda jaunā telpa.',
+            ]);
+        }
+
+        if ($isNodosana) {
+            if (empty($data['Jatbildigais_lietotajs_id'])) {
+                return back()->withInput()->withErrors([
+                    'Jatbildigais_lietotajs_id' => 'Kustības veidam "Nodošana" ir obligāti jānorāda jaunais atbildīgais.',
+                ]);
+            }
+
+            if ((int) $data['Jatbildigais_lietotajs_id'] === (int) $data['atbildigais_lietotajs_id']) {
+                return back()->withInput()->withErrors([
+                    'Jatbildigais_lietotajs_id' => 'Jaunais atbildīgais nedrīkst sakrist ar esošo atbildīgo.',
+                ]);
+            }
+        } else {
+            $data['Jatbildigais_lietotajs_id'] = 0;
+        }
+
+        if (! $isParvietosana) {
+            $data['jauna_telpa_id'] = null;
+        }
+
         $i = new InventaraKustiba();
         $i->datums = $data['datums'];
         $i->inventars_id = $data['inventars_id'];
         $i->kustibas_veids_id = $data['kustibas_veids_id'] ?? null;
         $i->atbildigais_lietotajs_id = $data['atbildigais_lietotajs_id'];
+        $i->Jatbildigais_lietotajs_id = $data['Jatbildigais_lietotajs_id'] ?? null;
         $i->veca_telpa_id = $data['veca_telpa_id'] ?? null;
         $i->jauna_telpa_id = $data['jauna_telpa_id'] ?? null;
         $i->piezimes = $data['piezimes'] ?? null;
@@ -323,5 +354,24 @@ class InventaraKustibaController extends Controller
         $normalized = mb_strtolower($nosaukums, 'UTF-8');
 
         return str_contains($normalized, 'norakst');
+    }
+
+    private function isNodosanaMovement($kustibasVeidsId): bool
+    {
+        if (empty($kustibasVeidsId)) {
+            return false;
+        }
+
+        $nosaukums = KustibasVeidi::query()
+            ->where('kustibas_veids_id', $kustibasVeidsId)
+            ->value('nosaukums');
+
+        if (! is_string($nosaukums)) {
+            return false;
+        }
+
+        $normalized = mb_strtolower($nosaukums, 'UTF-8');
+
+        return str_contains($normalized, 'nodo');
     }
 }

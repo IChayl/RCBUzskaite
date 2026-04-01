@@ -16,7 +16,7 @@ class InventaraKustiba extends Model
     public $timestamps = false;
 
     // Lauki, kuriem atļauta masveida aizpilde.
-    protected $fillable = ['datums', 'inventars_id', 'atbildigais_lietotajs_id', 'kustibas_veids_id', 'veca_telpa_id', 'jauna_telpa_id', 'piezimes', 'dokuments'];
+    protected $fillable = ['datums', 'inventars_id', 'atbildigais_lietotajs_id', 'Jatbildigais_lietotajs_id', 'kustibas_veids_id', 'veca_telpa_id', 'jauna_telpa_id', 'piezimes', 'dokuments'];
 
     // Saite uz inventāru, kuram veikta kustība.
     public function inventars()

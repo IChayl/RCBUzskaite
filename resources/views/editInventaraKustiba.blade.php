@@ -30,14 +30,14 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="veca_telpa_id" class="form-label">Vecā telpa</label>
+            <label for="veca_telpa_id" class="form-label">Tekošā telpa</label>
             <select class="form-control" id="veca_telpa_id" name="veca_telpa_id">
                 <option value="">-- Nav --</option>
                 @foreach($telpas as $t)
                     <option value="{{ $t->telpas_id }}" @if($kustiba->veca_telpa_id == $t->telpas_id) selected @endif>{{ $t->nosaukums }}</option>
                 @endforeach
             </select>
-            <small id="veca-telpa-lock-note" style="display:none; color:#E2D4BB; opacity:0.85;">Izvēloties inventāru, vecā telpa tiek iestatīta automātiski un nav maināma.</small>
+            <small id="veca-telpa-lock-note" style="display:none; color:#E2D4BB; opacity:0.85;">Izvēloties inventāru, tekošā telpa tiek iestatīta automātiski un nav maināma.</small>
         </div>
         <div class="mb-3">
             <label for="jauna_telpa_id" class="form-label">Jaunā telpa</label>

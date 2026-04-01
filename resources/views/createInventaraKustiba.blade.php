@@ -43,17 +43,17 @@
                 @endforeach
             </select>
         </div>
-        <div class="mb-3">
-            <label for="veca_telpa_id" class="form-label">Vecā telpa</label>
+        <div class="mb-3" data-field="veca_telpa">
+            <label for="veca_telpa_id" class="form-label">Tekošā telpa</label>
             <select class="form-control" id="veca_telpa_id" name="veca_telpa_id">
                 <option value="">-- Nav --</option>
                 @foreach($telpas as $t)
                     <option value="{{ $t->telpas_id }}">{{ $t->nosaukums }}</option>
                 @endforeach
             </select>
-            <small id="veca-telpa-lock-note" style="display:none; color:#E2D4BB; opacity:0.85;">Izvēloties inventāru, vecā telpa tiek iestatīta automātiski un nav maināma.</small>
+            <small id="veca-telpa-lock-note" style="display:none; color:#E2D4BB; opacity:0.85;">Izvēloties inventāru, tekošā telpa tiek iestatīta automātiski un nav maināma.</small>
         </div>
-        <div class="mb-3">
+        <div class="mb-3" data-field="jauna_telpa">
             <label for="jauna_telpa_id" class="form-label">Jaunā telpa</label>
             <select class="form-control" id="jauna_telpa_id" name="jauna_telpa_id">
                 <option value="">-- Nav --</option>
@@ -62,12 +62,12 @@
                 @endforeach
             </select>
         </div>
-        <div class="mb-3">
+        <div class="mb-3" data-field="piezimes">
             <label for="piezimes" class="form-label">Piezīmes</label>
             <input type="text" class="form-control" id="piezimes" name="piezimes">
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3" data-field="atbildigais">
             <label for="atbildigais_lietotajs_id" class="form-label">Atbildīgais darbinieks</label>
             <select class="form-control" id="atbildigais_lietotajs_id" name="atbildigais_lietotajs_id" required>
                 <option value="">-- Izvēlieties darbinieku --</option>
@@ -77,6 +77,16 @@
             </select>
             <small id="atbildigais-lock-note" style="display:none; color:#E2D4BB; opacity:0.85;">Izvēloties inventāru, atbildīgais darbinieks tiek iestatīts automātiski un nav maināms.</small>
         </div>
+
+        <div class="mb-3" data-field="jauns_atbildigais">
+            <label for="Jatbildigais_lietotajs_id" class="form-label">Jauns atbildīgais darbinieks</label>
+            <select class="form-control" id="Jatbildigais_lietotajs_id" name="Jatbildigais_lietotajs_id">
+                <option value="">-- Izvēlieties jauno atbildīgo --</option>
+                @foreach($lietotaji as $lt)
+                    <option style="color: #0F1931;" value="{{ $lt->lietotajs_id }}">{{ $lt->pilnais_vards }}</option>
+                @endforeach
+            </select>
+        </div>
         <!-- Saglabā kustības ierakstu -->
         <button type="submit" class="btn btn-primary">Saglabāt</button>
     </form>
@@ -85,10 +95,90 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const inventarsSelect = document.getElementById('inventars_id');
+        const kustibasVeidsSelect = document.getElementById('kustibas_veids_id');
         const vecaTelpaSelect = document.getElementById('veca_telpa_id');
+        const jaunaTelpaSelect = document.getElementById('jauna_telpa_id');
         const vecaTelpaLockNote = document.getElementById('veca-telpa-lock-note');
         const atbildigaisSelect = document.getElementById('atbildigais_lietotajs_id');
+        const jaunsAtbildigaisSelect = document.getElementById('Jatbildigais_lietotajs_id');
         const atbildigaisLockNote = document.getElementById('atbildigais-lock-note');
+
+        const fieldContainers = {
+            veca_telpa: document.querySelector('[data-field="veca_telpa"]'),
+            jauna_telpa: document.querySelector('[data-field="jauna_telpa"]'),
+            piezimes: document.querySelector('[data-field="piezimes"]'),
+            atbildigais: document.querySelector('[data-field="atbildigais"]'),
+            jauns_atbildigais: document.querySelector('[data-field="jauns_atbildigais"]'),
+        };
+
+        const normalize = (value) => (value || '').toLowerCase();
+
+        const getVeidsKey = () => {
+            const selected = kustibasVeidsSelect.options[kustibasVeidsSelect.selectedIndex];
+            const text = normalize(selected ? selected.textContent : '');
+
+            if (text.includes('pārvietošan') || text.includes('parvietosan')) {
+                return 'parvietosana';
+            }
+            if (text.includes('nodo')) {
+                return 'nodosana';
+            }
+            if (text.includes('remont')) {
+                return 'remonts';
+            }
+
+            return '';
+        };
+
+        const setFieldVisible = (key, visible) => {
+            const el = fieldContainers[key];
+            if (!el) return;
+            el.style.display = visible ? '' : 'none';
+        };
+
+        const applyVisibleFieldsByVeids = () => {
+            const veidsKey = getVeidsKey();
+
+            setFieldVisible('veca_telpa', false);
+            setFieldVisible('jauna_telpa', false);
+            setFieldVisible('piezimes', false);
+            setFieldVisible('atbildigais', false);
+            setFieldVisible('jauns_atbildigais', false);
+
+            jaunaTelpaSelect.required = false;
+            jaunsAtbildigaisSelect.required = false;
+
+            if (!veidsKey) {
+                return;
+            }
+
+            if (veidsKey === 'parvietosana') {
+                setFieldVisible('veca_telpa', true);
+                setFieldVisible('jauna_telpa', true);
+                setFieldVisible('piezimes', true);
+                setFieldVisible('atbildigais', true);
+                jaunaTelpaSelect.required = true;
+                jaunsAtbildigaisSelect.value = '';
+                return;
+            }
+
+            if (veidsKey === 'nodosana') {
+                setFieldVisible('atbildigais', true);
+                setFieldVisible('jauns_atbildigais', true);
+                setFieldVisible('piezimes', true);
+                jaunsAtbildigaisSelect.required = true;
+                jaunaTelpaSelect.value = '';
+                return;
+            }
+
+            if (veidsKey === 'remonts') {
+                setFieldVisible('veca_telpa', true);
+                setFieldVisible('atbildigais', true);
+                setFieldVisible('piezimes', true);
+                jaunaTelpaSelect.value = '';
+                jaunsAtbildigaisSelect.value = '';
+            }
+        };
 
         const applyInventoryLockRules = () => {
             const selectedInventars = inventarsSelect.options[inventarsSelect.selectedIndex];
@@ -113,7 +203,9 @@
         };
 
         inventarsSelect.addEventListener('change', applyInventoryLockRules);
+        kustibasVeidsSelect.addEventListener('change', applyVisibleFieldsByVeids);
 
         applyInventoryLockRules();
+        applyVisibleFieldsByVeids();
     });
 </script>

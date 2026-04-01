@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sql100.infinityfree.com
--- Generation Time: Mar 29, 2026 at 08:23 AM
+-- Generation Time: Apr 01, 2026 at 07:53 AM
 -- Server version: 11.4.10-MariaDB
 -- PHP Version: 7.2.22
 
@@ -33,29 +33,29 @@ CREATE TABLE `inventara_kustiba` (
   `datums` date NOT NULL,
   `inventars_id` int(11) NOT NULL,
   `atbildigais_lietotajs_id` int(11) NOT NULL,
+  `Jatbildigais_lietotajs_id` int(11) NOT NULL,
   `kustibas_veids_id` int(11) DEFAULT NULL,
   `veca_telpa_id` int(11) DEFAULT NULL,
   `jauna_telpa_id` int(11) DEFAULT NULL,
-  `piezimes` varchar(255) DEFAULT NULL,
-  `dokuments` varchar(255) DEFAULT NULL
+  `piezimes` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_latvian_ci;
 
 --
 -- Dumping data for table `inventara_kustiba`
 --
 
-INSERT INTO `inventara_kustiba` (`kustiba_id`, `datums`, `inventars_id`, `atbildigais_lietotajs_id`, `kustibas_veids_id`, `veca_telpa_id`, `jauna_telpa_id`, `piezimes`, `dokuments`) VALUES
-(2, '2026-02-23', 83, 7, 2, 1, 1, 'safdsgdgfdasdfsadasdasdasdasdasdasd', 'idk'),
-(13, '2024-01-01', 44, 4, 5, 10, 9, 'Pārvietots uz citu telpu', NULL),
-(14, '2024-01-02', 45, 5, 1, 9, 1, 'Pārvietots uz lasītavu', ''),
-(15, '2024-01-03', 46, 6, 5, 1, 1, 'Nosūtīts remontā', ''),
-(16, '2024-01-04', 47, 5, 1, 5, 3, 'Pārvietots uz administrāciju', ''),
-(17, '2024-01-05', 48, 7, 2, 3, 3, 'Izsniegts darbiniekam', NULL),
-(18, '2024-01-06', 49, 7, 2, 3, 3, 'Izsniegts darbiniekam', ''),
-(19, '2024-01-07', 50, 8, 1, 9, 5, 'Pārvietots uz konferenču zāli', ''),
-(20, '2024-01-08', 51, 9, 1, 1, 8, 'Pārvietots uz krātuvi', ''),
-(21, '2024-01-09', 52, 10, 4, 6, 6, 'Saņemts un uzstādīts serveru telpā', NULL),
-(22, '2024-01-10', 53, 11, 4, 8, 8, 'Inventarizācijas pārbaude', NULL);
+INSERT INTO `inventara_kustiba` (`kustiba_id`, `datums`, `inventars_id`, `atbildigais_lietotajs_id`, `Jatbildigais_lietotajs_id`, `kustibas_veids_id`, `veca_telpa_id`, `jauna_telpa_id`, `piezimes`) VALUES
+(2, '2026-02-23', 83, 7, 0, 2, 1, 1, 'safdsgdgfdasdfsadasdasdasdasdasdasd'),
+(13, '2024-01-01', 44, 4, 0, 5, 10, 9, 'Pārvietots uz citu telpu'),
+(14, '2024-01-02', 45, 5, 0, 1, 9, 1, 'Pārvietots uz lasītavu'),
+(15, '2024-01-03', 46, 6, 0, 5, 1, 1, 'Nosūtīts remontā'),
+(16, '2024-01-04', 47, 5, 0, 1, 5, 3, 'Pārvietots uz administrāciju'),
+(17, '2024-01-05', 48, 7, 0, 2, 3, 3, 'Izsniegts darbiniekam'),
+(18, '2024-01-06', 49, 7, 0, 2, 3, 3, 'Izsniegts darbiniekam'),
+(19, '2024-01-07', 50, 8, 0, 1, 9, 5, 'Pārvietots uz konferenču zāli'),
+(20, '2024-01-08', 51, 9, 0, 1, 1, 8, 'Pārvietots uz krātuvi'),
+(21, '2024-01-09', 52, 10, 0, 4, 6, 6, 'Saņemts un uzstādīts serveru telpā'),
+(22, '2024-01-10', 53, 11, 0, 4, 8, 8, 'Inventarizācijas pārbaude');
 
 -- --------------------------------------------------------
 
@@ -79,16 +79,13 @@ CREATE TABLE `inventars` (
 
 INSERT INTO `inventars` (`inventars_id`, `nosaukums`, `kategorija_id`, `telpas_id`, `atbildigais_id`, `inventara_numurs`, `iegades_datums`) VALUES
 (44, 'Personālais dators Dell OptiPl', 1, 10, 10, 'INV044', '2023-01-01'),
-(45, 'Personālais dators HP ProDesk', 1, 9, 13, 'INV045', '2023-02-01'),
-(46, 'Printeris HP LaserJet Pro M404', 1, 1, 13, 'INV046', '2022-05-01'),
-(47, 'Projektors Epson EB-X49', 3, 5, 13, 'INV047', '2021-03-01'),
 (48, 'Biroja krēsls Nowy Styl Comfor', 2, 3, 7, 'INV048', '2020-01-01'),
 (49, 'Rakstāmgalds IKEA BEKANT 160x8', 2, 3, 7, 'INV049', '2020-02-01'),
 (50, 'Monitors LG 24MP60G-B 24 collu', 1, 9, 8, 'INV050', '2023-04-01'),
 (51, 'Skeneris Canon CanoScan LiDE 3', 1, 1, 9, 'INV051', '2022-06-01'),
 (52, 'Maršrutētājs TP-Link Archer C6', 5, 6, 10, 'INV052', '2023-07-01'),
 (53, 'Grāmatu plaukts IKEA BILLY 80x', 2, 8, 11, 'INV053', '2019-01-01'),
-(54, 'Personālais dators Dell OptiPl', 1, 10, 4, 'INV054', '2023-01-01'),
+(54, 'Personālais dators Dell OptiPl', 1, 10, 13, 'INV054', '2023-01-01'),
 (55, 'Personālais dators HP ProDesk ', 1, 9, 5, 'INV055', '2023-02-01'),
 (56, 'Printeris HP LaserJet Pro M404', 1, 1, 6, 'INV056', '2022-05-01'),
 (57, 'Projektors Epson EB-X49', 3, 5, 5, 'INV057', '2021-03-01'),
@@ -162,11 +159,10 @@ CREATE TABLE `kustibas_veidi` (
 --
 
 INSERT INTO `kustibas_veidi` (`kustibas_veids_id`, `nosaukums`, `apraksts`) VALUES
-(1, 'Iegāde', 'Inventārs iegādāts'),
-(2, 'Izsniegšana', 'Inventārs izsniegts lietošanai'),
-(3, 'Atgriešana', 'Inventārs atgriezts noliktavā'),
+(1, 'Nodošana', 'Inventāra atbildīgā maiņa'),
 (4, 'Remonts', 'Inventārs nodots remontā'),
-(5, 'Pārvietošana', 'Inventārs pārvietots uz citu telpu');
+(5, 'Pārvietošana', 'Inventārs pārvietots uz citu telpu'),
+(6, 'Norakstīšana', 'inventārs tiek norakstīts');
 
 -- --------------------------------------------------------
 
@@ -193,16 +189,16 @@ CREATE TABLE `lietotajs` (
 --
 
 INSERT INTO `lietotajs` (`lietotajs_id`, `lietotajvards`, `parole`, `admina_tiesibas`, `avatar`, `vards`, `uzvards`, `epasts`, `telefons`, `amats`, `aktivs`) VALUES
-(4, 'admin', '12345', 1, '', 'Janis', 'Berzins', 'janis@rcb.lv', '20000001', '', 1),
+(4, 'admin', '12345', 1, '', 'Janis', 'Berzins', 'janis@rcb.lv', '20000001', 'Dir.Vietnieks', 1),
 (5, 'anna', '12345', 0, '', 'Anna', 'Kalnina', 'anna@rcb.lv', '20000002', 'Bibliotekārs', 1),
 (6, 'peteris', '12345', 0, '', 'Peteris', 'Ozols', 'peteris@rcb.lv', '20000003', 'Bibliotekārs', 1),
 (7, 'liga', '12345', 0, '', 'Liga', 'Liepa', 'liga@rcb.lv', '20000004', 'Bibliotekārs', 1),
-(8, 'maris', '12345', 0, '', 'Maris', 'Krumins', 'maris@rcb.lv', '20000005', '', 1),
+(8, 'maris', '12345', 1, '', 'Maris', 'Krumins', 'maris@rcb.lv', '20000005', 'Dir.Vietnieks', 1),
 (9, 'eva', '12345', 0, '', 'Eva', 'Bite', 'eva@rcb.lv', '20000045', 'Bibliotekārs', 1),
-(10, 'dace', '12345', 0, '', 'Dace', 'Ziedina', 'dace@rcb.lv', '20000007', '', 1),
-(11, 'gatis', '12345', 0, '', 'Gatis', 'Vilks', 'gatis@rcb.lv', '20000008', '', 1),
+(10, 'dace', '12345', 0, '', 'Dace', 'Ziedina', 'dace@rcb.lv', '20000007', 'Vecākais bibliotekārs', 1),
+(11, 'gatis', '12345', 0, '', 'Gatis', 'Vilks', 'gatis@rcb.lv', '20000008', 'Vecākais bibliotekārs', 1),
 (12, 'inese', '12345', 0, '', 'Inese', 'Egle', 'inese@rcb.lv', '20000009', 'Bibliotekārs', 1),
-(13, 'Test1', '12345', 0, '', 'Test', 'Test', 'test@rcb.lv', '20000010', NULL, 1),
+(13, 'Test1', '12345', 0, '', 'Augusts', 'Egle', 'test@rcb.lv', '20000010', 'Bibliotekārs', 1),
 (28, 'Chay', '12345', 1, 'avatars/LUyXXlleF4W5uuPs8bgHYGiF3uclhgAMRJ6X0NpI.png', 'Mareks', 'Rumjancevs', 'chay2007@inbox.lv', '25885030', 'Direktors', 1);
 
 -- --------------------------------------------------------
@@ -231,13 +227,10 @@ INSERT INTO `Norakstishana` (`norakstishana_id`, `inventara_id`, `norDatums`, `i
 (1, 44, '2024-02-01', 'Nolietots dators, neatbilst pr', 'Utilizēt', '2024-01-25', '2024-02-02', 1, 1),
 (2, 48, '2024-02-05', 'Salauzts krēsls', 'Izmest', '2024-02-01', '2024-02-06', 1, 1),
 (3, 53, '2024-02-10', 'Vecs grāmatu plaukts, bojāts', 'Nodot utilizācijai', '2024-02-05', '2024-02-11', 1, 1),
-(4, 46, '2024-02-15', 'Printeris bojāts, remonts nere', 'Utilizēt', '2024-02-10', '2024-02-16', 1, 1),
 (5, 50, '2024-02-20', 'Monitors ar bojātu ekrānu', 'Likvidēt', '2024-02-18', '2024-02-21', 1, 1),
 (6, 52, '2024-02-22', 'Maršrutētājs novecojis', 'Nomainīt pret jaunu', '2024-02-20', '2024-02-23', 1, 1),
 (7, 49, '2024-02-25', 'Rakstāmgalds bojāts', 'Nodot pārstrādei', '2024-02-22', '2024-02-26', 1, 1),
-(8, 47, '2024-03-01', 'Projektors nedarbojas', 'Izņemt no lietošanas', '2024-02-27', '2024-03-02', 1, 1),
-(9, 51, '2024-03-05', 'Skeneris bojāts', 'Izmest', '2024-03-01', '2024-03-06', 1, 1),
-(10, 45, '2024-03-10', 'Dators novecojis', 'Nodot utilizācijai', '2024-03-05', '2024-03-11', 1, 1);
+(9, 51, '2024-03-05', 'Skeneris bojāts', 'Izmest', '2024-03-01', '2024-03-06', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -281,7 +274,8 @@ ALTER TABLE `inventara_kustiba`
   ADD KEY `fk_kustiba_inventars` (`inventars_id`),
   ADD KEY `fk_kustiba_lietotajs` (`atbildigais_lietotajs_id`),
   ADD KEY `fk_veca_telpa` (`veca_telpa_id`),
-  ADD KEY `fk_jauna_telpa` (`jauna_telpa_id`);
+  ADD KEY `fk_jauna_telpa` (`jauna_telpa_id`),
+  ADD KEY `Jatbildigais_lietotajs_id` (`Jatbildigais_lietotajs_id`);
 
 --
 -- Indexes for table `inventars`
@@ -347,16 +341,22 @@ ALTER TABLE `kategorija`
   MODIFY `kategorija_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT for table `kustibas_veidi`
+--
+ALTER TABLE `kustibas_veidi`
+  MODIFY `kustibas_veids_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT for table `lietotajs`
 --
 ALTER TABLE `lietotajs`
-  MODIFY `lietotajs_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `lietotajs_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `Norakstishana`
 --
 ALTER TABLE `Norakstishana`
-  MODIFY `norakstishana_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `norakstishana_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `telpa`
