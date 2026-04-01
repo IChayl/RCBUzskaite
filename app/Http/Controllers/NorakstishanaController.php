@@ -270,7 +270,17 @@ class NorakstishanaController extends Controller
         if (!auth()->user()->admina_tiesibas) {
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
+        $norakstishana = Norakstishana::findOrFail($id);
         $this->deleteWithForeignKeyChecksDisabled('Norakstishana', 'norakstishana_id', $id);
+
+        if ($norakstishana->akceptets) {
+            DB::table('Norakstishana')
+                ->where('inventara_id', $norakstishana->inventara_id)
+                ->update([
+                    'akceptets' => false,
+                    'apstiprinashanas_dat' => null,
+                ]);
+        }
 
         return redirect('/norakstishana')->with('success', $this->buildDeleteMessage('Norakstīšanas', []));
     }
