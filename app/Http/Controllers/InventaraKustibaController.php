@@ -47,7 +47,7 @@ class InventaraKustibaController extends Controller
         }
 
         // Ielādējam saistītos modeļus, lai samazinātu papildus SQL pieprasījumus skatā.
-        $query = InventaraKustiba::query()->with(['inventars', 'lietotajs', 'kustibasVeids']);
+        $query = InventaraKustiba::query()->with(['inventars', 'lietotajs', 'jaunaisAtbildigais', 'kustibasVeids', 'vecaTelpa', 'jaunaTelpa']);
 
         // Ja lietotājs nav admins, rādam tikai viņa kustības.
         if (! $user->admina_tiesibas) {

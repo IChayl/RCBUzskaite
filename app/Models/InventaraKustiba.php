@@ -47,4 +47,10 @@ class InventaraKustiba extends Model
     {
         return $this->belongsTo(Telpa::class, 'jauna_telpa_id', 'telpas_id');
     }
+
+    // Saite uz jauno atbildīgo lietotāju (Nodošanas gadījumā).
+    public function jaunaisAtbildigais()
+    {
+        return $this->belongsTo(Lietotajs::class, 'Jatbildigais_lietotajs_id', 'lietotajs_id');
+    }
 }

@@ -104,6 +104,7 @@
                             @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'lietotajs', 'direction' => $dir]) }}">Atbildīgais</a>
                         </th>
+                        <th>Jaunais atbildīgais</th>
                           @if(Auth::user()->admina_tiesibas) <th>Darbības</th> @endif
                     </tr>
                 </thead>
@@ -115,9 +116,10 @@
                             <td>{{ \Carbon\Carbon::parse($item->datums)->locale('lv')->translatedFormat('j. F Y') }}</td>
                             <td>{{ $item->inventars->nosaukums ?? ('ID: '.$item->inventars_id) }}</td>
                             <td>{{ optional($item->kustibasVeids)->nosaukums ?? ('ID: '.$item->kustibas_veids_id) }}</td>
-                            <td>{{ optional($item->vecaTelpa)->nosaukums ?? ('ID: '.$item->veca_telpa_id) }}</td>
-                            <td>{{ optional($item->jaunaTelpa)->nosaukums ?? ('ID: '.$item->jauna_telpa_id) }}</td>
+                            <td>{{ optional($item->vecaTelpa)->nosaukums ?? 'Inventārs netika pārvietots' }}</td>
+                            <td>{{ optional($item->jaunaTelpa)->nosaukums ?? 'Inventārs netika pārvietots' }}</td>
                             <td>{{ optional($item->lietotajs)->pilnais_vards ?? ('ID: '.$item->atbildigais_lietotajs_id) }}</td>
+                            <td>{{ $item->Jatbildigais_lietotajs_id && $item->Jatbildigais_lietotajs_id != 0 ? (optional($item->jaunaisAtbildigais)->pilnais_vards ?? ('ID: '.$item->Jatbildigais_lietotajs_id)) : 'Atbildīgais netika mainīts' }}</td>
                                  @if(Auth::user()->admina_tiesibas)  <td>
                                 <div class="actions">
                              
