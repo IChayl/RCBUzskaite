@@ -22,7 +22,6 @@
             <p class="card-text"><strong>Telefons:</strong> {{ $lietotajs->telefons ?? '-' }}</p>
             <p class="card-text"><strong>Amats:</strong> {{ $lietotajs->amats ?? '-' }}</p>
             <p class="card-text"><strong>Admina tiesības:</strong> {{ $lietotajs->admina_tiesibas ? 'Jā' : 'Nē' }}</p>
-            <p class="card-text"><strong>Aktīvs:</strong> {{ $lietotajs->aktivs ? 'Jā' : 'Nē' }}</p>
             <p class="card-text"><strong>Avatar:</strong> {{ $lietotajs->avatar ? 'Saglabāts' : 'Nav' }}</p>
         </div>
     </div>

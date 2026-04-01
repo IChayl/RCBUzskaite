@@ -199,11 +199,74 @@
             display: flex;
             flex-wrap: nowrap;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 12px;
-            overflow-x: auto;
+            overflow: hidden;
             white-space: nowrap;
-            scrollbar-width: thin;
+            min-width: 0;
+        }
+        .table-controls > * {
+            flex: 0 1 auto;
+            min-width: 0;
+        }
+        .table-controls label {
+            flex: 0 0 auto;
+            margin-bottom: 0;
+        }
+        .table-controls select {
+            max-width: 165px;
+            min-width: 110px;
+            width: 100%;
+            padding: 8px 10px !important;
+            font-size: 0.9rem;
+        }
+        .table-controls .table-search-input {
+            flex: 1 1 130px;
+            min-width: 90px;
+            width: auto;
+            padding: 8px 10px;
+            font-size: 0.9rem;
+        }
+        .table-controls input[type="date"].table-search-input {
+            flex: 0 1 128px;
+            width: 128px !important;
+            min-width: 128px !important;
+            max-width: 128px !important;
+        }
+        .table-controls .bloom-button,
+        .table-controls button {
+            flex: 0 0 auto;
+            padding: 0.45rem 0.75rem;
+            font-size: 0.88rem;
+        }
+        .table-controls span {
+            flex: 0 0 auto;
+            font-size: 0.88rem;
+        }
+        @media (max-width: 1400px) {
+            .table-controls {
+                gap: 6px;
+            }
+            .table-controls select {
+                max-width: 145px;
+                min-width: 96px;
+                font-size: 0.85rem;
+            }
+            .table-controls .table-search-input {
+                min-width: 78px;
+                font-size: 0.85rem;
+            }
+            .table-controls input[type="date"].table-search-input {
+                width: 118px !important;
+                min-width: 118px !important;
+                max-width: 118px !important;
+            }
+            .table-controls .bloom-button,
+            .table-controls button,
+            .table-controls span,
+            .table-controls label {
+                font-size: 0.82rem;
+            }
         }
         .table-search-input {
             padding: 10px 12px;
@@ -211,7 +274,7 @@
             border: 1px solid rgba(45, 65, 89, 0.65);
             background: rgba(45, 65, 89, 0.5);
             color: var(--accent);
-            min-width: 240px;
+            min-width: 0;
         }
         .table-search-input:focus {
             outline: 2px solid rgba(45, 65, 89, 0.7);

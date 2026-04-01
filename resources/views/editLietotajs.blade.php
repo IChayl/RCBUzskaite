@@ -46,10 +46,6 @@
                     <option value="Bibliotekārs" {{ (old('amats', $lietotajs->amats ?? '')=='Bibliotekārs') ? 'selected' : '' }}>Bibliotekārs</option>
                 </select>
         </div>
-        <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="1" id="aktivs" name="aktivs" {{ $lietotajs->aktivs ? 'checked' : '' }}>
-            <label class="form-check-label" for="aktivs">Aktīvs</label>
-        </div>
         <div class="mb-3">
             <label for="avatar" class="form-label">Profila attēls</label>
             <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">

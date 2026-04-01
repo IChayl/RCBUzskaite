@@ -17,10 +17,6 @@
     <form method="POST" action="{{ route('lietotajs.store') }}" enctype="multipart/form-data" novalidate>
         @csrf
         <div class="mb-3">
-            <label for="parole" class="form-label">Parole</label>
-            <input type="password" class="form-control" id="parole" name="parole" required>
-        </div>
-        <div class="mb-3">
             <label for="vards" class="form-label">Vārds</label>
             <input type="text" class="form-control" id="vards" name="vards">
         </div>
@@ -36,6 +32,10 @@
             <label for="telefons" class="form-label">Telefons</label>
             <input type="text" class="form-control" id="telefons" name="telefons" inputmode="numeric" pattern="[0-9]+" maxlength="20">
         </div>
+        <div class="mb-3">
+            <label for="parole" class="form-label">Parole</label>
+            <input type="password" class="form-control" id="parole" name="parole" required>
+        </div>
                    <div class="mb-3" style="margin-bottom:16px;">
             <label style="font-weight:700; display:block; margin-bottom:8px;">Amats:</label>
                 <select name="amats" style="width:90%; padding:10px; border-radius:6px;">
@@ -45,10 +45,6 @@
                     <option value="Vecākais bibliotekārs" {{ old('amats') == 'Vecākais bibliotekārs' ? 'selected' : '' }}>Vecākais bibliotekārs</option>
                     <option value="Bibliotekārs" {{ old('amats') == 'Bibliotekārs' ? 'selected' : '' }}>Bibliotekārs</option>
                 </select>
-        </div>
-        <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="1" id="aktivs" name="aktivs" checked>
-            <label class="form-check-label" for="aktivs">Aktīvs</label>
         </div>
         <div class="mb-3">
             <label for="avatar" class="form-label">Profila attēls</label>

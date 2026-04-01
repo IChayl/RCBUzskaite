@@ -36,7 +36,6 @@
                         <th>Telefons</th>
                         <th>Amats</th>
                         <th>Admins</th>
-                        <th>Aktīvs</th>
                         @if(Auth::user()->admina_tiesibas)
                             <th>Darbības</th>
                         @endif
@@ -58,7 +57,6 @@
                             <td>{{ $item->telefons ?? '-' }}</td>
                             <td>{{ $item->amats ?? '-' }}</td>
                             <td>{{ $item->admina_tiesibas ? 'Jā' : 'Nē' }}</td>
-                            <td>{{ $item->aktivs ? 'Jā' : 'Nē' }}</td>
                             @if(Auth::user()->admina_tiesibas)
                                 <td>
                                     <div class="actions">

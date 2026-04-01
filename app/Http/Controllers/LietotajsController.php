@@ -49,7 +49,6 @@ class LietotajsController extends Controller
             'epasts' => ['required', 'email', 'max:100', Rule::unique('lietotajs', 'epasts')],
             'telefons' => ['nullable', 'string', 'max:20', 'regex:/^[0-9]+$/'],
             'amats' => 'nullable|string|max:50',
-            'aktivs' => 'nullable|boolean',
         ]);
 
         $u = new Lietotajs();
@@ -61,7 +60,7 @@ class LietotajsController extends Controller
         $u->epasts = $req->input('epasts');
         $u->telefons = $req->input('telefons');
         $u->amats = $req->input('amats');
-        $u->aktivs = $req->input('aktivs') ? 1 : 0;
+        $u->aktivs = 1;
 
         // Ja augšupielādēts attēls, saglabā to publiskajā diskā.
         if ($req->hasFile('avatar')) {
@@ -111,7 +110,6 @@ class LietotajsController extends Controller
             'epasts' => ['required', 'email', 'max:100', Rule::unique('lietotajs', 'epasts')->ignore($id, 'lietotajs_id')],
             'telefons' => ['nullable', 'string', 'max:20', 'regex:/^[0-9]+$/'],
             'amats' => 'nullable|string|max:50',
-            'aktivs' => 'nullable|boolean',
         ]);
 
         $email = (string) $req->input('epasts');
@@ -125,7 +123,6 @@ class LietotajsController extends Controller
             'epasts' => $email,
             'telefons' => $req->input('telefons'),
             'amats' => $req->input('amats'),
-            'aktivs' => $req->input('aktivs') ? 1 : 0,
         ];
 
         // Ja pievienots jauns avatar attēls, aizvieto ceļu ar jauno failu.
