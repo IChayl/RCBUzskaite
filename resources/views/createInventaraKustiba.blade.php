@@ -16,9 +16,11 @@
     <!-- Jaunas kustības izveides forma -->
     <form method="POST" action="{{ route('inventara_kustiba.store') }}" novalidate>
         @csrf
+        @php($today = now()->toDateString())
         <div class="mb-3">
             <label for="datums" class="form-label">Datums</label>
-            <input type="date" class="form-control" id="datums" name="datums" required lang="lv">
+            <input type="date" class="form-control" id="datums" value="{{ $today }}" disabled lang="lv">
+            <input type="hidden" name="datums" value="{{ $today }}">
         </div>
         <div class="mb-3">
             <label for="inventars_id" class="form-label">Inventārs</label>
@@ -34,7 +36,10 @@
             <select class="form-control" id="kustibas_veids_id" name="kustibas_veids_id">
                 <option value="">-- Izvēlieties kustības veidu --</option>
                 @foreach($kustibasVeidi as $kv)
-                    <option value="{{ $kv->kustibas_veids_id }}">{{ $kv->nosaukums }}</option>
+                    @php($isNorakstisana = str_contains(mb_strtolower($kv->nosaukums, 'UTF-8'), 'norakst'))
+                    @if(! $isNorakstisana)
+                        <option value="{{ $kv->kustibas_veids_id }}">{{ $kv->nosaukums }}</option>
+                    @endif
                 @endforeach
             </select>
         </div>

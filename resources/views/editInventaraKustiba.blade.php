@@ -57,7 +57,10 @@
             <select class="form-control" id="kustibas_veids_id" name="kustibas_veids_id">
                 <option value="">-- Izvēlieties kustības veidu --</option>
                 @foreach($kustibasVeidi as $kv)
-                    <option value="{{ $kv->kustibas_veids_id }}" @if($kustiba->kustibas_veids_id == $kv->kustibas_veids_id) selected @endif>{{ $kv->nosaukums }}</option>
+                    @php($isNorakstisana = str_contains(mb_strtolower($kv->nosaukums, 'UTF-8'), 'norakst'))
+                    @if(! $isNorakstisana || (int) $kustiba->kustibas_veids_id === (int) $kv->kustibas_veids_id)
+                        <option value="{{ $kv->kustibas_veids_id }}" @if($kustiba->kustibas_veids_id == $kv->kustibas_veids_id) selected @endif>{{ $kv->nosaukums }}</option>
+                    @endif
                 @endforeach
             </select>
         </div>

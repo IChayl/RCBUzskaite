@@ -156,7 +156,7 @@ class InventaraKustibaController extends Controller
     public function KustibaSubmit(Request $req)
     {
         $data = $req->validate([
-            'datums' => 'required|date',
+            'datums' => 'nullable|date',
             'inventars_id' => 'required|integer|exists:inventars,inventars_id',
             'kustibas_veids_id' => 'nullable|integer|exists:kustibas_veidi,kustibas_veids_id',
             'atbildigais_lietotajs_id' => 'required|integer|exists:lietotajs,lietotajs_id',
@@ -165,6 +165,14 @@ class InventaraKustibaController extends Controller
             'piezimes' => 'nullable|string|max:255',
             'dokuments' => 'nullable|string|max:255',
         ]);
+
+        $data['datums'] = now()->toDateString();
+
+        if ($this->isNorakstisanaMovement($data['kustibas_veids_id'] ?? null)) {
+            return back()->withInput()->withErrors([
+                'kustibas_veids_id' => 'Kustības veids "Norakstīšana" tiek pievienots automātiski un nav manuāli izvēlams.',
+            ]);
+        }
 
         $inventars = Inventar::findOrFail((int) $data['inventars_id']);
         if ($this->isParvietosanaMovement($data['kustibas_veids_id'] ?? null)) {
@@ -235,6 +243,17 @@ class InventaraKustibaController extends Controller
             'dokuments' => 'nullable|string|max:255',
         ]);
 
+        $existingKustiba = InventaraKustiba::findOrFail($id);
+
+        if (
+            $this->isNorakstisanaMovement($data['kustibas_veids_id'] ?? null)
+            && (int) $existingKustiba->kustibas_veids_id !== (int) ($data['kustibas_veids_id'] ?? 0)
+        ) {
+            return back()->withInput()->withErrors([
+                'kustibas_veids_id' => 'Kustības veids "Norakstīšana" tiek pievienots automātiski un nav manuāli izvēlams.',
+            ]);
+        }
+
         $inventars = Inventar::findOrFail((int) $data['inventars_id']);
         if ($this->isParvietosanaMovement($data['kustibas_veids_id'] ?? null)) {
             $data['veca_telpa_id'] = $inventars->telpas_id;
@@ -289,5 +308,24 @@ class InventaraKustibaController extends Controller
         $normalized = mb_strtolower($nosaukums, 'UTF-8');
 
         return str_contains($normalized, 'pārvietošan') || str_contains($normalized, 'parvietosan');
+    }
+
+    private function isNorakstisanaMovement($kustibasVeidsId): bool
+    {
+        if (empty($kustibasVeidsId)) {
+            return false;
+        }
+
+        $nosaukums = KustibasVeidi::query()
+            ->where('kustibas_veids_id', $kustibasVeidsId)
+            ->value('nosaukums');
+
+        if (! is_string($nosaukums)) {
+            return false;
+        }
+
+        $normalized = mb_strtolower($nosaukums, 'UTF-8');
+
+        return str_contains($normalized, 'norakst');
     }
 }

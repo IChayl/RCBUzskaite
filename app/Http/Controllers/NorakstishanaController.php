@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Norakstishana;
 use App\Models\Inventar;
+use App\Models\InventaraKustiba;
+use App\Models\KustibasVeidi;
 use App\Models\Lietotajs;
 use App\Http\Controllers\Concerns\HandlesSafeDelete;
 use Illuminate\Support\Facades\DB;
@@ -169,6 +171,10 @@ class NorakstishanaController extends Controller
         $norakstishana->talaka_riciba = $data['talaka_riciba'];
         $norakstishana->save();
 
+        if ($norakstishana->akceptets) {
+            $this->createKustibaForAcceptedNorakstishana($norakstishana);
+        }
+
         return redirect()->to('/norakstishana')->with('success', $user->admina_tiesibas ? 'Ieraksts pievienots un akceptēts.' : 'Norakstīšanas pieteikums iesniegts.');
     }
 
@@ -242,6 +248,7 @@ class NorakstishanaController extends Controller
         $norakstishana->akceptets = true;
         $norakstishana->apstiprinashanas_dat = Carbon::today();
         $norakstishana->save();
+        $this->createKustibaForAcceptedNorakstishana($norakstishana);
 
         return redirect()->to('/norakstishana')->with('success', 'Norakstīšanas pieteikums akceptēts.');
     }
@@ -344,5 +351,49 @@ class NorakstishanaController extends Controller
                 'inventara_id' => 'Šis inventārs jau ir norakstīts.',
             ]);
         }
+    }
+
+    private function createKustibaForAcceptedNorakstishana(Norakstishana $norakstishana): void
+    {
+        $norakstishana = $norakstishana->fresh(['inventars']);
+
+        if (! $norakstishana || ! $norakstishana->akceptets) {
+            return;
+        }
+
+        $norakstisanaVeidsId = KustibasVeidi::query()
+            ->whereRaw('LOWER(nosaukums) like ?', ['%norakst%'])
+            ->value('kustibas_veids_id');
+
+        if (empty($norakstisanaVeidsId)) {
+            return;
+        }
+
+        $documentRef = 'NORAKSTISHANA:' . $norakstishana->norakstishana_id;
+
+        $alreadyExists = InventaraKustiba::query()
+            ->where('dokuments', $documentRef)
+            ->exists();
+
+        if ($alreadyExists) {
+            return;
+        }
+
+        $inventars = $norakstishana->inventars;
+
+        if (! $inventars || empty($inventars->atbildigais_id)) {
+            return;
+        }
+
+        InventaraKustiba::query()->create([
+            'datums' => optional($norakstishana->norDatums)->toDateString() ?? Carbon::today()->toDateString(),
+            'inventars_id' => $norakstishana->inventara_id,
+            'atbildigais_lietotajs_id' => (int) $inventars->atbildigais_id,
+            'kustibas_veids_id' => (int) $norakstisanaVeidsId,
+            'veca_telpa_id' => $inventars->telpas_id,
+            'jauna_telpa_id' => null,
+            'piezimes' => 'Automātiski izveidots no norakstīšanas pieteikuma.',
+            
+        ]);
     }
 }

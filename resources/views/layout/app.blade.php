@@ -330,6 +330,15 @@
             box-shadow: none;
         }
 
+        .form-control:disabled,
+        .form-select:disabled,
+        .form-control[readonly],
+        .form-select[readonly] {
+            color: #0F1931 !important;
+            -webkit-text-fill-color: #0F1931;
+            opacity: 1;
+        }
+
         .form-label {
             color: rgba(226, 212, 187, 0.95);
         }
