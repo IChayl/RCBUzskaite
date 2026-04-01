@@ -52,10 +52,6 @@
             <input type="text" class="form-control" id="piezimes" name="piezimes" value="{{ $kustiba->piezimes }}">
         </div>
         <div class="mb-3">
-            <label for="dokuments" class="form-label">Dokuments</label>
-            <input type="text" class="form-control" id="dokuments" name="dokuments" value="{{ $kustiba->dokuments }}">
-        </div>
-        <div class="mb-3">
             <label for="kustibas_veids_id" class="form-label">Kustības veids</label>
             <select class="form-control" id="kustibas_veids_id" name="kustibas_veids_id">
                 <option value="">-- Izvēlieties kustības veidu --</option>
