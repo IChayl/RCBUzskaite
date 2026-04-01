@@ -35,13 +35,13 @@ class InventaraKustibaController extends Controller
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
         // Drošība: atļautās kolonnas, pēc kurām var kārtot
-        $allowedSort = ['kustiba_id', 'datums', 'inventars', 'kustibas_veids', 'lietotajs', 'veca_telpa', 'jauna_telpa'];
+        $allowedSort = ['kustiba_id', 'datums', 'inventara_numurs', 'inventars', 'kustibas_veids', 'lietotajs', 'veca_telpa', 'jauna_telpa'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'kustiba_id';
         }
 
         // Atļautās kolonnas meklēšanai.
-        $allowedColumns = ['all', 'inventars'];
+        $allowedColumns = ['all', 'inventars', 'inventara_numurs'];
         if (!in_array($column, $allowedColumns, true)) {
             $column = 'all';
         }
@@ -66,6 +66,10 @@ class InventaraKustibaController extends Controller
                 $query->whereHas('inventars', function ($q2) use ($q) {
                     $q2->where('nosaukums', 'like', "%{$q}%");
                 });
+            } elseif ($column === 'inventara_numurs') {
+                $query->whereHas('inventars', function ($q2) use ($q) {
+                    $q2->where('inventara_numurs', 'like', "%{$q}%");
+                });
             }
         }
 
@@ -89,6 +93,10 @@ class InventaraKustibaController extends Controller
         if ($sort === 'inventars') {
             $query->leftJoin('inventars', 'inventara_kustiba.inventars_id', '=', 'inventars.inventars_id')
                 ->orderBy('inventars.nosaukums', $direction)
+                ->select('inventara_kustiba.*');
+        } elseif ($sort === 'inventara_numurs') {
+            $query->leftJoin('inventars', 'inventara_kustiba.inventars_id', '=', 'inventars.inventars_id')
+                ->orderBy('inventars.inventara_numurs', $direction)
                 ->select('inventara_kustiba.*');
         } elseif ($sort === 'kustibas_veids') {
             $query->leftJoin('kustibas_veidi', 'inventara_kustiba.kustibas_veids_id', '=', 'kustibas_veidi.kustibas_veids_id')

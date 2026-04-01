@@ -42,19 +42,18 @@ class LietotajsController extends Controller
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
         $req->validate([
-            'lietotajvards' => 'required|string|max:255',
             'parole' => 'required|string|max:255',
             'avatar' => 'nullable|image|max:2048',
             'vards' => 'nullable|string|max:50',
             'uzvards' => 'nullable|string|max:50',
-            'epasts' => ['nullable', 'email', 'max:100', Rule::unique('lietotajs', 'epasts')],
+            'epasts' => ['required', 'email', 'max:100', Rule::unique('lietotajs', 'epasts')],
             'telefons' => ['nullable', 'string', 'max:20', 'regex:/^[0-9]+$/'],
             'amats' => 'nullable|string|max:50',
             'aktivs' => 'nullable|boolean',
         ]);
 
         $u = new Lietotajs();
-        $u->lietotajvards = $req->input('lietotajvards');
+        $u->lietotajvards = $this->generateSystemUsername((string) $req->input('epasts'));
         $u->parole = $req->input('parole');
         $u->admina_tiesibas = $req->input('admina_tiesibas') ? 1 : 0;
         $u->vards = $req->input('vards');
@@ -105,24 +104,25 @@ class LietotajsController extends Controller
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
         $req->validate([
-            'lietotajvards' => 'required|string|max:255',
             'parole' => 'required|string|max:255',
             'avatar' => 'nullable|image|max:2048',
             'vards' => 'nullable|string|max:50',
             'uzvards' => 'nullable|string|max:50',
-            'epasts' => ['nullable', 'email', 'max:100', Rule::unique('lietotajs', 'epasts')->ignore($id, 'lietotajs_id')],
+            'epasts' => ['required', 'email', 'max:100', Rule::unique('lietotajs', 'epasts')->ignore($id, 'lietotajs_id')],
             'telefons' => ['nullable', 'string', 'max:20', 'regex:/^[0-9]+$/'],
             'amats' => 'nullable|string|max:50',
             'aktivs' => 'nullable|boolean',
         ]);
 
+        $email = (string) $req->input('epasts');
+
         $data = [
-            'lietotajvards' => $req->input('lietotajvards'),
+            'lietotajvards' => $this->generateSystemUsername($email, (int) $id),
             'parole' => $req->input('parole'),
             'admina_tiesibas' => $req->input('admina_tiesibas') ? 1 : 0,
             'vards' => $req->input('vards'),
             'uzvards' => $req->input('uzvards'),
-            'epasts' => $req->input('epasts'),
+            'epasts' => $email,
             'telefons' => $req->input('telefons'),
             'amats' => $req->input('amats'),
             'aktivs' => $req->input('aktivs') ? 1 : 0,
@@ -170,5 +170,32 @@ class LietotajsController extends Controller
         $this->deleteWithForeignKeyChecksDisabled('lietotajs', 'lietotajs_id', $id);
 
         return redirect('/lietotajs')->with('success', $this->buildDeleteMessage('Lietotāja', $usedIn));
+    }
+
+    private function generateSystemUsername(string $email, ?int $ignoreId = null): string
+    {
+        $base = strtolower((string) preg_replace('/[^a-z0-9]/i', '', strstr($email, '@', true) ?: $email));
+        if ($base === '') {
+            $base = 'user';
+        }
+
+        $base = substr($base, 0, 14);
+        $candidate = $base;
+        $counter = 1;
+
+        while (
+            Lietotajs::query()
+                ->where('lietotajvards', $candidate)
+                ->when($ignoreId !== null, function ($query) use ($ignoreId) {
+                    $query->where('lietotajs_id', '!=', $ignoreId);
+                })
+                ->exists()
+        ) {
+            $suffix = (string) $counter;
+            $candidate = substr($base, 0, 20 - strlen($suffix)) . $suffix;
+            $counter++;
+        }
+
+        return $candidate;
     }
 }

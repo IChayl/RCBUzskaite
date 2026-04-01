@@ -15,7 +15,7 @@
     <!-- Lietotāja profila un piekļuves informācija -->
     <div class="card mt-3" style="background: rgba(45, 65, 89, 0.65); border: 1px solid rgba(226, 212, 187, 0.2); color: #E2D4BB; max-width: 600px;">
         <div class="card-body">
-            <h5 class="card-title">{{ $lietotajs->lietotajvards }} (ID: {{ $lietotajs->lietotajs_id }})</h5>
+            <h5 class="card-title">{{ $lietotajs->pilnais_vards }} (ID: {{ $lietotajs->lietotajs_id }})</h5>
             <p class="card-text"><strong>Vārds:</strong> {{ $lietotajs->vards ?? '-' }}</p>
             <p class="card-text"><strong>Uzvārds:</strong> {{ $lietotajs->uzvards ?? '-' }}</p>
             <p class="card-text"><strong>E-pasts:</strong> {{ $lietotajs->epasts ?? '-' }}</p>

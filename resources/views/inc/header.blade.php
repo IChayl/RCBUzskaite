@@ -197,7 +197,7 @@
   <div class="auth-links">
     @if(Auth::check())
       <a href="/Logout">Izlogoties</a>
-      {{ Auth::user()->lietotajvards }} {{ Auth::user()->admina_tiesibas ? '(Admin)' : '' }}
+      {{ Auth::user()->pilnais_vards }} {{ Auth::user()->admina_tiesibas ? '(Admin)' : '' }}
     @else
     <a href="/Login">Ielogoties</a>
     

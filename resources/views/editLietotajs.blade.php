@@ -17,10 +17,6 @@
     <form method="POST" action="/lietotajs/{{ $lietotajs->lietotajs_id }}/editSubmit" enctype="multipart/form-data" novalidate>
         @csrf
         <div class="mb-3">
-            <label for="lietotajvards" class="form-label">Lietotājvārds</label>
-            <input type="text" class="form-control" id="lietotajvards" name="lietotajvards" value="{{ $lietotajs->lietotajvards }}" required>
-        </div>
-        <div class="mb-3">
             <label for="parole" class="form-label">Parole</label>
             <input type="password" class="form-control" id="parole" name="parole" value="{{ $lietotajs->parole }}" required>
         </div>
@@ -34,7 +30,7 @@
         </div>
         <div class="mb-3">
             <label for="epasts" class="form-label">E-pasts</label>
-            <input type="email" class="form-control" id="epasts" name="epasts" value="{{ $lietotajs->epasts }}">
+            <input type="email" class="form-control" id="epasts" name="epasts" value="{{ $lietotajs->epasts }}" required>
         </div>
         <div class="mb-3">
             <label for="telefons" class="form-label">Telefons</label>

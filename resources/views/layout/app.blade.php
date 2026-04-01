@@ -197,10 +197,13 @@
         /* Meklēšanas un kārtošanas vadīklas */
         .table-controls {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             align-items: center;
             gap: 10px;
             margin-bottom: 12px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: thin;
         }
         .table-search-input {
             padding: 10px 12px;

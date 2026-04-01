@@ -30,7 +30,6 @@
                 <thead>
                     <tr>
                         <th>Avatar</th>
-                        <th>Lietotājvārds</th>
                         <th>Vārds</th>
                         <th>Uzvārds</th>
                         <th>E-pasts</th>
@@ -53,7 +52,6 @@
                                     -
                                 @endif
                             </td>
-                            <td>{{ $item->lietotajvards }}</td>
                             <td>{{ $item->vards ?? '-' }}</td>
                             <td>{{ $item->uzvards ?? '-' }}</td>
                             <td>{{ $item->epasts ?? '-' }}</td>
