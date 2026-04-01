@@ -37,7 +37,7 @@
                     <option value="{{ $t->telpas_id }}" @if($kustiba->veca_telpa_id == $t->telpas_id) selected @endif>{{ $t->nosaukums }}</option>
                 @endforeach
             </select>
-            <small id="veca-telpa-lock-note" style="display:none; color:#E2D4BB; opacity:0.85;">Pie veida "Pārvietošana" vecā telpa tiek iestatīta automātiski no izvēlētā inventāra.</small>
+            <small id="veca-telpa-lock-note" style="display:none; color:#E2D4BB; opacity:0.85;">Izvēloties inventāru, vecā telpa tiek iestatīta automātiski un nav maināma.</small>
         </div>
         <div class="mb-3">
             <label for="jauna_telpa_id" class="form-label">Jaunā telpa</label>
@@ -72,7 +72,7 @@
                     <option value="{{ $lt->lietotajs_id }}" @if($kustiba->atbildigais_lietotajs_id == $lt->lietotajs_id) selected @endif>{{ $lt->pilnais_vards }}</option>
                 @endforeach
             </select>
-            <small id="atbildigais-lock-note" style="display:none; color:#E2D4BB; opacity:0.85;">Pie veida "Pārvietošana" atbildīgais darbinieks tiek iestatīts automātiski no izvēlētā inventāra.</small>
+            <small id="atbildigais-lock-note" style="display:none; color:#E2D4BB; opacity:0.85;">Izvēloties inventāru, atbildīgais darbinieks tiek iestatīts automātiski un nav maināms.</small>
         </div>
         <!-- Saglabā atjaunināto kustības ierakstu -->
         <button type="submit" class="btn btn-primary">Atjaunināt</button>
@@ -82,22 +82,14 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const inventarsSelect = document.getElementById('inventars_id');
-        const kustibasVeidsSelect = document.getElementById('kustibas_veids_id');
         const vecaTelpaSelect = document.getElementById('veca_telpa_id');
         const vecaTelpaLockNote = document.getElementById('veca-telpa-lock-note');
         const atbildigaisSelect = document.getElementById('atbildigais_lietotajs_id');
         const atbildigaisLockNote = document.getElementById('atbildigais-lock-note');
 
-        const isParvietosanaSelected = () => {
-            const selected = kustibasVeidsSelect.options[kustibasVeidsSelect.selectedIndex];
-            if (!selected) return false;
-
-            const text = (selected.textContent || '').toLowerCase();
-            return text.includes('pārvietošan') || text.includes('parvietosan');
-        };
-
-        const applyParvietosanaRules = () => {
-            if (!isParvietosanaSelected()) {
+        const applyInventoryLockRules = () => {
+            const selectedInventars = inventarsSelect.options[inventarsSelect.selectedIndex];
+            if (!selectedInventars || !inventarsSelect.value) {
                 vecaTelpaSelect.disabled = false;
                 vecaTelpaLockNote.style.display = 'none';
                 atbildigaisSelect.disabled = false;
@@ -105,7 +97,6 @@
                 return;
             }
 
-            const selectedInventars = inventarsSelect.options[inventarsSelect.selectedIndex];
             const currentTelpaId = selectedInventars ? selectedInventars.getAttribute('data-current-telpa-id') : '';
             const currentAtbildigaisId = selectedInventars ? selectedInventars.getAttribute('data-current-atbildigais-id') : '';
 
@@ -118,9 +109,8 @@
             atbildigaisLockNote.style.display = 'block';
         };
 
-        inventarsSelect.addEventListener('change', applyParvietosanaRules);
-        kustibasVeidsSelect.addEventListener('change', applyParvietosanaRules);
+        inventarsSelect.addEventListener('change', applyInventoryLockRules);
 
-        applyParvietosanaRules();
+        applyInventoryLockRules();
     });
 </script>
