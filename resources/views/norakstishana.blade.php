@@ -4,7 +4,12 @@
     <p style="color: #E2D4BB;">Norakstīšanas</p>
 
     <div class="auth-links">
-        <a href="/norakstishana/create">Pieteikt norakstīšanu</a>
+        @if(Auth::user()->admina_tiesibas)
+        <a href="/norakstishana/create">Norakstīt inventāru</a>
+        @else
+        <a href="/norakstishana/create">Pieteikt inventāra norakstīšanu</a> 
+        @endif
+
         <a type="button" class="auth-links" onclick="window.print()" title="Printēt dokumentu"><i class="fas fa-print"></i> Printēt</a>
     </div>
 
@@ -66,7 +71,7 @@
                                 <div>
                                     <strong>{{ optional($pendingItem->inventars)->nosaukums ?? ('Inventārs ID: '.$pendingItem->inventara_id) }}</strong>
                                     <div style="opacity:0.88; margin-top:4px;">
-                                        Pieteica: {{ optional($pendingItem->pieteicejs)->pilnais_vards ?? optional($pendingItem->pieteicejs)->lietotajvards ?? 'Nezināms lietotājs' }}
+                                        Pieteica: {{ optional($pendingItem->pieteicejs)->pilnais_vards ?? optional($pendingItem->pieteicejs)->lietotajvards ?? 'Nezināms darbinieks' }}
                                         , datums: @lvDate($pendingItem->pieteikshanas_dat)
                                         , iemesls: {{ $pendingItem->iemesls }}
                                     </div>

@@ -180,7 +180,7 @@
    
        @if(Auth::check())
       <a href="/inventars">Inventārs</a>
-      <a href="/inventara_kustiba">Kustības</a>
+      <a href="/inventara_kustiba">Inventāra kustības</a>
         <a href="/norakstishana" class="nav-link-with-badge">
           <span>Norakstīšanas</span>
           @if(Auth::user()->admina_tiesibas && ($pendingNorakstishanaCount ?? 0) > 0)
@@ -189,7 +189,9 @@
         </a>
       <a href="/kategorija">Kategorijas tabula</a>
       <a href="/telpa">Telpas</a>
-      <a href="/lietotajs">Lietotāji</a>
+      @if(Auth::user()->admina_tiesibas || in_array((string) Auth::user()->amats, ['Direktors', 'Dir.Vietnieks'], true))
+        <a href="/lietotajs">Darbinieki</a>
+      @endif
       @else
          @endif
   </nav>

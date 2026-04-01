@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #E2D4BB;">Rediģēt lietotāju</p>
+    <p style="color: #E2D4BB;">Rediģēt darbinieku</p>
 
     <div class="auth-links">
         <a href="/lietotajs" class="btn btn-secondary">Atpakaļ</a>
@@ -9,11 +9,11 @@
 
     <hr>
 
-    <h2 style="color: #E2D4BB;">Rediģēt lietotāju</h2>
+    <h2 style="color: #E2D4BB;">Rediģēt darbinieku</h2>
 
     @include('partials.validation-errors')
 
-    <!-- Lietotāja datu rediģēšanas forma -->
+    <!-- Darbinieka datu rediģēšanas forma -->
     <form method="POST" action="/lietotajs/{{ $lietotajs->lietotajs_id }}/editSubmit" enctype="multipart/form-data" novalidate>
         @csrf
         <div class="mb-3">
@@ -58,7 +58,7 @@
             <input class="form-check-input" type="checkbox" value="1" id="admina_tiesibas" name="admina_tiesibas" {{ $lietotajs->admina_tiesibas ? 'checked' : '' }}>
             <label class="form-check-label" for="admina_tiesibas">Admina tiesības</label>
         </div>
-        <!-- Saglabā lietotāja izmaiņas -->
+        <!-- Saglabā darbinieka izmaiņas -->
         <button type="submit" class="btn btn-primary">Atjaunināt</button>
     </form>
 @endsection

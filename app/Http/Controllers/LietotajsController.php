@@ -18,8 +18,17 @@ class LietotajsController extends Controller
      */
     public function showAllLietotaji()
     {
-        $u = new Lietotajs();
-        return view('lietotaji', ['lietotaji' => $u->orderBy('lietotajs_id','asc')->get()]);
+        $user = auth()->user();
+        $canViewDarbiniekiTable = $user->admina_tiesibas || in_array((string) $user->amats, ['Direktors', 'Dir.Vietnieks'], true);
+
+        $lietotaji = $canViewDarbiniekiTable
+            ? Lietotajs::query()->orderBy('lietotajs_id', 'asc')->get()
+            : collect();
+
+        return view('lietotaji', [
+            'lietotaji' => $lietotaji,
+            'canViewDarbiniekiTable' => $canViewDarbiniekiTable,
+        ]);
     }
 
     /**

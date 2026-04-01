@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #E2D4BB;">Jauns lietotājs</p>
+    <p style="color: #E2D4BB;">Jauns darbinieks</p>
 
     <div class="auth-links">
         <a href="/lietotajs" class="btn btn-secondary">Atpakaļ uz sarakstu</a>
@@ -9,11 +9,11 @@
 
     <hr>
 
-    <h2 style="color: #E2D4BB;">Jauns lietotājs</h2>
+    <h2 style="color: #E2D4BB;">Jauns darbinieks</h2>
 
     @include('partials.validation-errors')
 
-    <!-- Jauna lietotāja izveides forma -->
+    <!-- Jauna darbinieka izveides forma -->
     <form method="POST" action="{{ route('lietotajs.store') }}" enctype="multipart/form-data" novalidate>
         @csrf
         <div class="mb-3">
@@ -54,7 +54,7 @@
             <input class="form-check-input" type="checkbox" value="1" id="admina_tiesibas" name="admina_tiesibas">
             <label class="form-check-label" for="admina_tiesibas">Admina tiesības</label>
         </div>
-        <!-- Saglabā lietotāja ierakstu -->
+        <!-- Saglabā darbinieka ierakstu -->
         <button type="submit" class="btn btn-primary">Saglabāt</button>
     </form>
 @endsection

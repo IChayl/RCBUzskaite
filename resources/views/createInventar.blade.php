@@ -47,9 +47,9 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="atbildigais_id" class="form-label">Atbildīgais lietotājs</label>
+            <label for="atbildigais_id" class="form-label">Atbildīgais darbinieks</label>
             <select class="form-control" id="atbildigais_id" name="atbildigais_id">
-                <option value="">-- Izvēlieties lietotāju (pēc izvēles) --</option>
+                <option value="">-- Izvēlieties darbinieku (pēc izvēles) --</option>
                 @foreach($lietotaji as $lt)
                     <option value="{{ $lt->lietotajs_id }}">{{ $lt->lietotajvards }} (ID: {{ $lt->lietotajs_id }})</option>
                 @endforeach

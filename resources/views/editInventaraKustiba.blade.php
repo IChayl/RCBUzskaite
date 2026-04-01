@@ -61,9 +61,9 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="atbildigais_lietotajs_id" class="form-label">Atbildīgais lietotājs</label>
+            <label for="atbildigais_lietotajs_id" class="form-label">Atbildīgais darbinieks</label>
             <select class="form-control" id="atbildigais_lietotajs_id" name="atbildigais_lietotajs_id" required>
-                <option value="">-- Izvēlieties lietotāju --</option>
+                <option value="">-- Izvēlieties darbinieku --</option>
                 @foreach($lietotaji as $lt)
                     <option value="{{ $lt->lietotajs_id }}" @if($kustiba->atbildigais_lietotajs_id == $lt->lietotajs_id) selected @endif>{{ $lt->lietotajvards }} (ID: {{ $lt->lietotajs_id }})</option>
                 @endforeach
