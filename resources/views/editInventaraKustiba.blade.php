@@ -25,7 +25,7 @@
             <select class="form-control" id="inventars_id" name="inventars_id" required>
                 <option value="">-- Izvēlieties inventāru --</option>
                 @foreach($inventari as $inv)
-                    <option value="{{ $inv->inventars_id }}" @if($kustiba->inventars_id == $inv->inventars_id) selected @endif>{{ $inv->nosaukums }} (ID: {{ $inv->inventars_id }})</option>
+                    <option value="{{ $inv->inventars_id }}" data-current-telpa-id="{{ $inv->telpas_id ?? '' }}" @if($kustiba->inventars_id == $inv->inventars_id) selected @endif>{{ $inv->nosaukums }} (ID: {{ $inv->inventars_id }})</option>
                 @endforeach
             </select>
         </div>
@@ -37,6 +37,7 @@
                     <option value="{{ $t->telpas_id }}" @if($kustiba->veca_telpa_id == $t->telpas_id) selected @endif>{{ $t->nosaukums }} (ID: {{ $t->telpas_id }})</option>
                 @endforeach
             </select>
+            <small id="veca-telpa-lock-note" style="display:none; color:#E2D4BB; opacity:0.85;">Pie veida "Pārvietošana" vecā telpa tiek iestatīta automātiski no izvēlētā inventāra.</small>
         </div>
         <div class="mb-3">
             <label for="jauna_telpa_id" class="form-label">Jaunā telpa</label>
@@ -73,3 +74,40 @@
         <button type="submit" class="btn btn-primary">Atjaunināt</button>
     </form>
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const inventarsSelect = document.getElementById('inventars_id');
+        const kustibasVeidsSelect = document.getElementById('kustibas_veids_id');
+        const vecaTelpaSelect = document.getElementById('veca_telpa_id');
+        const lockNote = document.getElementById('veca-telpa-lock-note');
+
+        const isParvietosanaSelected = () => {
+            const selected = kustibasVeidsSelect.options[kustibasVeidsSelect.selectedIndex];
+            if (!selected) return false;
+
+            const text = (selected.textContent || '').toLowerCase();
+            return text.includes('pārvietošan') || text.includes('parvietosan');
+        };
+
+        const applyVecaTelpaRule = () => {
+            if (!isParvietosanaSelected()) {
+                vecaTelpaSelect.disabled = false;
+                lockNote.style.display = 'none';
+                return;
+            }
+
+            const selectedInventars = inventarsSelect.options[inventarsSelect.selectedIndex];
+            const currentTelpaId = selectedInventars ? selectedInventars.getAttribute('data-current-telpa-id') : '';
+
+            vecaTelpaSelect.value = currentTelpaId || '';
+            vecaTelpaSelect.disabled = true;
+            lockNote.style.display = 'block';
+        };
+
+        inventarsSelect.addEventListener('change', applyVecaTelpaRule);
+        kustibasVeidsSelect.addEventListener('change', applyVecaTelpaRule);
+
+        applyVecaTelpaRule();
+    });
+</script>

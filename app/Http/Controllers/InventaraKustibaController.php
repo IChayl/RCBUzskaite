@@ -166,6 +166,11 @@ class InventaraKustibaController extends Controller
             'dokuments' => 'nullable|string|max:255',
         ]);
 
+        $inventars = Inventar::findOrFail((int) $data['inventars_id']);
+        if ($this->isParvietosanaMovement($data['kustibas_veids_id'] ?? null)) {
+            $data['veca_telpa_id'] = $inventars->telpas_id;
+        }
+
         $i = new InventaraKustiba();
         $i->datums = $data['datums'];
         $i->inventars_id = $data['inventars_id'];
@@ -224,6 +229,11 @@ class InventaraKustibaController extends Controller
             'dokuments' => 'nullable|string|max:255',
         ]);
 
+        $inventars = Inventar::findOrFail((int) $data['inventars_id']);
+        if ($this->isParvietosanaMovement($data['kustibas_veids_id'] ?? null)) {
+            $data['veca_telpa_id'] = $inventars->telpas_id;
+        }
+
         DB::table('inventara_kustiba')->where('kustiba_id',$id)->update([
             'datums' => $data['datums'],
             'inventars_id' => $data['inventars_id'],
@@ -248,5 +258,24 @@ class InventaraKustibaController extends Controller
         $this->deleteWithForeignKeyChecksDisabled('inventara_kustiba', 'kustiba_id', $id);
 
         return redirect('/inventara_kustiba')->with('success', $this->buildDeleteMessage('Inventāra kustības', []));
+    }
+
+    private function isParvietosanaMovement($kustibasVeidsId): bool
+    {
+        if (empty($kustibasVeidsId)) {
+            return false;
+        }
+
+        $nosaukums = KustibasVeidi::query()
+            ->where('kustibas_veids_id', $kustibasVeidsId)
+            ->value('nosaukums');
+
+        if (! is_string($nosaukums)) {
+            return false;
+        }
+
+        $normalized = mb_strtolower($nosaukums, 'UTF-8');
+
+        return str_contains($normalized, 'pārvietošan') || str_contains($normalized, 'parvietosan');
     }
 }
