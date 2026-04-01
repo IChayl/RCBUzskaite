@@ -25,42 +25,42 @@
         @endif
     </div>
 
-    <form method="GET" class="table-controls">
+    <form method="GET" class="table-controls inventory-toolbar">
         <input type="hidden" name="inventory_status" value="{{ $inventoryStatus }}">
         <input type="hidden" name="inventory_scope" value="{{ $inventoryScope }}">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
-        <label style="display:flex; align-items:center; gap:8px;">
-            <span style="color:#E2D4BB; font-size:0.9rem;">Meklēt pēc:</span>
-            <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
+        <label style="display:flex; align-items:center; gap:6px;">
+            <span style="color:#E2D4BB; font-size:0.82rem;">Meklēt</span>
+            <select name="column" class="inventory-search-scope" style="border-radius:999px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
                 <option style="color:#0F1931;" value="all" {{ request('column') === 'all' ? 'selected' : '' }}>Visi</option>
                 <option style="color:#0F1931;" value="nosaukums" {{ request('column') === 'nosaukums' ? 'selected' : '' }}>Nosaukums</option>
-                <option style="color:#0F1931;" value="inventara_numurs" {{ request('column') === 'inventara_numurs' ? 'selected' : '' }}>Inventāra numurs</option>
+                <option style="color:#0F1931;" value="inventara_numurs" {{ request('column') === 'inventara_numurs' ? 'selected' : '' }}>Inv.Nr.</option>
             </select>
         </label>
-        <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
-        <select name="filter_kategorija" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
-            <option style="color:#0F1931;" value="">Kategorija (visas)</option>
+        <input class="table-search-input inventory-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
+        <select name="filter_kategorija" style="border-radius:999px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
+            <option style="color:#0F1931;" value="">Kategorija</option>
             @foreach($kategorijas as $kategorija)
                 <option style="color:#0F1931;" value="{{ $kategorija->kategorija_id }}" {{ (string) request('filter_kategorija') === (string) $kategorija->kategorija_id ? 'selected' : '' }}>{{ $kategorija->nosaukums }}</option>
             @endforeach
         </select>
-        <select name="filter_telpa" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
-            <option style="color:#0F1931;" value="">Telpa (visas)</option>
+        <select name="filter_telpa" style="border-radius:999px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
+            <option style="color:#0F1931;" value="">Telpa</option>
             @foreach($telpas as $telpa)
                 <option style="color:#0F1931;" value="{{ $telpa->telpas_id }}" {{ (string) request('filter_telpa') === (string) $telpa->telpas_id ? 'selected' : '' }}>{{ $telpa->nosaukums }}</option>
             @endforeach
         </select>
-        <select name="filter_atbildigais" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
-            <option style="color:#0F1931;" value="">Atbildīgais (visi)</option>
+        <select name="filter_atbildigais" style="border-radius:999px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
+            <option style="color:#0F1931;" value="">Atbild.</option>
             @foreach($lietotaji as $lietotajs)
                 <option style="color:#0F1931;" value="{{ $lietotajs->lietotajs_id }}" {{ (string) request('filter_atbildigais') === (string) $lietotajs->lietotajs_id ? 'selected' : '' }}>{{ $lietotajs->pilnais_vards }}</option>
             @endforeach
         </select>
-        <span style="color:#E2D4BB;">Datums no</span>
-        <input type="date" name="iegades_datums_no" value="{{ request('iegades_datums_no') }}" class="table-search-input" style="max-width: 170px; min-width:170px;" title="Iegādes datums no">
-        <span style="color:#E2D4BB;">līdz</span>
-        <input type="date" name="iegades_datums_lidz" value="{{ request('iegades_datums_lidz') }}" class="table-search-input" style="max-width: 170px; min-width:170px;" title="Iegādes datums līdz">
+        <span class="inventory-date-label" style="color:#E2D4BB;">No</span>
+        <input type="date" name="iegades_datums_no" value="{{ request('iegades_datums_no') }}" class="table-search-input" title="Iegādes datums no">
+        <span class="inventory-date-label" style="color:#E2D4BB;">Līdz</span>
+        <input type="date" name="iegades_datums_lidz" value="{{ request('iegades_datums_lidz') }}" class="table-search-input" title="Iegādes datums līdz">
         <button type="submit" class="bloom-button sm" style="height: 36px;">Filtrēt</button>
         <a href="{{ url('/inventars') }}" class="bloom-button sm" style="height: 36px;">Notīrīt</a>
         <span class="no-results-message" style="display:none; color:#2D4159;">Nav rezultātu.</span>

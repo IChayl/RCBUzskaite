@@ -56,10 +56,9 @@ class InventarsController extends Controller
 
         if ($user->admina_tiesibas) {
             $inventoryScope = 'all';
-        }
-
-        if (! $user->admina_tiesibas && $inventoryStatus === 'written_off') {
-            $inventoryScope = 'all';
+        } else {
+            $inventoryStatus = 'active';
+            $inventoryScope = 'responsible';
         }
 
         $query = Inventar::query()

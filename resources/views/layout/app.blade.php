@@ -268,6 +268,41 @@
                 font-size: 0.82rem;
             }
         }
+        .inventory-toolbar {
+            gap: 5px;
+        }
+        .inventory-toolbar select {
+            max-width: 124px;
+            min-width: 82px;
+            padding: 7px 9px !important;
+            font-size: 0.83rem;
+        }
+        .inventory-toolbar .inventory-search-scope {
+            max-width: 106px;
+            min-width: 78px;
+        }
+        .inventory-toolbar .inventory-search-input {
+            flex: 1 1 110px;
+            min-width: 88px;
+            padding: 7px 9px;
+            font-size: 0.83rem;
+        }
+        .inventory-toolbar input[type="date"].table-search-input {
+            width: 104px !important;
+            min-width: 104px !important;
+            max-width: 104px !important;
+            padding: 7px 8px;
+            font-size: 0.81rem;
+        }
+        .inventory-toolbar .inventory-date-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        .inventory-toolbar .bloom-button,
+        .inventory-toolbar button {
+            padding: 0.42rem 0.62rem;
+            font-size: 0.8rem;
+        }
         .table-search-input {
             padding: 10px 12px;
             border-radius: 999px;
