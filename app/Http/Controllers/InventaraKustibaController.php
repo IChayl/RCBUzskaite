@@ -143,7 +143,7 @@ class InventaraKustibaController extends Controller
      */
     public function createKustiba()
     {
-        $inventari = Inventar::orderBy('inventars_id','asc')->get();
+        $inventari = Inventar::withoutAcceptedNorakstishana()->orderBy('inventars_id','asc')->get();
         $kustibasVeidi = KustibasVeidi::orderBy('kustibas_veids_id','asc')->get();
         $lietotaji = Lietotajs::orderBy('lietotajs_id','asc')->get();
         $telpas = Telpa::orderBy('telpas_id','asc')->get();
@@ -223,6 +223,11 @@ class InventaraKustibaController extends Controller
         $i->piezimes = $data['piezimes'] ?? null;
         $i->save();
 
+        if ($isNodosana) {
+            $inventars->atbildigais_id = $data['Jatbildigais_lietotajs_id'];
+            $inventars->save();
+        }
+
         return redirect()->to('/inventara_kustiba')->with('success','Ieraksts pievienots');
     }
 
@@ -244,7 +249,7 @@ class InventaraKustibaController extends Controller
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
         $i = InventaraKustiba::find($id);
-        $inventari = Inventar::orderBy('inventars_id','asc')->get();
+        $inventari = Inventar::withoutAcceptedNorakstishana()->orderBy('inventars_id','asc')->get();
         $kustibasVeidi = KustibasVeidi::orderBy('kustibas_veids_id','asc')->get();
         $lietotaji = Lietotajs::orderBy('lietotajs_id','asc')->get();
         $telpas = Telpa::orderBy('telpas_id','asc')->get();
