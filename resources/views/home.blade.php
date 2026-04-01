@@ -30,17 +30,6 @@
     <p>Rēzeknes Centrālās bibliotēkas inventāra uzskaites sistēma – pārskatāma, droša un efektīva bibliotēkas resursu pārvaldība.</p>
 </div>
 
-<div class="table-controls" style="margin-top: 18px; margin-bottom: 0;">
-    <a class="bloom-button" href="{{ url('/inventars?inventory_status=in_use') }}">Inventārs: Lietošanā</a>
-    <a class="bloom-button" href="{{ url('/inventars?inventory_status=in_repair') }}">Inventārs: Remontā</a>
-    <a class="bloom-button" href="{{ url('/inventars?inventory_status=written_off') }}">Inventārs: Norakstīts</a>
-    <a class="bloom-button" href="{{ url('/inventara_kustiba') }}">Kustības</a>
-    <a class="bloom-button" href="{{ url('/norakstishana') }}">Norakstīšana</a>
-    <a class="bloom-button" href="{{ url('/lietotajs') }}">Darbinieki</a>
-    <a class="bloom-button" href="{{ url('/telpa') }}">Saraksti: Telpu saraksts</a>
-    <a class="bloom-button" href="{{ url('/kategorija') }}">Saraksti: Kategoriju saraksts</a>
-</div>
-
 @endsection
 
 

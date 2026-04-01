@@ -25,7 +25,7 @@
             <select class="form-control" id="inventars_id" name="inventars_id" required>
                 <option value="">-- Izvēlieties inventāru --</option>
                 @foreach($inventari as $inv)
-                    <option value="{{ $inv->inventars_id }}" @if($kustiba->inventars_id == $inv->inventars_id) selected @endif>{{ $inv->inventara_numurs ?? '-' }} - {{ $inv->nosaukums }} (ID: {{ $inv->inventars_id }})</option>
+                    <option value="{{ $inv->inventars_id }}" @if($kustiba->inventars_id == $inv->inventars_id) selected @endif>{{ $inv->nosaukums }} (ID: {{ $inv->inventars_id }})</option>
                 @endforeach
             </select>
         </div>
@@ -53,13 +53,12 @@
         </div>
         <div class="mb-3">
             <label for="kustibas_veids_id" class="form-label">Kustības veids</label>
-            <select class="form-control" id="kustibas_veids_id" name="kustibas_veids_id" required>
+            <select class="form-control" id="kustibas_veids_id" name="kustibas_veids_id">
                 <option value="">-- Izvēlieties kustības veidu --</option>
                 @foreach($kustibasVeidi as $kv)
                     <option value="{{ $kv->kustibas_veids_id }}" @if($kustiba->kustibas_veids_id == $kv->kustibas_veids_id) selected @endif>{{ $kv->nosaukums }} (ID: {{ $kv->kustibas_veids_id }})</option>
                 @endforeach
             </select>
-            <small style="color:#E2D4BB; opacity:0.85;">Ieteicamie veidi: Pārvietošana, Nodošana, Remonts.</small>
         </div>
         <div class="mb-3">
             <label for="atbildigais_lietotajs_id" class="form-label">Atbildīgais lietotājs</label>

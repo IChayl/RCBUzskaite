@@ -23,16 +23,16 @@ class LoginController extends Controller
     public function submit(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'name' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        $user = Lietotajs::where('epasts', $request->input('email'))
+        $user = Lietotajs::where('lietotajvards', $request->input('name'))
             ->where('parole', $request->input('password'))
             ->first();
 
         if (! $user) {
-            return back()->withErrors(['email' => 'Nekorekts e-pasts vai parole'])->withInput();
+            return back()->withErrors(['name' => 'Nekorekts lietotājvārds vai parole'])->withInput();
         }
 
         Auth::login($user);

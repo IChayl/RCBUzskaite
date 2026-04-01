@@ -167,8 +167,8 @@
                 @csrf
 
                 <div class="mb-3">
-                    <label for="email" class="form-label">E-pasts</label>
-                    <input type="email" class="form-control" id="email" name="email" required value="{{ old('email') }}">
+                    <label for="name" class="form-label">Lietotājvārds</label>
+                    <input type="text" class="form-control" id="name" name="name" required value="{{ old('name') }}">
                 </div>
 
                 <div class="mb-3">
@@ -178,8 +178,8 @@
 
                 <button type="submit" class="btn btn-bloom w-100">Pieteikties</button>
 
-                Admins: chay@example.com, Parole: 12345
-                Lietotājs: test1@example.com, Parole: 12345
+                Admins: Chay, Parole: 12345
+                Lietotājs: Test1, Parole: 12345
 
             </form>
 

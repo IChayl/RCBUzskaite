@@ -179,19 +179,17 @@
   <nav>
    
        @if(Auth::check())
-      <a href="{{ url('/inventars?inventory_status=in_use') }}">Inventārs (Lietošanā)</a>
-      <a href="{{ url('/inventars?inventory_status=in_repair') }}">Inventārs (Remontā)</a>
-      <a href="{{ url('/inventars?inventory_status=written_off') }}">Inventārs (Norakstīts)</a>
+      <a href="/inventars">Inventārs</a>
       <a href="/inventara_kustiba">Kustības</a>
         <a href="/norakstishana" class="nav-link-with-badge">
-          <span>Norakstīšana</span>
+          <span>Norakstīšanas</span>
           @if(Auth::user()->admina_tiesibas && ($pendingNorakstishanaCount ?? 0) > 0)
             <span class="nav-badge" title="Neakceptēti norakstīšanas pieteikumi">{{ $pendingNorakstishanaCount }}</span>
           @endif
         </a>
-      <a href="/lietotajs">Darbinieki</a>
-      <a href="/telpa">Saraksti: Telpas</a>
-      <a href="/kategorija">Saraksti: Kategorijas</a>
+      <a href="/kategorija">Kategorijas tabula</a>
+      <a href="/telpa">Telpas</a>
+      <a href="/lietotajs">Lietotāji</a>
       @else
          @endif
   </nav>
@@ -199,7 +197,7 @@
   <div class="auth-links">
     @if(Auth::check())
       <a href="/Logout">Izlogoties</a>
-      {{ Auth::user()->epasts ?? Auth::user()->lietotajvards }} {{ Auth::user()->admina_tiesibas ? '(Admin)' : '' }}
+      {{ Auth::user()->lietotajvards }} {{ Auth::user()->admina_tiesibas ? '(Admin)' : '' }}
     @else
     <a href="/Login">Ielogoties</a>
     

@@ -35,13 +35,13 @@ class InventaraKustibaController extends Controller
         $direction = strtolower($request->input('direction', 'asc')) === 'desc' ? 'desc' : 'asc';
 
         // Drošība: atļautās kolonnas, pēc kurām var kārtot
-        $allowedSort = ['kustiba_id', 'datums', 'inventara_numurs', 'inventars', 'kustibas_veids', 'lietotajs', 'veca_telpa', 'jauna_telpa'];
+        $allowedSort = ['kustiba_id', 'datums', 'inventars', 'kustibas_veids', 'lietotajs', 'veca_telpa', 'jauna_telpa'];
         if (!in_array($sort, $allowedSort, true)) {
             $sort = 'kustiba_id';
         }
 
         // Atļautās kolonnas meklēšanai.
-        $allowedColumns = ['all', 'inventars', 'inventara_numurs'];
+        $allowedColumns = ['all', 'inventars'];
         if (!in_array($column, $allowedColumns, true)) {
             $column = 'all';
         }
@@ -66,10 +66,6 @@ class InventaraKustibaController extends Controller
                 $query->whereHas('inventars', function ($q2) use ($q) {
                     $q2->where('nosaukums', 'like', "%{$q}%");
                 });
-            } elseif ($column === 'inventara_numurs') {
-                $query->whereHas('inventars', function ($q2) use ($q) {
-                    $q2->where('inventara_numurs', 'like', "%{$q}%");
-                });
             }
         }
 
@@ -93,10 +89,6 @@ class InventaraKustibaController extends Controller
         if ($sort === 'inventars') {
             $query->leftJoin('inventars', 'inventara_kustiba.inventars_id', '=', 'inventars.inventars_id')
                 ->orderBy('inventars.nosaukums', $direction)
-                ->select('inventara_kustiba.*');
-        } elseif ($sort === 'inventara_numurs') {
-            $query->leftJoin('inventars', 'inventara_kustiba.inventars_id', '=', 'inventars.inventars_id')
-                ->orderBy('inventars.inventara_numurs', $direction)
                 ->select('inventara_kustiba.*');
         } elseif ($sort === 'kustibas_veids') {
             $query->leftJoin('kustibas_veidi', 'inventara_kustiba.kustibas_veids_id', '=', 'kustibas_veidi.kustibas_veids_id')
@@ -158,7 +150,7 @@ class InventaraKustibaController extends Controller
         $data = $req->validate([
             'datums' => 'required|date',
             'inventars_id' => 'required|integer|exists:inventars,inventars_id',
-            'kustibas_veids_id' => 'required|integer|exists:kustibas_veidi,kustibas_veids_id',
+            'kustibas_veids_id' => 'nullable|integer|exists:kustibas_veidi,kustibas_veids_id',
             'atbildigais_lietotajs_id' => 'required|integer|exists:lietotajs,lietotajs_id',
             'veca_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
             'jauna_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
@@ -169,7 +161,7 @@ class InventaraKustibaController extends Controller
         $i = new InventaraKustiba();
         $i->datums = $data['datums'];
         $i->inventars_id = $data['inventars_id'];
-        $i->kustibas_veids_id = $data['kustibas_veids_id'];
+        $i->kustibas_veids_id = $data['kustibas_veids_id'] ?? null;
         $i->atbildigais_lietotajs_id = $data['atbildigais_lietotajs_id'];
         $i->veca_telpa_id = $data['veca_telpa_id'] ?? null;
         $i->jauna_telpa_id = $data['jauna_telpa_id'] ?? null;
@@ -216,7 +208,7 @@ class InventaraKustibaController extends Controller
         $data = $req->validate([
             'datums' => 'required|date',
             'inventars_id' => 'required|integer|exists:inventars,inventars_id',
-            'kustibas_veids_id' => 'required|integer|exists:kustibas_veidi,kustibas_veids_id',
+            'kustibas_veids_id' => 'nullable|integer|exists:kustibas_veidi,kustibas_veids_id',
             'atbildigais_lietotajs_id' => 'required|integer|exists:lietotajs,lietotajs_id',
             'veca_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
             'jauna_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
@@ -227,7 +219,7 @@ class InventaraKustibaController extends Controller
         DB::table('inventara_kustiba')->where('kustiba_id',$id)->update([
             'datums' => $data['datums'],
             'inventars_id' => $data['inventars_id'],
-            'kustibas_veids_id' => $data['kustibas_veids_id'],
+            'kustibas_veids_id' => $data['kustibas_veids_id'] ?? null,
             'atbildigais_lietotajs_id' => $data['atbildigais_lietotajs_id'],
             'veca_telpa_id' => $data['veca_telpa_id'] ?? null,
             'jauna_telpa_id' => $data['jauna_telpa_id'] ?? null,

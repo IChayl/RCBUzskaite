@@ -712,13 +712,6 @@
                 color: #000 !important;
             }
 
-            .data-table .print-group-row td {
-                background: #e9e9e9 !important;
-                font-weight: 700 !important;
-                border: 1px solid #000 !important;
-                border-top: 2px solid #000 !important;
-            }
-
             .data-table tbody tr:nth-child(even) {
                 background: #f9f9f9 !important;
             }
@@ -918,47 +911,6 @@
             const initAllTableControls = () => {
                 document.querySelectorAll('.table-controls').forEach(initTableControls);
             };
-
-            const clearPrintGroups = () => {
-                document.querySelectorAll('.data-table .print-group-row').forEach((row) => row.remove());
-            };
-
-            const injectPrintGroups = () => {
-                clearPrintGroups();
-
-                document.querySelectorAll('.data-table').forEach((table) => {
-                    const tbody = table.tBodies[0];
-                    if (!tbody) return;
-
-                    let lastGroup = null;
-                    const rows = Array.from(tbody.rows).filter((row) => !row.classList.contains('print-group-row'));
-                    rows.forEach((row) => {
-                        if (row.style.display === 'none') return;
-
-                        const firstCell = row.cells[0];
-                        if (!firstCell) return;
-
-                        const rawText = (firstCell.textContent || '').trim();
-                        const groupTitle = rawText === '' ? 'Nav norādīts' : rawText;
-
-                        if (groupTitle !== lastGroup) {
-                            const groupRow = document.createElement('tr');
-                            groupRow.className = 'print-group-row';
-
-                            const groupCell = document.createElement('td');
-                            groupCell.colSpan = Math.max(row.cells.length, 1);
-                            groupCell.textContent = `Grupa: ${groupTitle}`;
-
-                            groupRow.appendChild(groupCell);
-                            tbody.insertBefore(groupRow, row);
-                            lastGroup = groupTitle;
-                        }
-                    });
-                });
-            };
-
-            window.addEventListener('beforeprint', injectPrintGroups);
-            window.addEventListener('afterprint', clearPrintGroups);
 
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', () => {

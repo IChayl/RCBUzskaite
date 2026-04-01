@@ -18,9 +18,8 @@
     <div class="table-controls" style="margin-bottom: 16px;">
         @if(Auth::user()->admina_tiesibas)
             <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'all']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'all' ? 'box-shadow: 0 0 0 2px rgba(226, 212, 187, 0.45), 0 16px 40px rgba(15, 25, 49, 0.45);' : '' }}">Viss inventārs</a>
-            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'in_use']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'in_use' ? 'box-shadow: 0 0 0 2px rgba(226, 212, 187, 0.45), 0 16px 40px rgba(15, 25, 49, 0.45);' : '' }}">Lietošanā</a>
-            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'in_repair']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'in_repair' ? 'box-shadow: 0 0 0 2px rgba(226, 212, 187, 0.45), 0 16px 40px rgba(15, 25, 49, 0.45);' : '' }}">Remontā</a>
-            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'written_off']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'written_off' ? 'box-shadow: 0 0 0 2px rgba(226, 212, 187, 0.45), 0 16px 40px rgba(15, 25, 49, 0.45);' : '' }}">Norakstīts</a>
+            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'written_off']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'written_off' ? 'box-shadow: 0 0 0 2px rgba(226, 212, 187, 0.45), 0 16px 40px rgba(15, 25, 49, 0.45);' : '' }}">Tikai norakstītais</a>
+            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'active']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'active' ? 'box-shadow: 0 0 0 2px rgba(226, 212, 187, 0.45), 0 16px 40px rgba(15, 25, 49, 0.45);' : '' }}">Tikai nenorakstītais</a>
         @else
 
         @endif
@@ -31,6 +30,11 @@
         <input type="hidden" name="inventory_scope" value="{{ $inventoryScope }}">
         <input type="hidden" name="sort" value="{{ request('sort') }}">
         <input type="hidden" name="direction" value="{{ request('direction') }}">
+        <input type="hidden" name="filter_kategorija" value="{{ request('filter_kategorija') }}">
+        <input type="hidden" name="filter_telpa" value="{{ request('filter_telpa') }}">
+        <input type="hidden" name="filter_atbildigais" value="{{ request('filter_atbildigais') }}">
+        <input type="hidden" name="iegades_datums_no" value="{{ request('iegades_datums_no') }}">
+        <input type="hidden" name="iegades_datums_lidz" value="{{ request('iegades_datums_lidz') }}">
         <label style="display:flex; align-items:center; gap:8px;">
             <span style="color:#E2D4BB; font-size:0.9rem;">Meklēt pēc:</span>
             <select name="column" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
@@ -40,6 +44,16 @@
             </select>
         </label>
         <input class="table-search-input" name="q" type="text" value="{{ request('q') }}" placeholder="Meklēt...">
+        <button type="submit" class="bloom-button sm" style="height: 36px;">Meklēt</button>
+    </form>
+ <hr>
+    <form method="GET" class="table-controls" style="margin-top: 10px;">
+        <input type="hidden" name="inventory_status" value="{{ $inventoryStatus }}">
+        <input type="hidden" name="inventory_scope" value="{{ $inventoryScope }}">
+        <input type="hidden" name="sort" value="{{ request('sort') }}">
+        <input type="hidden" name="direction" value="{{ request('direction') }}">
+        <input type="hidden" name="column" value="{{ request('column', 'all') }}">
+        <input type="hidden" name="q" value="{{ request('q') }}">
         <select name="filter_kategorija" style="border-radius:999px; padding: 8px 12px; border:1px solid rgba(226, 212, 187, 0.2); background:rgba(226, 212, 187, 0.06); color:#E2D4BB;">
             <option style="color:#0F1931;" value="">Kategorija (visas)</option>
             @foreach($kategorijas as $kategorija)
@@ -58,10 +72,9 @@
                 <option style="color:#0F1931;" value="{{ $lietotajs->lietotajs_id }}" {{ (string) request('filter_atbildigais') === (string) $lietotajs->lietotajs_id ? 'selected' : '' }}>{{ $lietotajs->pilnais_vards }}</option>
             @endforeach
         </select>
-        <span style="color:#E2D4BB;">Datums no</span>
-        <input type="date" name="iegades_datums_no" value="{{ request('iegades_datums_no') }}" class="table-search-input" style="max-width: 170px;" title="Iegādes datums no">
-        <span style="color:#E2D4BB;">līdz</span>
-        <input type="date" name="iegades_datums_lidz" value="{{ request('iegades_datums_lidz') }}" class="table-search-input" style="max-width: 170px;" title="Iegādes datums līdz">
+        <br>
+        datums no <input type="date" name="iegades_datums_no" value="{{ request('iegades_datums_no') }}" class="table-search-input" style="max-width: 170px;" title="Iegādes datums no">
+        datums līdz <input type="date" name="iegades_datums_lidz" value="{{ request('iegades_datums_lidz') }}" class="table-search-input" style="max-width: 170px;" title="Iegādes datums līdz">
         <button type="submit" class="bloom-button sm" style="height: 36px;">Filtrēt</button>
         <a href="{{ url('/inventars') }}" class="bloom-button sm" style="height: 36px;">Notīrīt</a>
         <span class="no-results-message" style="display:none; color:#2D4159;">Nav rezultātu.</span>
@@ -83,10 +96,6 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th class="sortable {{ request('sort') === 'inventara_numurs' ? 'sorted-'.request('direction','asc') : '' }}">
-                            @php $dir = request('sort') === 'inventara_numurs' && request('direction') === 'asc' ? 'desc' : 'asc'; @endphp
-                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'inventara_numurs', 'direction' => $dir]) }}">Inv. numurs</a>
-                        </th>
                         <th class="sortable {{ request('sort') === 'nosaukums' ? 'sorted-'.request('direction','asc') : '' }}">
                             @php $dir = request('sort') === 'nosaukums' && request('direction') === 'asc' ? 'desc' : 'asc'; @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'nosaukums', 'direction' => $dir]) }}">Nosaukums</a>
@@ -103,6 +112,10 @@
                             @php $dir = request('sort') === 'atbildigais' && request('direction') === 'asc' ? 'desc' : 'asc'; @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'atbildigais', 'direction' => $dir]) }}">Atbildīgais</a>
                         </th>
+                        <th class="sortable {{ request('sort') === 'inventara_numurs' ? 'sorted-'.request('direction','asc') : '' }}">
+                            @php $dir = request('sort') === 'inventara_numurs' && request('direction') === 'asc' ? 'desc' : 'asc'; @endphp
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'inventara_numurs', 'direction' => $dir]) }}">Inventāra numurs</a>
+                        </th>
                         <th class="sortable {{ request('sort') === 'iegades_datums' ? 'sorted-'.request('direction','asc') : '' }}">
                             @php $dir = request('sort') === 'iegades_datums' && request('direction') === 'asc' ? 'desc' : 'asc'; @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'iegades_datums', 'direction' => $dir]) }}">Iegādes datums</a>
@@ -114,11 +127,11 @@
                     <!-- Tabulas rinda katram inventāra ierakstam -->
                     @foreach ($inventari as $item)
                         <tr>
-                            <td>{{ $item->inventara_numurs ?? '-' }}</td>
                             <td>{{ $item->nosaukums }}</td>
                             <td>{{ $item->kategorija->nosaukums ?? ('ID: '.$item->kategorija_id) }}</td>
                             <td>{{ optional($item->telpa)->nosaukums ?? ('ID: '.$item->telpas_id) }}</td>
                             <td>{{ optional($item->atbildigais)->pilnais_vards ?? ('ID: '.$item->atbildigais_id) }}</td>
+                            <td>{{ $item->inventara_numurs ?? '-' }}</td>
                             <td>@lvDate($item->iegades_datums)</td>
                             @if(Auth::user()->admina_tiesibas)
                             <td>

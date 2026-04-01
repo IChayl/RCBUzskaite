@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #E2D4BB;">Telpu saraksts</p>
+    <p style="color: #E2D4BB;">Visas telpas</p>
 
  <div class="auth-links">
         @if(Auth::user()->admina_tiesibas)
@@ -20,7 +20,7 @@
         @endif
     </div>
 
-    <h2 style="color: #E2D4BB;">Telpu saraksts</h2>
+    <h2 style="color: #E2D4BB;">Telpas</h2>
 
     <!-- Telpu meklēšanas un kārtošanas vadīklas -->
     <form method="GET" class="table-controls">

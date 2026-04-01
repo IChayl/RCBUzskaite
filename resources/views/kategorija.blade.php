@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('content')
-    <p style="color: #E2D4BB;">Kategoriju saraksts</p>
+    <p style="color: #E2D4BB;">Visas kategorijas</p>
 
  <div class="auth-links">
         @if(Auth::user()->admina_tiesibas)
@@ -11,7 +11,7 @@
     </div>
 
     <hr>
-    <h2 style="color: #E2D4BB;">Kategoriju saraksts</h2>
+    <h2 style="color: #E2D4BB;">Kategorijas</h2>
 
     <!-- Meklēšana un kārtošanas parametru nodošana uz serveri -->
     <form method="GET" class="table-controls">
