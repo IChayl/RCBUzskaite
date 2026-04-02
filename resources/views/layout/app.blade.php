@@ -1286,7 +1286,7 @@
                     validate();
                 };
 
-                document.querySelectorAll('form.table-controls').forEach((form) => {
+                document.querySelectorAll('form').forEach((form) => {
                     const fromInputs = form.querySelectorAll('input[name$="_no"], input[name$="_from"]');
                     fromInputs.forEach((fromInput) => {
                         const toInput = findToInput(form, fromInput.name || '');

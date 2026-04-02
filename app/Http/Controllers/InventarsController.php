@@ -8,6 +8,7 @@ use App\Models\Telpa;
 use App\Models\KategorijaModel;
 use App\Models\Lietotajs;
 use App\Http\Controllers\Concerns\HandlesSafeDelete;
+use App\Http\Controllers\Concerns\NormalizesDateRanges;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
@@ -15,6 +16,7 @@ use Illuminate\Validation\Rule;
 class InventarsController extends Controller
 {
     use HandlesSafeDelete;
+    use NormalizesDateRanges;
     /**
      * Parāda inventāra sarakstu ar meklēšanu, kārtošanu un lapošanu.
      */
@@ -67,8 +69,7 @@ class InventarsController extends Controller
         $filterKategorija = $request->input('filter_kategorija');
         $filterTelpa = $request->input('filter_telpa');
         $filterAtbildigais = $request->input('filter_atbildigais');
-        $dateFrom = $request->input('iegades_datums_no');
-        $dateTo = $request->input('iegades_datums_lidz');
+        [$dateFrom, $dateTo] = $this->normalizeDateRange($request, 'iegades_datums_no', 'iegades_datums_lidz');
 
         if ($inventoryScope === 'responsible' && ! $user->admina_tiesibas && $inventoryStatus === 'all') {
             $query->where(function ($responsibleQuery) use ($user) {

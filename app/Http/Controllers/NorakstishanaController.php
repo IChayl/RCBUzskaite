@@ -9,6 +9,7 @@ use App\Models\InventaraKustiba;
 use App\Models\KustibasVeidi;
 use App\Models\Lietotajs;
 use App\Http\Controllers\Concerns\HandlesSafeDelete;
+use App\Http\Controllers\Concerns\NormalizesDateRanges;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
@@ -17,6 +18,7 @@ use Illuminate\Validation\ValidationException;
 class NorakstishanaController extends Controller
 {
     use HandlesSafeDelete;
+    use NormalizesDateRanges;
     /**
      * Parāda norakstīšanas sarakstu ar meklēšanu, kārtošanu un lapošanu.
      */
@@ -29,8 +31,7 @@ class NorakstishanaController extends Controller
         // Meklēšanas teksta un kolonnas iestatījumi
         $q = trim($request->input('q', ''));
         $column = $request->input('column', 'all');
-        $dateFrom = $request->input('nor_datums_no');
-        $dateTo = $request->input('nor_datums_lidz');
+        [$dateFrom, $dateTo] = $this->normalizeDateRange($request, 'nor_datums_no', 'nor_datums_lidz');
 
         // Kārtošanas parametri
         $sort = $request->input('sort', 'norakstishana_id');

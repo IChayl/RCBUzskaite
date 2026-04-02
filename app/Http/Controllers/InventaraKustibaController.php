@@ -9,12 +9,14 @@ use App\Models\KustibasVeidi;
 use App\Models\Lietotajs;
 use App\Models\Telpa;
 use App\Http\Controllers\Concerns\HandlesSafeDelete;
+use App\Http\Controllers\Concerns\NormalizesDateRanges;
 use Illuminate\Support\Facades\DB;
 
 // Kontrolieris inventāra kustību pārvaldībai.
 class InventaraKustibaController extends Controller
 {
     use HandlesSafeDelete;
+    use NormalizesDateRanges;
     /**
      * Parāda kustību sarakstu ar filtrēšanu, kārtošanu un lapošanu.
      */
@@ -27,8 +29,7 @@ class InventaraKustibaController extends Controller
         $column = $request->input('column', 'all');
         $filterVeids = $request->input('filter_veids');
         $filterAtbildigais = $request->input('filter_atbildigais');
-        $dateFrom = $request->input('datums_no');
-        $dateTo = $request->input('datums_lidz');
+        [$dateFrom, $dateTo] = $this->normalizeDateRange($request, 'datums_no', 'datums_lidz');
 
         // Kārtošanas iestatījumi: kolonna un virziens (asc/desc)
         $sort = $request->input('sort', 'kustiba_id');
