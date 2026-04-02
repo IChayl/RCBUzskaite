@@ -1225,6 +1225,67 @@
                 document.querySelectorAll('.table-controls').forEach(initTableControls);
             };
 
+            const initDateRangeFilters = () => {
+                const normalizeDateValue = (value) => {
+                    const trimmed = (value || '').trim();
+                    return /^\d{4}-\d{2}-\d{2}$/.test(trimmed) ? trimmed : '';
+                };
+
+                const findToInput = (form, fromName) => {
+                    if (fromName.endsWith('_no')) {
+                        const base = fromName.slice(0, -3);
+                        return form.querySelector(`input[name="${base}_lidz"]`);
+                    }
+
+                    if (fromName.endsWith('_from')) {
+                        const base = fromName.slice(0, -5);
+                        return form.querySelector(`input[name="${base}_to"]`);
+                    }
+
+                    return null;
+                };
+
+                const bindRange = (form, fromInput, toInput) => {
+                    const validate = () => {
+                        const fromValue = normalizeDateValue(fromInput.value);
+                        const toValue = normalizeDateValue(toInput.value);
+
+                        toInput.min = fromValue || '';
+
+                        if (fromValue && toValue && toValue < fromValue) {
+                            toInput.setCustomValidity('Datums "līdz" nevar būt agrāks par datumu "no".');
+                            return false;
+                        }
+
+                        toInput.setCustomValidity('');
+                        return true;
+                    };
+
+                    fromInput.addEventListener('change', validate);
+                    fromInput.addEventListener('input', validate);
+                    toInput.addEventListener('change', validate);
+                    toInput.addEventListener('input', validate);
+
+                    form.addEventListener('submit', (event) => {
+                        if (!validate()) {
+                            event.preventDefault();
+                            toInput.reportValidity();
+                        }
+                    });
+
+                    validate();
+                };
+
+                document.querySelectorAll('form.table-controls').forEach((form) => {
+                    const fromInputs = form.querySelectorAll('input[name$="_no"], input[name$="_from"]');
+                    fromInputs.forEach((fromInput) => {
+                        const toInput = findToInput(form, fromInput.name || '');
+                        if (!toInput) return;
+                        bindRange(form, fromInput, toInput);
+                    });
+                });
+            };
+
             const printGroupState = new WeakMap();
 
             const getPrintableText = (row, columnIndex) => {
@@ -1322,10 +1383,12 @@
                 document.addEventListener('DOMContentLoaded', () => {
                     initDatePickers();
                     initAllTableControls();
+                    initDateRangeFilters();
                 });
             } else {
                 initDatePickers();
                 initAllTableControls();
+                initDateRangeFilters();
             }
         })();
     </script>
