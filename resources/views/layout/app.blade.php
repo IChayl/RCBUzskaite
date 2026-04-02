@@ -9,6 +9,16 @@
    
     <meta name="theme-color" content="#0F1931">
     <!-- Iekļauta data-URI favicon (rezerves variants) -->
+
+    <script>
+        (function () {
+            const key = 'rcb-theme';
+            const stored = localStorage.getItem(key);
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = stored === 'light' || stored === 'dark' ? stored : (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
@@ -25,16 +35,61 @@
             --maroon: #2D4159;
             --maroon-2: #2D4159;
             --accent: #E2D4BB;
+            --text-main: #E2D4BB;
+            --bg-gradient-start: #0F1931;
+            --bg-gradient-end: #2D4159;
+            --shape-1: rgba(45, 65, 89, 0.24);
+            --shape-2: rgba(45, 65, 89, 0.28);
+            --surface-bg: rgba(45, 65, 89, 0.45);
+            --surface-bg-soft: rgba(45, 65, 89, 0.5);
+            --surface-border: rgba(45, 65, 89, 0.62);
+            --table-border: rgba(226, 212, 187, 0.26);
+            --header-bg: linear-gradient(90deg, #0F1931, #2D4159);
+            --header-shadow: 0 4px 12px rgba(15, 25, 49, 0.45);
+            --footer-bg: linear-gradient(90deg, #0F1931, #2D4159);
+            --footer-shadow: 0 -4px 10px rgba(15, 25, 49, 0.4);
+            --button-text: #E2D4BB;
+            --button-outline: rgba(45, 65, 89, 0.35);
+            --title-shadow:
+                0 0 10px rgba(45, 65, 89, 0.7),
+                0 0 20px rgba(45, 65, 89, 0.75),
+                0 0 30px rgba(45, 65, 89, 0.8),
+                0 6px 20px rgba(15, 25, 49, 0.8);
+        }
+
+        html[data-theme="light"] {
+            --navy: #f4f7fb;
+            --navy-2: #dee8f4;
+            --maroon: #e9eff7;
+            --maroon-2: #d6e1ef;
+            --accent: #1d2a3b;
+            --text-main: #1d2a3b;
+            --bg-gradient-start: #f7faff;
+            --bg-gradient-end: #e8eef7;
+            --shape-1: rgba(122, 156, 196, 0.2);
+            --shape-2: rgba(149, 175, 209, 0.22);
+            --surface-bg: rgba(255, 255, 255, 0.74);
+            --surface-bg-soft: rgba(255, 255, 255, 0.86);
+            --surface-border: rgba(126, 152, 183, 0.42);
+            --table-border: rgba(82, 109, 140, 0.24);
+            --header-bg: linear-gradient(90deg, #e5edf7, #d5e1ef);
+            --header-shadow: 0 6px 18px rgba(92, 115, 143, 0.2);
+            --footer-bg: linear-gradient(90deg, #e5edf7, #d5e1ef);
+            --footer-shadow: 0 -4px 10px rgba(92, 115, 143, 0.18);
+            --button-text: #1d2a3b;
+            --button-outline: rgba(98, 128, 165, 0.35);
+            --title-shadow:
+                0 2px 12px rgba(110, 138, 170, 0.4);
         }
 
         html,body{
             height:100%;
             margin:0;
             font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            background: radial-gradient(1200px 800px at 10% 20%, rgba(45, 65, 89, 0.24), transparent 8%),
-                        radial-gradient(1000px 600px at 90% 80%, rgba(45, 65, 89, 0.28), transparent 10%),
-                        linear-gradient(180deg, var(--navy) 0%, var(--maroon) 100%);
-            color: var(--accent);
+            background: radial-gradient(1200px 800px at 10% 20%, var(--shape-1), transparent 8%),
+                        radial-gradient(1000px 600px at 90% 80%, var(--shape-2), transparent 10%),
+                        linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            color: var(--text-main);
             -webkit-font-smoothing:antialiased;
             -moz-osx-font-smoothing:grayscale;
         }
@@ -97,11 +152,7 @@
             font-size:1.75rem;
             letter-spacing:0.6px;
             color: var(--accent);
-            text-shadow: 
-            0 0 10px rgba(45, 65, 89, 0.7),
-            0 0 20px rgba(45, 65, 89, 0.75),
-            0 0 30px rgba(45, 65, 89, 0.8),
-            0 6px 20px rgba(15, 25, 49, 0.8);
+            text-shadow: var(--title-shadow);
         }
 
         /* Nodrošina, ka virsraksti ir salasāmi uz tumša fona */
@@ -111,18 +162,19 @@
 
         /* Kartītes stils galvenajam saturam */
         .card-surface{
-            border: 1px solid rgba(45, 65, 89, 0.42);
+            border: 1px solid var(--surface-border);
             border-radius: 18px;
             padding: 1.5rem;
-            box-shadow: 0 8px 30px rgba(15, 25, 49, 0.7), inset 0 1px 0 rgba(45, 65, 89, 0.32);
+            box-shadow: 0 8px 30px rgba(15, 25, 49, 0.35), inset 0 1px 0 rgba(45, 65, 89, 0.2);
             backdrop-filter: blur(6px) saturate(120%);
+            background: var(--surface-bg);
         }
 
         /* Bloom pogas stils */
         .bloom-button{
             display:inline-block;
             background: linear-gradient(90deg, var(--navy-2) 0%, var(--maroon) 50%, var(--maroon-2) 100%);
-            color: var(--accent);
+            color: var(--button-text);
             border: none;
             padding: .6rem 1rem;
             border-radius: 999px;
@@ -138,7 +190,7 @@
             -webkit-tap-highlight-color: transparent;
         }
         .bloom-button:focus{
-            outline: 3px solid rgba(45, 65, 89, 0.35);
+            outline: 3px solid var(--button-outline);
             outline-offset: 4px;
         }
         .bloom-button:hover{
@@ -182,7 +234,7 @@
         .data-table th,
         .data-table td {
             padding: 12px 14px;
-            border-bottom: 1px solid rgba(226, 212, 187, 0.26);
+            border-bottom: 1px solid var(--table-border);
             vertical-align: top;
             overflow-wrap: anywhere;
             word-break: break-word;
@@ -201,11 +253,11 @@
             display: none;
         }
         .data-table tbody tr {
-            background: rgba(45, 65, 89, 0.45);
+            background: var(--surface-bg);
             transition: background 0.2s ease;
         }
         .data-table tbody tr:hover {
-            background: rgba(45, 65, 89, 0.5);
+            background: var(--surface-bg-soft);
         }
         .data-table .actions {
             display: flex;
@@ -333,9 +385,9 @@
         .table-search-input {
             padding: 10px 12px;
             border-radius: 999px;
-            border: 1px solid rgba(45, 65, 89, 0.65);
-            background: rgba(45, 65, 89, 0.5);
-            color: var(--accent);
+            border: 1px solid var(--surface-border);
+            background: var(--surface-bg-soft);
+            color: var(--text-main);
             min-width: 0;
         }
         .table-search-input:focus {
@@ -345,9 +397,9 @@
         /* Formu lauki pielāgoti tumšajai sarakstu lapu tēmai */
         .form-control,
         .form-select {
-            background: rgba(45, 65, 89, 0.5);
-            border: 1px solid rgba(45, 65, 89, 0.65);
-            color: var(--accent);
+            background: var(--surface-bg-soft);
+            border: 1px solid var(--surface-border);
+            color: var(--text-main);
             border-radius: 999px;
         }
 
@@ -549,7 +601,7 @@
         .btn-primary,
         .btn-secondary {
             background: linear-gradient(90deg, var(--navy-2) 0%, var(--maroon) 50%, var(--maroon-2) 100%);
-            color: var(--accent);
+            color: var(--button-text);
             border: none;
             padding: .55rem 1rem;
             border-radius: 999px;
@@ -624,9 +676,9 @@
             justify-content: center;
             padding: 0.4rem 0.7rem;
             border-radius: 999px;
-            border: 1px solid rgba(45, 65, 89, 0.62);
-            background: rgba(45, 65, 89, 0.5);
-            color: var(--accent);
+            border: 1px solid var(--surface-border);
+            background: var(--surface-bg-soft);
+            color: var(--text-main);
             text-decoration: none;
             min-width: 36px;
             font-size: 0.9rem;
@@ -659,8 +711,8 @@
             align-items: center;
             padding: 12px 14px;
             border-radius: 14px;
-            border: 1px solid rgba(45, 65, 89, 0.62);
-            background: rgba(45, 65, 89, 0.45);
+            border: 1px solid var(--surface-border);
+            background: var(--surface-bg);
             transition: background 0.2s ease, transform 0.2s ease;
         }
         .card-table-header {
@@ -684,12 +736,19 @@
 
         /* Kartīšu saraksta rindas, stilizētas kā tabulas rindas */
         .table-card {
-            background: rgba(45, 65, 89, 0.45);
-            border: 1px solid rgba(45, 65, 89, 0.62);
+            background: var(--surface-bg);
+            border: 1px solid var(--surface-border);
             border-radius: 16px;
             box-shadow: 0 6px 18px rgba(15, 25, 49, 0.35);
             transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
             animation: fadeIn 0.25s ease;
+        }
+
+        html[data-theme="light"] .table-card,
+        html[data-theme="light"] .card-surface,
+        html[data-theme="light"] .card-table-header,
+        html[data-theme="light"] .card-table-row {
+            box-shadow: 0 8px 20px rgba(88, 120, 156, 0.15);
         }
         .table-card:hover {
             background: rgba(45, 65, 89, 0.5);
@@ -1067,6 +1126,24 @@
                 color: #000 !important;
             }
         }
+
+        html[data-theme="light"] header,
+        html[data-theme="light"] .small header {
+            background: var(--header-bg) !important;
+            box-shadow: var(--header-shadow) !important;
+            border-bottom-color: rgba(98, 128, 165, 0.24) !important;
+        }
+
+        html[data-theme="light"] footer {
+            background: var(--footer-bg) !important;
+            box-shadow: var(--footer-shadow) !important;
+            border-top: 1px solid rgba(98, 128, 165, 0.22);
+        }
+
+        html[data-theme="light"] .nav-badge {
+            background: #2f4766;
+            color: #f5f9ff;
+        }
     </style>
 </head>
 <body>
@@ -1126,6 +1203,65 @@
 
     <script>
         (function(){
+            const THEME_KEY = 'rcb-theme';
+
+            const getCurrentTheme = () => {
+                const active = document.documentElement.getAttribute('data-theme');
+                return active === 'light' ? 'light' : 'dark';
+            };
+
+            const updateThemeMeta = (theme) => {
+                const meta = document.querySelector('meta[name="theme-color"]');
+                if (!meta) return;
+                meta.setAttribute('content', theme === 'light' ? '#e8eef7' : '#0F1931');
+            };
+
+            const updateThemeButton = () => {
+                const toggleButton = document.querySelector('[data-theme-toggle]');
+                if (!toggleButton) return;
+
+                const current = getCurrentTheme();
+                const iconEl = toggleButton.querySelector('[data-theme-icon]');
+                const labelEl = toggleButton.querySelector('[data-theme-label]');
+
+                if (iconEl) {
+                    iconEl.className = current === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+                }
+
+                if (labelEl) {
+                    labelEl.textContent = current === 'light' ? 'Gaiša tēma' : 'Tumša tēma';
+                }
+
+                toggleButton.setAttribute('aria-pressed', current === 'dark' ? 'true' : 'false');
+                toggleButton.setAttribute('title', current === 'light' ? 'Pārslēgt uz tumšo tēmu' : 'Pārslēgt uz gaišo tēmu');
+            };
+
+            const applyTheme = (theme, persist = true) => {
+                const resolved = theme === 'light' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', resolved);
+                updateThemeMeta(resolved);
+                updateThemeButton();
+
+                if (persist) {
+                    localStorage.setItem(THEME_KEY, resolved);
+                }
+            };
+
+            const initThemeToggle = () => {
+                const toggleButton = document.querySelector('[data-theme-toggle]');
+                updateThemeMeta(getCurrentTheme());
+                updateThemeButton();
+
+                if (!toggleButton || toggleButton.dataset.themeBound === '1') return;
+
+                toggleButton.addEventListener('click', () => {
+                    const next = getCurrentTheme() === 'dark' ? 'light' : 'dark';
+                    applyTheme(next);
+                });
+
+                toggleButton.dataset.themeBound = '1';
+            };
+
             const initDatePickers = () => {
                 if (!window.flatpickr) return;
 
@@ -1391,11 +1527,13 @@
 
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', () => {
+                    initThemeToggle();
                     initDatePickers();
                     initAllTableControls();
                     initDateRangeFilters();
                 });
             } else {
+                initThemeToggle();
                 initDatePickers();
                 initAllTableControls();
                 initDateRangeFilters();

@@ -3,22 +3,22 @@
     /* Galvenes pamatstils */
     header {
       position: relative;
-      background: linear-gradient(90deg, #0F1931, #2D4159);
-      color: #E2D4BB;
+      background: var(--header-bg, linear-gradient(90deg, #0F1931, #2D4159));
+      color: var(--accent, #E2D4BB);
       padding: 15px 30px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       overflow: hidden;
       transparency: true;
-      box-shadow: 0 4px 12px rgba(15, 25, 49, 0.45);
+      box-shadow: var(--header-shadow, 0 4px 12px rgba(15, 25, 49, 0.45));
       border-bottom: 2px solid rgba(226, 212, 187, 0.1);
     }
 
       .small header {
       position: relative;
-      background: linear-gradient(90deg, #0F1931, #2D4159);
-      color: #E2D4BB;
+      background: var(--header-bg, linear-gradient(90deg, #0F1931, #2D4159));
+      color: var(--accent, #E2D4BB);
       padding: 15px 30px;
       display: flex;
       align-items: center;
@@ -27,7 +27,7 @@
       transparency: true;
       border-radius: 18px;
       
-      box-shadow: 0 4px 12px rgba(15, 25, 49, 0.45);
+      box-shadow: var(--header-shadow, 0 4px 12px rgba(15, 25, 49, 0.45));
       border-bottom: 2px solid rgba(226, 212, 187, 0.1);
     }
 
@@ -56,7 +56,7 @@
 
     /* Zīmola nosaukums */
     .brand a {
-      color: #E2D4BB;
+      color: var(--accent, #E2D4BB);
       font-size: 1.6em;
       font-weight: bold;
       text-decoration: none;
@@ -81,7 +81,7 @@
 
     nav a {
       position: relative;
-      color: #E2D4BB;
+      color: var(--accent, #E2D4BB);
       text-decoration: none;
       font-weight: 500;
       letter-spacing: 0.5px;
@@ -109,8 +109,8 @@
     }
 
     nav a:hover {
-      color: #E2D4BB;
-      text-shadow: 0 0 10px #E2D4BB, 0 0 22px #E2D4BB;
+      color: var(--accent, #E2D4BB);
+      text-shadow: 0 0 10px var(--accent, #E2D4BB), 0 0 22px var(--accent, #E2D4BB);
     }
 
     .nav-link-with-badge {
@@ -127,8 +127,8 @@
       height: 22px;
       padding: 0 7px;
       border-radius: 999px;
-      background: #E2D4BB;
-      color: #0F1931;
+      background: var(--accent, #E2D4BB);
+      color: var(--navy, #0F1931);
       font-size: 0.75rem;
       font-weight: 700;
       line-height: 1;
@@ -139,11 +139,13 @@
     .auth-links {
       display: flex;
       gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
       z-index: 1;
     }
 
     .auth-links a {
-      color: #E2D4BB;
+      color: var(--accent, #E2D4BB);
       text-decoration: none;
       font-weight: 500;
       letter-spacing: 0.5px;
@@ -153,6 +155,39 @@
       transition: all 0.3s ease;
       background: rgba(226, 212, 187, 0.05);
       backdrop-filter: blur(3px);
+    }
+
+    .auth-user {
+      color: var(--accent, #E2D4BB);
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      padding: 2px 4px;
+      border-radius: 8px;
+    }
+
+    .theme-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(226, 212, 187, 0.3);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-weight: 600;
+      background: rgba(226, 212, 187, 0.08);
+      color: var(--accent, #E2D4BB);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .theme-toggle-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(226, 212, 187, 0.16);
+      box-shadow: 0 8px 18px rgba(15, 25, 49, 0.25);
+    }
+
+    .theme-toggle-btn:focus-visible {
+      outline: 2px solid var(--button-outline, rgba(45, 65, 89, 0.35));
+      outline-offset: 3px;
     }
 
     .auth-links a:hover {
@@ -199,10 +234,15 @@
   <div class="auth-links">
     @if(Auth::check())
       <a href="/Logout">Izlogoties</a>
-      {{ Auth::user()->pilnais_vards }} {{ Auth::user()->admina_tiesibas ? '(Admin)' : '' }}
+      <span class="auth-user">{{ Auth::user()->pilnais_vards }} {{ Auth::user()->admina_tiesibas ? '(Admin)' : '' }}</span>
     @else
     <a href="/Login">Ielogoties</a>
     
     @endif
+
+    <button type="button" class="theme-toggle-btn" data-theme-toggle aria-label="Mainīt tēmu" aria-pressed="false">
+      <i class="fa-solid fa-moon" aria-hidden="true" data-theme-icon></i>
+      <span data-theme-label>Tumša tēma</span>
+    </button>
   </div>
 </header>

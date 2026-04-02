@@ -1,8 +1,8 @@
 <footer>
   <style>
     footer {
-      background: linear-gradient(90deg, #0F1931, #2D4159);
-      color: #E2D4BB;
+      background: var(--footer-bg, linear-gradient(90deg, #0F1931, #2D4159));
+      color: var(--accent, #E2D4BB);
       text-align: center;
       padding: 20px 10px;
       font-size: 0.95rem;
@@ -10,7 +10,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      box-shadow: 0 -4px 10px rgba(15, 25, 49, 0.4);
+      box-shadow: var(--footer-shadow, 0 -4px 10px rgba(15, 25, 49, 0.4));
       z-index: 100;
     }
 
@@ -20,7 +20,7 @@
     }
 
     footer a {
-      color: #E2D4BB;
+      color: var(--accent, #E2D4BB);
       text-decoration: none;
       transition: all 0.3s ease;
       margin: 0 5px;
@@ -46,13 +46,6 @@
       animation: glow 0.3s ease-in-out;
     }
 
-    /* Nodrošina, ka saturs virs kājenes nepazūd aiz tās */
-    body {
-      margin: 0;
-      padding-bottom: 70px; /* Pielāgo atkarībā no kājenes augstuma */
-      background-color: #0F1931;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
   </style>
 
   <div class="container">

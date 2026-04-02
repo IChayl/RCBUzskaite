@@ -6,6 +6,15 @@
     <title>Pieteikšanās</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <meta name="theme-color" content="#0F1931">
+    <script>
+        (function () {
+            const key = 'rcb-theme';
+            const stored = localStorage.getItem(key);
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = stored === 'light' || stored === 'dark' ? stored : (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -18,6 +27,16 @@
             --accent: #E2D4BB;
             --card-bg: rgba(226, 212, 187, 0.06);
             --muted-white: rgba(226, 212, 187, 0.9);
+        }
+
+        html[data-theme="light"] {
+            --navy: #f7faff;
+            --navy-2: #dae5f3;
+            --maroon: #e9eff7;
+            --maroon-2: #c8d8eb;
+            --accent: #1f2f43;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --muted-white: #1f2f43;
         }
 
         html, body {
@@ -37,6 +56,20 @@
             align-items: center;
             justify-content: center;
             padding: 2rem;
+        }
+
+        .theme-toggle-floating {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 1000;
+            border: 1px solid rgba(226, 212, 187, 0.32);
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-weight: 600;
+            color: var(--accent);
+            background: rgba(226, 212, 187, 0.1);
+            backdrop-filter: blur(4px);
         }
 
         /* Stikla efekta kartīte */
@@ -146,6 +179,7 @@
 </head>
 
 <body>
+    <button type="button" class="theme-toggle-floating" data-theme-toggle aria-label="Mainīt tēmu">Tumša tēma</button>
 
     <div class="center-wrap">
         <div class="card custom p-4">
@@ -191,4 +225,37 @@
     </div>
 
 </body>
+<script>
+    (function () {
+        const key = 'rcb-theme';
+
+        const getTheme = () => document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+
+        const setTheme = (theme) => {
+            const resolved = theme === 'light' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', resolved);
+            localStorage.setItem(key, resolved);
+
+            const meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) {
+                meta.setAttribute('content', resolved === 'light' ? '#e8eef7' : '#0F1931');
+            }
+
+            const btn = document.querySelector('[data-theme-toggle]');
+            if (btn) {
+                btn.textContent = resolved === 'light' ? 'Gaiša tēma' : 'Tumša tēma';
+                btn.title = resolved === 'light' ? 'Pārslēgt uz tumšo tēmu' : 'Pārslēgt uz gaišo tēmu';
+            }
+        };
+
+        const button = document.querySelector('[data-theme-toggle]');
+        if (button) {
+            button.addEventListener('click', () => {
+                setTheme(getTheme() === 'dark' ? 'light' : 'dark');
+            });
+        }
+
+        setTheme(getTheme());
+    })();
+</script>
 </html>
