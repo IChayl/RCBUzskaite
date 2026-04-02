@@ -169,16 +169,33 @@
             border-collapse: collapse;
             color: var(--accent);
         }
+        .table-wrap {
+            width: 100%;
+            max-width: 100%;
+        }
+        .table-wrap--fit {
+            overflow-x: hidden;
+        }
+        .movement-table {
+            table-layout: fixed;
+        }
         .data-table th,
         .data-table td {
             padding: 12px 14px;
             border-bottom: 1px solid rgba(226, 212, 187, 0.26);
+            vertical-align: top;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
         .data-table th {
             font-weight: 600;
             border-bottom: 2px solid rgba(45, 65, 89, 0.45);
             text-align: left;
             letter-spacing: 0.02em;
+        }
+        .movement-table th,
+        .movement-table td {
+            white-space: normal;
         }
         .data-table tbody tr {
             background: rgba(45, 65, 89, 0.45);
@@ -197,12 +214,12 @@
         /* Meklēšanas un kārtošanas vadīklas */
         .table-controls {
             display: flex;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
             align-items: center;
             gap: 8px;
             margin-bottom: 12px;
-            overflow: hidden;
-            white-space: nowrap;
+            overflow: visible;
+            white-space: normal;
             min-width: 0;
         }
         .table-controls > * {
@@ -221,7 +238,7 @@
             font-size: 0.9rem;
         }
         .table-controls .table-search-input {
-            flex: 1 1 130px;
+            flex: 1 1 180px;
             min-width: 90px;
             width: auto;
             padding: 8px 10px;
@@ -266,6 +283,13 @@
             .table-controls span,
             .table-controls label {
                 font-size: 0.82rem;
+            }
+        }
+        @media (max-width: 992px) {
+            .movement-table th,
+            .movement-table td {
+                padding: 10px 8px;
+                font-size: 0.88rem;
             }
         }
         .inventory-toolbar {
@@ -859,8 +883,13 @@
                 width: 100% !important;
                 border-collapse: collapse !important;
                 margin: 5mm 0 !important;
-                font-size: 9pt !important;
-                table-layout: auto !important;
+                font-size: 8pt !important;
+                table-layout: fixed !important;
+            }
+
+            .table-wrap,
+            .table-wrap--fit {
+                overflow: visible !important;
             }
 
             .data-table thead {
@@ -874,8 +903,10 @@
                 text-align: left !important;
                 font-weight: bold !important;
                 border: 1px solid #000 !important;
-                font-size: 8.5pt !important;
-                white-space: nowrap;
+                font-size: 8pt !important;
+                white-space: normal !important;
+                overflow-wrap: anywhere !important;
+                word-break: break-word !important;
             }
 
             .data-table th.sortable a,
@@ -892,8 +923,50 @@
             .data-table td {
                 padding: 5px 6px !important;
                 border: 1px solid #bbb !important;
-                font-size: 9pt !important;
+                font-size: 8pt !important;
                 vertical-align: top;
+                overflow-wrap: anywhere !important;
+                word-break: break-word !important;
+            }
+
+            .movement-table th:nth-child(1),
+            .movement-table td:nth-child(1) {
+                width: 10% !important;
+            }
+
+            .movement-table th:nth-child(2),
+            .movement-table td:nth-child(2) {
+                width: 10% !important;
+            }
+
+            .movement-table th:nth-child(3),
+            .movement-table td:nth-child(3) {
+                width: 18% !important;
+            }
+
+            .movement-table th:nth-child(4),
+            .movement-table td:nth-child(4) {
+                width: 11% !important;
+            }
+
+            .movement-table th:nth-child(5),
+            .movement-table td:nth-child(5) {
+                width: 11% !important;
+            }
+
+            .movement-table th:nth-child(6),
+            .movement-table td:nth-child(6) {
+                width: 11% !important;
+            }
+
+            .movement-table th:nth-child(7),
+            .movement-table td:nth-child(7) {
+                width: 12% !important;
+            }
+
+            .movement-table th:nth-child(8),
+            .movement-table td:nth-child(8) {
+                width: 17% !important;
             }
 
             .data-table tbody tr:nth-child(even) td {

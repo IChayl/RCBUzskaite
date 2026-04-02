@@ -58,8 +58,8 @@
         <p style="color: #E2D4BB;">Nav ierakstu.</p>
     @else
         <!-- Kustību tabula ar dinamiskiem kārtošanas linkiem -->
-        <div style="overflow-x: auto;">
-            <table class="data-table">
+        <div class="table-wrap table-wrap--fit">
+            <table class="data-table movement-table">
                 <thead>
                     <tr>
                         <th class="sortable {{ request('sort') === 'inventara_numurs' ? 'sorted-'.request('direction','asc') : '' }}">
