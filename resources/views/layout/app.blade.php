@@ -1206,6 +1206,70 @@
             }
         }
 
+        /* ── Light theme: override hardcoded inline dark-palette colours ── */
+
+        /* Text colour on any element with hardcoded #E2D4BB beige */
+        html[data-theme="light"] [style*="#E2D4BB"] {
+            color: var(--text-main) !important;
+        }
+
+        /* Filter selects / inputs with beige-tinted dark background */
+        html[data-theme="light"] [style*="rgba(226, 212, 187, 0.06)"],
+        html[data-theme="light"] [style*="rgba(226,212,187,0.06)"] {
+            background: #ffffff !important;
+            color: var(--text-main) !important;
+            border-color: rgba(26, 82, 176, 0.3) !important;
+        }
+
+        /* Flash messages and wrapper divs with #0F1931 dark background */
+        html[data-theme="light"] [style*="#0F1931"] {
+            background: var(--surface-bg) !important;
+            color: var(--text-main) !important;
+        }
+        html[data-theme="light"] #flash-message {
+            border-left-color: var(--navy-2) !important;
+        }
+
+        /* Admin notice panel with beige translucent background */
+        html[data-theme="light"] [style*="rgba(226, 212, 187, 0.08)"] {
+            background: rgba(26, 82, 176, 0.06) !important;
+            border-color: rgba(26, 82, 176, 0.2) !important;
+        }
+
+        /* Count badge / pill with beige background */
+        html[data-theme="light"] [style*="background:#E2D4BB"] {
+            background: var(--navy-2) !important;
+            color: #ffffff !important;
+        }
+
+        /* Details-page cards with dark semi-transparent background */
+        html[data-theme="light"] [style*="rgba(45, 65, 89, 0.65)"] {
+            background: var(--surface-bg) !important;
+            border-color: rgba(26, 82, 176, 0.2) !important;
+        }
+
+        /* Pending-item rows with deep-navy background */
+        html[data-theme="light"] [style*="rgba(15, 25, 49, 0.35)"] {
+            background: rgba(26, 82, 176, 0.05) !important;
+            border-color: rgba(26, 82, 176, 0.15) !important;
+        }
+
+        /* home.blade.php info banner and sidemenu */
+        html[data-theme="light"] .navy-maroon {
+            background: rgba(26, 82, 176, 0.08) !important;
+            color: var(--text-main) !important;
+        }
+        html[data-theme="light"] .sidemenu {
+            background: rgba(26, 82, 176, 0.08) !important;
+            color: var(--text-main) !important;
+        }
+        html[data-theme="light"] .sidemenu a {
+            color: var(--navy-2) !important;
+        }
+        html[data-theme="light"] .sidemenu a:hover {
+            color: var(--maroon-2) !important;
+        }
+
         html[data-theme="light"] header,
         html[data-theme="light"] .small header {
             background: var(--header-bg) !important;
