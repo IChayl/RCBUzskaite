@@ -30,13 +30,49 @@
         }
 
         html[data-theme="light"] {
-            --navy: #f7faff;
-            --navy-2: #dae5f3;
-            --maroon: #e9eff7;
-            --maroon-2: #c8d8eb;
-            --accent: #1f2f43;
-            --card-bg: rgba(255, 255, 255, 0.8);
-            --muted-white: #1f2f43;
+            --navy: #edf4ff;
+            --navy-2: #1a52b0;
+            --maroon: #1645a0;
+            --maroon-2: #2965cc;
+            --accent: #091828;
+            --card-bg: rgba(255, 255, 255, 0.97);
+            --muted-white: #091828;
+        }
+
+        html[data-theme="light"] html,
+        html[data-theme="light"] body {
+            background: linear-gradient(180deg, #edf4ff 0%, #cfe0f9 100%);
+        }
+
+        html[data-theme="light"] label.form-label {
+            color: #1a2d46;
+        }
+
+        html[data-theme="light"] input.form-control {
+            background: rgba(235, 244, 255, 0.8);
+            border-color: rgba(40, 100, 200, 0.3);
+            color: #091828;
+        }
+
+        html[data-theme="light"] input.form-control:focus {
+            border-color: #1a52b0;
+            box-shadow: 0 0 0 0.15rem rgba(26, 82, 176, 0.2);
+            color: #091828;
+        }
+
+        html[data-theme="light"] .card.custom {
+            border-color: rgba(40, 100, 200, 0.2);
+            box-shadow: 0 8px 32px rgba(15, 45, 120, 0.18);
+        }
+
+        html[data-theme="light"] .card.custom h2 {
+            color: #091828;
+        }
+
+        html[data-theme="light"] .theme-toggle-floating {
+            color: #091828;
+            border-color: rgba(40, 100, 200, 0.4);
+            background: rgba(200, 220, 255, 0.3);
         }
 
         html, body {
