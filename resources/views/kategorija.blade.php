@@ -43,8 +43,8 @@
         <p style="color: #E2D4BB;">Nav kategoriju.</p>
     @else
         <!-- Kategoriju tabula ar kārtojamām kolonnām -->
-        <div style="overflow-x: auto;">
-            <table class="data-table">
+        <div class="table-wrap">
+            <table class="data-table" data-print-group-column="0" data-print-group-label="Nosaukuma burts" data-print-group-mode="initial">
                 <thead>
                     <tr>
                         <th class="sortable {{ request('sort') === 'nosaukums' ? 'sorted-'.request('direction','asc') : '' }}">

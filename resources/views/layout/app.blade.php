@@ -197,6 +197,9 @@
         .movement-table td {
             white-space: normal;
         }
+        .print-group-row {
+            display: none;
+        }
         .data-table tbody tr {
             background: rgba(45, 65, 89, 0.45);
             transition: background 0.2s ease;
@@ -973,6 +976,21 @@
                 background: #f4f4f4 !important;
             }
 
+            .print-group-row {
+                display: table-row !important;
+                page-break-after: avoid;
+                page-break-inside: avoid;
+            }
+
+            .print-group-row td {
+                background: #d9d9d9 !important;
+                color: #000 !important;
+                border: 1px solid #000 !important;
+                font-weight: bold !important;
+                text-transform: none;
+                padding: 4px 6px !important;
+            }
+
             .data-table tbody tr {
                 page-break-inside: avoid;
             }
@@ -1206,6 +1224,99 @@
             const initAllTableControls = () => {
                 document.querySelectorAll('.table-controls').forEach(initTableControls);
             };
+
+            const printGroupState = new WeakMap();
+
+            const getPrintableText = (row, columnIndex) => {
+                const cell = row.cells[columnIndex];
+                if (!cell) return '-';
+
+                const text = Array.from(cell.childNodes)
+                    .map((node) => node.textContent || '')
+                    .join(' ')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+
+                return text || '-';
+            };
+
+            const resolveGroupValue = (value, mode) => {
+                if (mode === 'initial') {
+                    const firstLetter = (value || '').trim().charAt(0).toUpperCase();
+                    return firstLetter || '#';
+                }
+
+                return value || '-';
+            };
+
+            const preparePrintGroups = () => {
+                document.querySelectorAll('table[data-print-group-column]').forEach((table) => {
+                    if (printGroupState.has(table)) return;
+
+                    const tbody = table.tBodies[0];
+                    if (!tbody) return;
+
+                    const allRows = Array.from(tbody.querySelectorAll('tr')).filter((row) => !row.classList.contains('print-group-row'));
+                    if (allRows.length === 0) return;
+
+                    const columnIndex = Number(table.dataset.printGroupColumn);
+                    if (Number.isNaN(columnIndex)) return;
+
+                    const visibleRows = allRows.filter((row) => window.getComputedStyle(row).display !== 'none');
+                    if (visibleRows.length === 0) return;
+
+                    printGroupState.set(table, { rows: allRows });
+
+                    const hiddenRows = allRows.filter((row) => window.getComputedStyle(row).display === 'none');
+                    const label = table.dataset.printGroupLabel || 'Grupa';
+                    const mode = table.dataset.printGroupMode || 'text';
+                    const columnCount = table.querySelectorAll('thead th').length || visibleRows[0].cells.length || 1;
+
+                    const sortedVisibleRows = [...visibleRows].sort((rowA, rowB) => {
+                        const valueA = resolveGroupValue(getPrintableText(rowA, columnIndex), mode);
+                        const valueB = resolveGroupValue(getPrintableText(rowB, columnIndex), mode);
+                        return valueA.localeCompare(valueB, 'lv', { numeric: true, sensitivity: 'base' });
+                    });
+
+                    let currentGroup = null;
+                    sortedVisibleRows.forEach((row) => {
+                        const groupValue = resolveGroupValue(getPrintableText(row, columnIndex), mode);
+                        if (groupValue !== currentGroup) {
+                            const groupRow = document.createElement('tr');
+                            groupRow.className = 'print-group-row';
+
+                            const groupCell = document.createElement('td');
+                            groupCell.colSpan = columnCount;
+                            groupCell.textContent = `${label}: ${groupValue}`;
+
+                            groupRow.appendChild(groupCell);
+                            tbody.appendChild(groupRow);
+                            currentGroup = groupValue;
+                        }
+
+                        tbody.appendChild(row);
+                    });
+
+                    hiddenRows.forEach((row) => tbody.appendChild(row));
+                });
+            };
+
+            const restorePrintGroups = () => {
+                document.querySelectorAll('table[data-print-group-column]').forEach((table) => {
+                    const state = printGroupState.get(table);
+                    if (!state) return;
+
+                    const tbody = table.tBodies[0];
+                    if (!tbody) return;
+
+                    tbody.querySelectorAll('.print-group-row').forEach((row) => row.remove());
+                    state.rows.forEach((row) => tbody.appendChild(row));
+                    printGroupState.delete(table);
+                });
+            };
+
+            window.addEventListener('beforeprint', preparePrintGroups);
+            window.addEventListener('afterprint', restorePrintGroups);
 
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', () => {

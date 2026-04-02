@@ -27,8 +27,8 @@
     @elseif($lietotaji->isEmpty())
         <p style="color: #E2D4BB;">Nav darbinieku.</p>
     @else
-        <div style="overflow-x: auto;">
-            <table class="data-table">
+        <div class="table-wrap">
+            <table class="data-table" data-print-group-column="5" data-print-group-label="Amats">
                 <thead>
                     <tr>
                         <th>Avatar</th>

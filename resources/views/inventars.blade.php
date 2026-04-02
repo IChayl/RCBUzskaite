@@ -78,8 +78,8 @@
         <p style="color: #E2D4BB;">Nav ierakstu.</p>
     @else
         <!-- Inventāra tabula ar servera puses kārtošanu pa kolonnām -->
-        <div style="overflow-x: auto;">
-            <table class="data-table">
+        <div class="table-wrap">
+            <table class="data-table" data-print-group-column="2" data-print-group-label="Kategorija">
                 <thead>
                     <tr>
                         <th class="sortable {{ request('sort') === 'inventara_numurs' ? 'sorted-'.request('direction','asc') : '' }}">

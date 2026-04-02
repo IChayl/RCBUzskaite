@@ -59,7 +59,7 @@
     @else
         <!-- Kustību tabula ar dinamiskiem kārtošanas linkiem -->
         <div class="table-wrap table-wrap--fit">
-            <table class="data-table movement-table">
+            <table class="data-table movement-table" data-print-group-column="3" data-print-group-label="Kustības veids">
                 <thead>
                     <tr>
                         <th class="sortable {{ request('sort') === 'inventara_numurs' ? 'sorted-'.request('direction','asc') : '' }}">

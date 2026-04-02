@@ -96,8 +96,8 @@
         <p style="color: #E2D4BB;">Nav ierakstu.</p>
     @else
         <!-- Norakstīšanas tabula -->
-        <div style="overflow-x: auto;">
-            <table class="data-table">
+        <div class="table-wrap">
+            <table class="data-table" data-print-group-column="7" data-print-group-label="Akceptēts">
                 <thead>
                     <tr>
                         <th class="sortable {{ request('sort') === 'inventara_numurs' ? 'sorted-'.request('direction','asc') : '' }}">
