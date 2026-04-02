@@ -719,26 +719,38 @@
                 grid-template-columns: 1.5fr 1fr;
             }
         }
+        /* Print-only elements hidden on screen */
+        .print-only { display: none !important; }
+
         @media print {
-            /* Document-like styling for print */
+            /* ── Page setup ── */
+            @page {
+                size: A4 portrait;
+                margin: 18mm 20mm 22mm 20mm;
+            }
+
+            /* ── Reset colours & shadows ── */
             *, *::before, *::after {
                 background: transparent !important;
                 color: #000 !important;
                 box-shadow: none !important;
                 text-shadow: none !important;
                 filter: none !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
             html, body {
-                background: white !important;
-                color: black !important;
+                background: #fff !important;
+                font-family: Arial, Helvetica, sans-serif !important;
+                font-size: 10pt !important;
+                line-height: 1.45 !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 width: 100%;
-                height: auto;
             }
 
-            /* Hide non-printable elements */
+            /* ── Hide all screen-only chrome ── */
             .page-shapes,
             header,
             footer,
@@ -746,142 +758,222 @@
             .bloom-button,
             .btn,
             button,
-            .table-controls,
+            form.table-controls,
+            .inventory-toolbar,
             .pagination,
             .no-results-message,
-            .actions a,
-            a[onclick*="print"] {
+            .actions,
+            #flash-message,
+            #flash-error,
+            hr {
                 display: none !important;
             }
 
-            /* Document header styling */
+            /* ── Show print-only elements ── */
+            .print-only {
+                display: block !important;
+            }
+
+            /* ── Layout wrappers ── */
             main {
                 padding: 0 !important;
                 margin: 0 !important;
-                width: 100%;
             }
 
             .container {
                 width: 100% !important;
                 max-width: 100% !important;
-                padding: 20px !important;
+                padding: 0 !important;
                 margin: 0 !important;
             }
 
             .card-surface {
                 border: none !important;
-                background: white !important;
-                box-shadow: none !important;
+                background: #fff !important;
                 padding: 0 !important;
                 margin: 0 !important;
                 border-radius: 0 !important;
             }
 
-            /* Document title styling */
-            p:first-of-type {
-                font-size: 16pt !important;
-                font-weight: bold !important;
-                margin-bottom: 20px !important;
-                margin-top: 0 !important;
+            /* ── Print document header ── */
+            .print-doc-header {
+                width: 100%;
+                margin-bottom: 8mm;
             }
 
+            .print-doc-header .print-org-row {
+                display: flex !important;
+                justify-content: space-between;
+                align-items: baseline;
+                font-size: 9pt;
+                color: #444 !important;
+                margin-bottom: 3mm;
+            }
+
+            .print-doc-header .print-org-name {
+                font-weight: bold;
+                font-size: 11pt;
+                letter-spacing: 0.03em;
+                text-transform: uppercase;
+            }
+
+            .print-doc-header .print-date {
+                font-size: 9pt;
+                color: #444 !important;
+            }
+
+            .print-doc-header .print-divider {
+                border: none !important;
+                border-top: 2px solid #000 !important;
+                display: block !important;
+                margin: 2mm 0 4mm !important;
+            }
+
+            .print-doc-header .print-doc-title {
+                font-size: 15pt !important;
+                font-weight: bold !important;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                margin: 0 0 1mm !important;
+            }
+
+            .print-doc-header .print-doc-subtitle {
+                font-size: 9pt;
+                color: #555 !important;
+            }
+
+            .print-doc-header .print-title-divider {
+                border: none !important;
+                border-top: 1px solid #000 !important;
+                display: block !important;
+                margin: 3mm 0 0 !important;
+            }
+
+            /* ── Hide page h2 (title shown in print header instead) ── */
             h2 {
-                font-size: 14pt !important;
-                font-weight: bold !important;
-                margin-top: 0 !important;
-                margin-bottom: 12px !important;
-                border-bottom: 2px solid #000 !important;
-                padding-bottom: 8px !important;
+                display: none !important;
             }
 
-            /* Professional table styling */
+            /* ── Data table ── */
             .data-table {
                 width: 100% !important;
                 border-collapse: collapse !important;
-                margin: 20px 0 !important;
-                font-size: 11pt !important;
+                margin: 5mm 0 !important;
+                font-size: 9pt !important;
+                table-layout: auto !important;
+            }
+
+            .data-table thead {
+                display: table-header-group;
             }
 
             .data-table th {
-                background: #333 !important;
-                color: white !important;
-                padding: 10px 8px !important;
+                background: #1a1a1a !important;
+                color: #fff !important;
+                padding: 5px 6px !important;
                 text-align: left !important;
                 font-weight: bold !important;
                 border: 1px solid #000 !important;
-                page-break-inside: avoid;
+                font-size: 8.5pt !important;
+                white-space: nowrap;
+            }
+
+            .data-table th.sortable a,
+            .data-table th a {
+                color: #fff !important;
+                text-decoration: none !important;
             }
 
             .data-table th.sortable::after {
                 content: '' !important;
+                display: none !important;
             }
 
             .data-table td {
-                padding: 8px !important;
-                border: 1px solid #ccc !important;
-                color: #000 !important;
+                padding: 5px 6px !important;
+                border: 1px solid #bbb !important;
+                font-size: 9pt !important;
+                vertical-align: top;
             }
 
-            .data-table tbody tr:nth-child(even) {
-                background: #f9f9f9 !important;
+            .data-table tbody tr:nth-child(even) td {
+                background: #f4f4f4 !important;
             }
 
             .data-table tbody tr {
                 page-break-inside: avoid;
             }
 
-            /* Hide action columns in print */
+            /* Hide last column (Darbības / actions) */
             .data-table td:last-child,
             .data-table th:last-child {
                 display: none !important;
             }
 
-            /* Card styling for detail pages */
+            /* ── Detail card ── */
             .card {
-                border: 1px solid #000 !important;
-                background: white !important;
-                color: black !important;
-                margin: 20px 0 !important;
+                border: none !important;
+                background: #fff !important;
+                margin: 0 !important;
+                max-width: 100% !important;
                 page-break-inside: avoid;
             }
 
             .card-body {
-                padding: 16px !important;
+                padding: 0 !important;
             }
 
             .card-title {
                 font-size: 12pt !important;
                 font-weight: bold !important;
-                margin-bottom: 12px !important;
-                border-bottom: 1px solid #000 !important;
-                padding-bottom: 8px !important;
+                margin: 0 0 4mm !important;
+                padding-bottom: 2mm !important;
+                border-bottom: 2px solid #000 !important;
             }
 
+            /* Convert card-text rows into a clean label/value table */
             .card-text {
-                margin: 6px 0 !important;
-                font-size: 11pt !important;
+                display: grid !important;
+                grid-template-columns: 45mm 1fr !important;
+                border-bottom: 1px solid #ddd !important;
+                padding: 2.5mm 0 !important;
+                font-size: 10pt !important;
+                margin: 0 !important;
+                gap: 0 4mm;
             }
 
             .card-text strong {
                 font-weight: bold !important;
+                color: #222 !important;
             }
 
-            /* Page breaks and margins */
-            @page {
-                margin: 15mm;
-                size: A4;
+            /* ── Print footer ── */
+            .print-doc-footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                font-size: 8pt;
+                color: #555 !important;
+                border-top: 1px solid #bbb !important;
+                padding-top: 2mm;
+                display: flex !important;
+                justify-content: space-between;
             }
 
-            /* Ensure good print quality */
+            .print-doc-footer::after {
+                content: attr(data-page);
+            }
+
+            /* ── Misc ── */
             img {
                 max-width: 100% !important;
                 page-break-inside: avoid;
             }
 
-            hr {
-                border: none !important;
-                border-top: 1px solid #000 !important;
-                margin: 12px 0 !important;
+            a {
+                text-decoration: none !important;
+                color: #000 !important;
             }
         }
     </style>
@@ -908,7 +1000,27 @@
 
     <main style="padding-bottom: 100px" class="container">
         <section class="card-surface">
+
+            {{-- Print-only document header (hidden on screen) --}}
+            <div class="print-only print-doc-header" id="print-doc-header">
+                <div class="print-org-row">
+                    <span class="print-org-name">Rīgas Centrālā bibliotēka</span>
+                    <span class="print-date" id="print-date"></span>
+                </div>
+                <hr class="print-divider">
+                <p class="print-doc-title" id="print-doc-title"></p>
+                <p class="print-doc-subtitle">Inventāra uzskaites sistēma</p>
+                <hr class="print-title-divider">
+            </div>
+
             @yield('content')
+
+            {{-- Print-only document footer (hidden on screen) --}}
+            <div class="print-only print-doc-footer" id="print-doc-footer">
+                <span>RCB Inventāra uzskaite &mdash; <span id="print-footer-date"></span></span>
+                <span></span>
+            </div>
+
         </section>
     </main>
 
