@@ -1231,6 +1231,11 @@
                     return /^\d{4}-\d{2}-\d{2}$/.test(trimmed) ? trimmed : '';
                 };
 
+                const syncPickerMinDate = (input, minDate) => {
+                    if (!input?._flatpickr) return;
+                    input._flatpickr.set('minDate', minDate || null);
+                };
+
                 const findToInput = (form, fromName) => {
                     if (fromName.endsWith('_no')) {
                         const base = fromName.slice(0, -3);
@@ -1251,8 +1256,13 @@
                         const toValue = normalizeDateValue(toInput.value);
 
                         toInput.min = fromValue || '';
+                        syncPickerMinDate(toInput, fromValue);
 
                         if (fromValue && toValue && toValue < fromValue) {
+                            toInput.value = fromValue;
+                            if (toInput._flatpickr) {
+                                toInput._flatpickr.setDate(fromValue, false);
+                            }
                             toInput.setCustomValidity('Datums "līdz" nevar būt agrāks par datumu "no".');
                             return false;
                         }
