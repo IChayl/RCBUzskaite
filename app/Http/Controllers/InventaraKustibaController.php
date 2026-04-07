@@ -270,6 +270,7 @@ class InventaraKustibaController extends Controller
             'inventars_id' => 'required|integer|exists:inventars,inventars_id',
             'kustibas_veids_id' => 'nullable|integer|exists:kustibas_veidi,kustibas_veids_id',
             'atbildigais_lietotajs_id' => 'required|integer|exists:lietotajs,lietotajs_id',
+            'Jatbildigais_lietotajs_id' => 'nullable|integer|exists:lietotajs,lietotajs_id',
             'veca_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
             'jauna_telpa_id' => 'nullable|integer|exists:telpa,telpas_id',
             'piezimes' => 'nullable|string|max:255',
@@ -295,15 +296,51 @@ class InventaraKustibaController extends Controller
         }
         $data['atbildigais_lietotajs_id'] = (int) $inventars->atbildigais_id;
 
+        $isParvietosana = $this->isParvietosanaMovement($data['kustibas_veids_id'] ?? null);
+        $isNodosana = $this->isNodosanaMovement($data['kustibas_veids_id'] ?? null);
+
+        if ($isParvietosana && empty($data['jauna_telpa_id'])) {
+            return back()->withInput()->withErrors([
+                'jauna_telpa_id' => 'Kustības veidam "Pārvietošana" ir obligāti jānorāda jaunā telpa.',
+            ]);
+        }
+
+        if ($isNodosana) {
+            if (empty($data['Jatbildigais_lietotajs_id'])) {
+                return back()->withInput()->withErrors([
+                    'Jatbildigais_lietotajs_id' => 'Kustības veidam "Nodošana" ir obligāti jānorāda jaunais atbildīgais.',
+                ]);
+            }
+
+            if ((int) $data['Jatbildigais_lietotajs_id'] === (int) $data['atbildigais_lietotajs_id']) {
+                return back()->withInput()->withErrors([
+                    'Jatbildigais_lietotajs_id' => 'Jaunais atbildīgais nedrīkst sakrist ar esošo atbildīgo.',
+                ]);
+            }
+        } else {
+            $data['Jatbildigais_lietotajs_id'] = 0;
+        }
+
+        if (! $isParvietosana) {
+            $data['jauna_telpa_id'] = null;
+        }
+
         DB::table('inventara_kustiba')->where('kustiba_id',$id)->update([
             'datums' => $data['datums'],
             'inventars_id' => $data['inventars_id'],
             'kustibas_veids_id' => $data['kustibas_veids_id'] ?? null,
             'atbildigais_lietotajs_id' => $data['atbildigais_lietotajs_id'],
+            'Jatbildigais_lietotajs_id' => $data['Jatbildigais_lietotajs_id'] ?? 0,
             'veca_telpa_id' => $data['veca_telpa_id'] ?? null,
             'jauna_telpa_id' => $data['jauna_telpa_id'] ?? null,
             'piezimes' => $data['piezimes'] ?? null,
         ]);
+
+        if ($isNodosana) {
+            $inventars->atbildigais_id = $data['Jatbildigais_lietotajs_id'];
+            $inventars->save();
+        }
+
         return redirect()->to('/inventara_kustiba')->with('success','Ieraksts atjaunināts');
     }
 
