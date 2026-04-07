@@ -1354,16 +1354,18 @@
             }
 
             .print-group-row td {
-                background: #d9d9d9 !important;
+                background: #efefef !important;
                 color: #000 !important;
-                border: 1px solid #000 !important;
+                border: 2px solid #000 !important;
                 font-weight: bold !important;
                 text-transform: none;
-                padding: 4px 6px !important;
+                font-size: 9pt !important;
+                letter-spacing: 0.02em;
+                padding: 6px 8px !important;
             }
 
             .print-group-separator td {
-                height: 5mm !important;
+                height: 7mm !important;
                 background: #fff !important;
                 border: none !important;
                 padding: 0 !important;
@@ -1972,6 +1974,12 @@
                         return valueA.localeCompare(valueB, 'lv', { numeric: true, sensitivity: 'base' });
                     });
 
+                    const groupCounts = sortedVisibleRows.reduce((accumulator, row) => {
+                        const groupValue = resolveGroupValue(getPrintableText(row, columnIndex), mode);
+                        accumulator[groupValue] = (accumulator[groupValue] || 0) + 1;
+                        return accumulator;
+                    }, {});
+
                     let currentGroup = null;
                     sortedVisibleRows.forEach((row) => {
                         const groupValue = resolveGroupValue(getPrintableText(row, columnIndex), mode);
@@ -1993,7 +2001,7 @@
 
                             const groupCell = document.createElement('td');
                             groupCell.colSpan = columnCount;
-                            groupCell.textContent = `${label}: ${groupValue}`;
+                            groupCell.textContent = `${label}: ${groupValue} (${groupCounts[groupValue] || 0} ieraksti)`;
 
                             groupRow.appendChild(groupCell);
                             tbody.appendChild(groupRow);
