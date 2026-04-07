@@ -17,9 +17,9 @@
 
    
         @if(Auth::user()->admina_tiesibas)
-            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'all']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'all' ? 'box-shadow: 0 0 0 2px rgba(226, 212, 187, 0.45), 0 16px 40px rgba(15, 25, 49, 0.45);' : '' }}">Viss inventārs</a>
-            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'written_off']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'written_off' ? 'box-shadow: 0 0 0 2px rgba(226, 212, 187, 0.45), 0 16px 40px rgba(15, 25, 49, 0.45);' : '' }}">Tikai norakstītais</a>
-            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'active']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'active' ? 'box-shadow: 0 0 0 2px rgba(226, 212, 187, 0.45), 0 16px 40px rgba(15, 25, 49, 0.45);' : '' }}">Tikai nenorakstītais</a>
+            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'all']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'all' ? 'box-shadow: 0 0 0 1px rgba(226, 212, 187, 0.28), 0 7px 18px rgba(15, 25, 49, 0.22);' : '' }}">Viss inventārs</a>
+            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'written_off']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'written_off' ? 'box-shadow: 0 0 0 1px rgba(226, 212, 187, 0.28), 0 7px 18px rgba(15, 25, 49, 0.22);' : '' }}">Tikai norakstītais</a>
+            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'active']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'active' ? 'box-shadow: 0 0 0 1px rgba(226, 212, 187, 0.28), 0 7px 18px rgba(15, 25, 49, 0.22);' : '' }}">Tikai nenorakstītais</a>
         @else
 
         @endif
