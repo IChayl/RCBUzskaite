@@ -296,11 +296,11 @@
         .data-table .actions--inventory select {
             padding: 0.32rem 0.46rem;
             font-size: 0.74rem;
-            max-width: 90px;
+            max-width: 84px;
         }
         .data-table .actions--inventory .quick-action-select {
-            min-width: 90px !important;
-            width: 90px;
+            min-width: 84px !important;
+            width: 84px;
         }
 
         /* Meklēšanas un kārtošanas vadīklas */

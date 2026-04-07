@@ -123,7 +123,7 @@
                             <td>
                                 <div class="actions actions--inventory">
                                     <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->inventars_id }}">Dzēst</a>
-                                    <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm">Red.</a>
+                                    <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm">Rediģēt</a>
                                     <select class="form-control quick-action-select bloom-button sm" style="min-width: 170px; display: inline-block;" aria-label="Izvēlieties darbību">
                                         <option value="">Darbība</option>
                                         @foreach($kustibasVeidiQuickActions as $kv)
