@@ -243,6 +243,12 @@
             overflow-wrap: normal;
             word-break: normal;
         }
+        .data-table th:last-child,
+        .data-table td:last-child {
+            width: 230px;
+            overflow: visible;
+            text-overflow: clip;
+        }
         .data-table th {
             font-weight: 600;
             border-bottom: 2px solid rgba(45, 65, 89, 0.45);
@@ -269,7 +275,7 @@
             gap: 6px;
             align-items: center;
             white-space: nowrap;
-            overflow: hidden;
+            overflow: visible;
         }
         .data-table .actions > * {
             flex: 0 0 auto;
@@ -277,9 +283,9 @@
         }
         .data-table .actions .bloom-button,
         .data-table .actions select {
-            padding: 0.4rem 0.65rem;
-            font-size: 0.84rem;
-            max-width: 132px;
+            padding: 0.34rem 0.52rem;
+            font-size: 0.78rem;
+            max-width: 110px;
             overflow: hidden;
             text-overflow: ellipsis;
         }
