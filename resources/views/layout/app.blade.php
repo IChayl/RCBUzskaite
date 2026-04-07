@@ -370,6 +370,38 @@
             flex: 0 0 auto;
             font-size: 0.88rem;
         }
+        .print-options {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 10px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--surface-border);
+            background: var(--surface-bg-soft);
+            color: var(--text-main);
+            font-size: 0.82rem;
+        }
+        .print-options label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .print-options input[type="number"] {
+            width: 78px;
+            border-radius: 999px;
+            border: 1px solid var(--surface-border);
+            background: var(--surface-bg);
+            color: var(--text-main);
+            padding: 4px 10px;
+        }
+        .print-options input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+        }
         @media (max-width: 1400px) {
             .table-controls {
                 gap: 6px;
@@ -1321,6 +1353,16 @@
                 padding: 4px 6px !important;
             }
 
+            .print-group-separator td {
+                height: 3mm !important;
+                background: #fff !important;
+                border-left: 1px solid #bbb !important;
+                border-right: 1px solid #bbb !important;
+                border-bottom: 1px solid #bbb !important;
+                border-top: 2px solid #000 !important;
+                padding: 0 !important;
+            }
+
             .data-table tbody tr {
                 page-break-inside: avoid;
             }
@@ -1800,7 +1842,73 @@
                 });
             };
 
+            const nativePrint = window.print.bind(window);
             const printGroupState = new WeakMap();
+            const printLimitState = new WeakMap();
+
+            const getPrintOptions = () => {
+                const container = document.querySelector('.print-options');
+                if (!container) {
+                    return {
+                        limit: null,
+                        group: true,
+                    };
+                }
+
+                const limitInput = container.querySelector('.print-row-limit');
+                const groupInput = container.querySelector('.print-group-toggle');
+                const parsedLimit = parseInt((limitInput?.value || '').trim(), 10);
+
+                return {
+                    limit: Number.isFinite(parsedLimit) && parsedLimit > 0 ? parsedLimit : null,
+                    group: groupInput ? !!groupInput.checked : true,
+                };
+            };
+
+            const applyPrintRowLimit = () => {
+                const options = getPrintOptions();
+                if (!options.limit) {
+                    return;
+                }
+
+                document.querySelectorAll('table.data-table').forEach((table) => {
+                    if (printLimitState.has(table)) return;
+
+                    const tbody = table.tBodies[0];
+                    if (!tbody) return;
+
+                    const allRows = Array.from(tbody.querySelectorAll('tr')).filter((row) => !row.classList.contains('print-group-row') && !row.classList.contains('print-group-separator'));
+                    const visibleRows = allRows.filter((row) => window.getComputedStyle(row).display !== 'none');
+
+                    if (visibleRows.length <= options.limit) {
+                        return;
+                    }
+
+                    const rowsToHide = visibleRows.slice(options.limit);
+                    rowsToHide.forEach((row) => {
+                        row.dataset.printHiddenByLimit = '1';
+                        row.style.display = 'none';
+                    });
+
+                    printLimitState.set(table, rowsToHide);
+                });
+            };
+
+            const restorePrintRowLimit = () => {
+                document.querySelectorAll('table.data-table').forEach((table) => {
+                    const rows = printLimitState.get(table);
+                    if (!rows || rows.length === 0) return;
+
+                    rows.forEach((row) => {
+                        if (row.dataset.printHiddenByLimit === '1') {
+                            row.style.display = '';
+                            delete row.dataset.printHiddenByLimit;
+                        }
+                    });
+
+                    printLimitState.delete(table);
+                });
+            };
 
             const getPrintableText = (row, columnIndex) => {
                 const cell = row.cells[columnIndex];
@@ -1825,6 +1933,11 @@
             };
 
             const preparePrintGroups = () => {
+                const options = getPrintOptions();
+                if (!options.group) {
+                    return;
+                }
+
                 document.querySelectorAll('table[data-print-group-column]').forEach((table) => {
                     if (printGroupState.has(table)) return;
 
@@ -1857,6 +1970,18 @@
                     sortedVisibleRows.forEach((row) => {
                         const groupValue = resolveGroupValue(getPrintableText(row, columnIndex), mode);
                         if (groupValue !== currentGroup) {
+                            if (currentGroup !== null) {
+                                const separatorRow = document.createElement('tr');
+                                separatorRow.className = 'print-group-separator';
+
+                                const separatorCell = document.createElement('td');
+                                separatorCell.colSpan = columnCount;
+                                separatorCell.textContent = '';
+
+                                separatorRow.appendChild(separatorCell);
+                                tbody.appendChild(separatorRow);
+                            }
+
                             const groupRow = document.createElement('tr');
                             groupRow.className = 'print-group-row';
 
@@ -1884,14 +2009,66 @@
                     const tbody = table.tBodies[0];
                     if (!tbody) return;
 
-                    tbody.querySelectorAll('.print-group-row').forEach((row) => row.remove());
+                    tbody.querySelectorAll('.print-group-row, .print-group-separator').forEach((row) => row.remove());
                     state.rows.forEach((row) => tbody.appendChild(row));
                     printGroupState.delete(table);
                 });
             };
 
-            window.addEventListener('beforeprint', preparePrintGroups);
-            window.addEventListener('afterprint', restorePrintGroups);
+            const initPrintControls = () => {
+                const triggers = Array.from(document.querySelectorAll('a[onclick*="window.print"], button[onclick*="window.print"], .js-print-trigger'));
+
+                triggers.forEach((trigger) => {
+                    if (trigger.dataset.printBound === '1') return;
+
+                    trigger.removeAttribute('onclick');
+                    trigger.classList.add('js-print-trigger');
+
+                    trigger.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        window.print();
+                    });
+
+                    trigger.dataset.printBound = '1';
+
+                    const container = trigger.parentElement;
+                    if (!container || container.querySelector('.print-options')) {
+                        return;
+                    }
+
+                    const options = document.createElement('span');
+                    options.className = 'print-options';
+                    options.innerHTML = `
+                        <label>Rindas
+                            <input type="number" class="print-row-limit" min="1" step="1" placeholder="Visas" title="Cik rindas drukāt">
+                        </label>
+                        <label>
+                            <input type="checkbox" class="print-group-toggle" checked>
+                            Grupēt
+                        </label>
+                    `;
+
+                    container.appendChild(options);
+                });
+            };
+
+            const preparePrintView = () => {
+                applyPrintRowLimit();
+                preparePrintGroups();
+            };
+
+            const restorePrintView = () => {
+                restorePrintGroups();
+                restorePrintRowLimit();
+            };
+
+            window.print = () => {
+                preparePrintView();
+                nativePrint();
+            };
+
+            window.addEventListener('beforeprint', preparePrintView);
+            window.addEventListener('afterprint', restorePrintView);
 
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', () => {
@@ -1899,12 +2076,14 @@
                     initDatePickers();
                     initAllTableControls();
                     initDateRangeFilters();
+                    initPrintControls();
                 });
             } else {
                 initThemeToggle();
                 initDatePickers();
                 initAllTableControls();
                 initDateRangeFilters();
+                initPrintControls();
             }
         })();
     </script>
