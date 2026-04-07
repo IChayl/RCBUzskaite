@@ -371,8 +371,9 @@
             font-size: 0.88rem;
         }
         .print-options {
-            display: inline-flex;
+            display: none;
             align-items: center;
+            flex-wrap: wrap;
             gap: 10px;
             margin-left: 10px;
             padding: 6px 10px;
@@ -381,6 +382,9 @@
             background: var(--surface-bg-soft);
             color: var(--text-main);
             font-size: 0.82rem;
+        }
+        .print-options.is-visible {
+            display: inline-flex;
         }
         .print-options label {
             display: inline-flex;
@@ -401,6 +405,11 @@
         .print-options input[type="checkbox"] {
             width: 14px;
             height: 14px;
+        }
+        .print-options .print-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
         @media (max-width: 1400px) {
             .table-controls {
@@ -1354,12 +1363,9 @@
             }
 
             .print-group-separator td {
-                height: 3mm !important;
+                height: 5mm !important;
                 background: #fff !important;
-                border-left: 1px solid #bbb !important;
-                border-right: 1px solid #bbb !important;
-                border-bottom: 1px solid #bbb !important;
-                border-top: 2px solid #000 !important;
+                border: none !important;
                 padding: 0 !important;
             }
 
@@ -2024,15 +2030,17 @@
                     trigger.removeAttribute('onclick');
                     trigger.classList.add('js-print-trigger');
 
-                    trigger.addEventListener('click', (event) => {
-                        event.preventDefault();
-                        window.print();
-                    });
-
                     trigger.dataset.printBound = '1';
 
                     const container = trigger.parentElement;
                     if (!container || container.querySelector('.print-options')) {
+                        trigger.addEventListener('click', (event) => {
+                            event.preventDefault();
+                            const existingOptions = container ? container.querySelector('.print-options') : null;
+                            if (existingOptions) {
+                                existingOptions.classList.toggle('is-visible');
+                            }
+                        });
                         return;
                     }
 
@@ -2046,9 +2054,34 @@
                             <input type="checkbox" class="print-group-toggle" checked>
                             Grupēt
                         </label>
+                        <span class="print-actions">
+                            <button type="button" class="bloom-button sm print-confirm">Drukāt</button>
+                            <button type="button" class="bloom-button sm print-cancel">Aizvērt</button>
+                        </span>
                     `;
 
                     container.appendChild(options);
+
+                    trigger.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        options.classList.toggle('is-visible');
+                    });
+
+                    const printConfirmBtn = options.querySelector('.print-confirm');
+                    if (printConfirmBtn) {
+                        printConfirmBtn.addEventListener('click', (event) => {
+                            event.preventDefault();
+                            window.print();
+                        });
+                    }
+
+                    const printCancelBtn = options.querySelector('.print-cancel');
+                    if (printCancelBtn) {
+                        printCancelBtn.addEventListener('click', (event) => {
+                            event.preventDefault();
+                            options.classList.remove('is-visible');
+                        });
+                    }
                 });
             };
 
@@ -2060,6 +2093,9 @@
             const restorePrintView = () => {
                 restorePrintGroups();
                 restorePrintRowLimit();
+                document.querySelectorAll('.print-options.is-visible').forEach((panel) => {
+                    panel.classList.remove('is-visible');
+                });
             };
 
             window.print = () => {
