@@ -374,17 +374,24 @@
             display: none;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px 12px;
             margin-left: 10px;
-            padding: 6px 10px;
-            border-radius: 999px;
+            padding: 10px 12px;
+            border-radius: 14px;
             border: 1px solid var(--surface-border);
             background: var(--surface-bg-soft);
             color: var(--text-main);
             font-size: 0.82rem;
+            box-shadow: 0 8px 18px rgba(15, 25, 49, 0.24);
         }
         .print-options.is-visible {
             display: inline-flex;
+        }
+        .print-options .print-options-title {
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            margin-right: 2px;
+            color: var(--text-main);
         }
         .print-options label {
             display: inline-flex;
@@ -393,9 +400,12 @@
             margin: 0;
             white-space: nowrap;
             cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(45, 65, 89, 0.08);
         }
         .print-options input[type="number"] {
-            width: 78px;
+            width: 102px;
             border-radius: 999px;
             border: 1px solid var(--surface-border);
             background: var(--surface-bg);
@@ -410,6 +420,14 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
+        }
+        html[data-theme="light"] .print-options {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(26, 82, 176, 0.24);
+            box-shadow: 0 8px 20px rgba(26, 82, 176, 0.14);
+        }
+        html[data-theme="light"] .print-options label {
+            background: rgba(26, 82, 176, 0.08);
         }
         @media (max-width: 1400px) {
             .table-controls {
@@ -1853,6 +1871,7 @@
             const nativePrint = window.print.bind(window);
             const printGroupState = new WeakMap();
             const printLimitState = new WeakMap();
+            let shouldResetPrintAllAfterDialog = false;
 
             const getPrintOptions = () => {
                 const container = document.querySelector('.print-options');
@@ -2055,16 +2074,17 @@
                     const options = document.createElement('span');
                     options.className = 'print-options';
                     options.innerHTML = `
-                        <label>Rindas
-                            <input type="number" class="print-row-limit" min="1" step="1" placeholder="Visas" title="Cik rindas drukāt">
+                        <span class="print-options-title">Drukāšanas izvēlne:</span>
+                        <label>Rindu skaits
+                            <input type="number" class="print-row-limit" min="1" step="1" placeholder="Visas rindas" title="Norādiet, cik rindas drukāt">
                         </label>
                         <label>
                             <input type="checkbox" class="print-group-toggle" checked>
-                            Grupēt
+                            Grupēt datus
                         </label>
                         <label>
                             <input type="checkbox" class="print-all-pages-toggle">
-                            Visi lapojumi
+                            Iekļaut visas lapas
                         </label>
                         <span class="print-actions">
                             <button type="button" class="bloom-button sm print-confirm">Drukāt</button>
@@ -2120,13 +2140,43 @@
                 });
             };
 
+            const cleanupPrintAllMode = () => {
+                if (!shouldResetPrintAllAfterDialog) {
+                    return;
+                }
+
+                const currentUrl = new URL(window.location.href);
+                if (currentUrl.searchParams.get('print_all') !== '1') {
+                    shouldResetPrintAllAfterDialog = false;
+                    return;
+                }
+
+                currentUrl.searchParams.delete('print_all');
+                currentUrl.searchParams.delete('print_autorun');
+                shouldResetPrintAllAfterDialog = false;
+                window.location.replace(currentUrl.toString());
+            };
+
             window.print = () => {
                 preparePrintView();
                 nativePrint();
             };
 
             window.addEventListener('beforeprint', preparePrintView);
-            window.addEventListener('afterprint', restorePrintView);
+            window.addEventListener('afterprint', () => {
+                restorePrintView();
+                cleanupPrintAllMode();
+            });
+
+            window.addEventListener('focus', () => {
+                if (!shouldResetPrintAllAfterDialog) {
+                    return;
+                }
+
+                setTimeout(() => {
+                    cleanupPrintAllMode();
+                }, 180);
+            });
 
             const initAutoPrintFromQuery = () => {
                 const url = new URL(window.location.href);
@@ -2134,6 +2184,7 @@
                     return;
                 }
 
+                shouldResetPrintAllAfterDialog = url.searchParams.get('print_all') === '1';
                 url.searchParams.delete('print_autorun');
                 window.history.replaceState({}, '', url.toString());
 
