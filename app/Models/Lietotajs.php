@@ -38,7 +38,7 @@ class Lietotajs extends Authenticatable
     }
 
     /**
-     * Atrod reālo avatar faila ceļu publiskajā diskā arī tad, ja datubāzē saglabāts atšķirīgs prefikss.
+     * Atrod reālo avatar faila ceļu projekta publiskajā mapē.
      */
     public function resolveAvatarPath(): ?string
     {
@@ -55,8 +55,13 @@ class Lietotajs extends Authenticatable
         ]));
 
         foreach ($candidates as $candidate) {
-            if (Storage::disk('public')->exists($candidate)) {
+            if (is_file(public_path($candidate))) {
                 return $candidate;
+            }
+
+            // Saderībai ar veciem datiem pārbaudām arī storage/public ceļu.
+            if (Storage::disk('public')->exists($candidate)) {
+                return 'storage/' . ltrim($candidate, '/');
             }
         }
 

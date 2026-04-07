@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Lietotajs;
 use App\Http\Controllers\Concerns\HandlesSafeDelete;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 // Kontrolieris lietotāju pārvaldībai (CRUD darbības).
@@ -71,10 +70,17 @@ class LietotajsController extends Controller
         $u->amats = $req->input('amats');
         $u->aktivs = 1;
 
-        // Ja augšupielādēts attēls, saglabā to publiskajā diskā.
+        // Ja augšupielādēts attēls, saglabā to projekta mapē public/avatars.
         if ($req->hasFile('avatar')) {
-            Storage::disk('public')->makeDirectory('avatars');
-            $path = $req->file('avatar')->store('avatars', 'public');
+            $avatarDirectory = public_path('avatars');
+            if (! is_dir($avatarDirectory)) {
+                mkdir($avatarDirectory, 0775, true);
+            }
+
+            $extension = strtolower((string) $req->file('avatar')->getClientOriginalExtension());
+            $fileName = uniqid('avatar_', true) . ($extension !== '' ? '.' . $extension : '');
+            $req->file('avatar')->move($avatarDirectory, $fileName);
+            $path = 'avatars/' . $fileName;
             $u->avatar = $path;
         }
 
@@ -134,10 +140,17 @@ class LietotajsController extends Controller
             'amats' => $req->input('amats'),
         ];
 
-        // Ja pievienots jauns avatar attēls, aizvieto ceļu ar jauno failu.
+        // Ja pievienots jauns avatar attēls, aizvieto ceļu ar jauno failu public/avatars mapē.
         if ($req->hasFile('avatar')) {
-            Storage::disk('public')->makeDirectory('avatars');
-            $path = $req->file('avatar')->store('avatars', 'public');
+            $avatarDirectory = public_path('avatars');
+            if (! is_dir($avatarDirectory)) {
+                mkdir($avatarDirectory, 0775, true);
+            }
+
+            $extension = strtolower((string) $req->file('avatar')->getClientOriginalExtension());
+            $fileName = uniqid('avatar_', true) . ($extension !== '' ? '.' . $extension : '');
+            $req->file('avatar')->move($avatarDirectory, $fileName);
+            $path = 'avatars/' . $fileName;
             $data['avatar'] = $path;
         }
 
@@ -146,7 +159,7 @@ class LietotajsController extends Controller
     }
 
     /**
-     * Atgriež lietotāja avatar attēlu tieši no publiskā diska.
+     * Atgriež lietotāja avatar attēlu no projekta mapes public/avatars.
      */
     public function avatar($id)
     {
@@ -157,7 +170,7 @@ class LietotajsController extends Controller
             abort(404);
         }
 
-        return response()->file(Storage::disk('public')->path($avatarPath));
+        return response()->file(public_path($avatarPath));
     }
 
     /**
