@@ -24,6 +24,8 @@ class NorakstishanaController extends Controller
      */
     public function showAll(Request $request)
     {
+        $this->syncAcceptedNorakstishanaIntoKustibas();
+
         $user = auth()->user();
         $pendingNorakstishanaCount = 0;
         $pendingNorakstishanaRequests = collect();
@@ -354,12 +356,24 @@ class NorakstishanaController extends Controller
         }
     }
 
-    private function createKustibaForAcceptedNorakstishana(Norakstishana $norakstishana): void
+    private function syncAcceptedNorakstishanaIntoKustibas(): void
+    {
+        $acceptedNorakstishanas = Norakstishana::query()
+            ->where('akceptets', true)
+            ->orderBy('norakstishana_id')
+            ->get();
+
+        foreach ($acceptedNorakstishanas as $acceptedNorakstishana) {
+            $this->createKustibaForAcceptedNorakstishana($acceptedNorakstishana);
+        }
+    }
+
+    private function createKustibaForAcceptedNorakstishana(Norakstishana $norakstishana): bool
     {
         $norakstishana = $norakstishana->fresh(['inventars']);
 
         if (! $norakstishana || ! $norakstishana->akceptets) {
-            return;
+            return false;
         }
 
         $norakstisanaVeidsId = KustibasVeidi::query()
@@ -367,7 +381,7 @@ class NorakstishanaController extends Controller
             ->value('kustibas_veids_id');
 
         if (empty($norakstisanaVeidsId)) {
-            return;
+            return false;
         }
 
         $documentRef = '[NORAKSTISHANA:' . $norakstishana->norakstishana_id . ']';
@@ -377,13 +391,13 @@ class NorakstishanaController extends Controller
             ->exists();
 
         if ($alreadyExists) {
-            return;
+            return false;
         }
 
         $inventars = $norakstishana->inventars;
 
         if (! $inventars || empty($inventars->atbildigais_id)) {
-            return;
+            return false;
         }
 
         InventaraKustiba::query()->create([
@@ -396,5 +410,7 @@ class NorakstishanaController extends Controller
             'jauna_telpa_id' => null,
             'piezimes' => 'Automātiski izveidots no norakstīšanas pieteikuma. ' . $documentRef,
         ]);
+
+        return true;
     }
 }
