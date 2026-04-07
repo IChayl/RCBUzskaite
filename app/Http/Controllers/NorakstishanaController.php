@@ -24,7 +24,7 @@ class NorakstishanaController extends Controller
      */
     public function showAll(Request $request)
     {
-        $this->syncAcceptedNorakstishanaIntoKustibas();
+        $this->syncAllExistingDataBetweenNorakstishanaAndKustibas();
 
         $user = auth()->user();
         $pendingNorakstishanaCount = 0;
@@ -356,6 +356,13 @@ class NorakstishanaController extends Controller
         }
     }
 
+    private function syncAllExistingDataBetweenNorakstishanaAndKustibas(): void
+    {
+        $this->syncAcceptedNorakstishanaIntoKustibas();
+        $this->syncNorakstisanaKustibasIntoAcceptedNorakstishana();
+        $this->syncAcceptedNorakstishanaIntoKustibas();
+    }
+
     private function syncAcceptedNorakstishanaIntoKustibas(): void
     {
         $acceptedNorakstishanas = Norakstishana::query()
@@ -365,6 +372,52 @@ class NorakstishanaController extends Controller
 
         foreach ($acceptedNorakstishanas as $acceptedNorakstishana) {
             $this->createKustibaForAcceptedNorakstishana($acceptedNorakstishana);
+        }
+    }
+
+    private function syncNorakstisanaKustibasIntoAcceptedNorakstishana(): void
+    {
+        $norakstisanaVeidsId = KustibasVeidi::query()
+            ->whereRaw('LOWER(nosaukums) like ?', ['%norakst%'])
+            ->value('kustibas_veids_id');
+
+        if (empty($norakstisanaVeidsId)) {
+            return;
+        }
+
+        $norakstisanaKustibas = InventaraKustiba::query()
+            ->where('kustibas_veids_id', (int) $norakstisanaVeidsId)
+            ->orderBy('kustiba_id')
+            ->get();
+
+        foreach ($norakstisanaKustibas as $kustiba) {
+            $alreadyHasAcceptedNorakstishana = Norakstishana::query()
+                ->where('inventara_id', (int) $kustiba->inventars_id)
+                ->where('akceptets', true)
+                ->exists();
+
+            if ($alreadyHasAcceptedNorakstishana) {
+                continue;
+            }
+
+            $norakstishana = Norakstishana::query()->create([
+                'inventara_id' => (int) $kustiba->inventars_id,
+                'norDatums' => optional($kustiba->datums)->toDateString() ?? Carbon::today()->toDateString(),
+                'iemesls' => 'Sinhronizēts no kustības',
+                'talaka_riciba' => 'Norakstīts',
+                'pieteikshanas_dat' => optional($kustiba->datums)->toDateString() ?? Carbon::today()->toDateString(),
+                'apstiprinashanas_dat' => optional($kustiba->datums)->toDateString() ?? Carbon::today()->toDateString(),
+                'akceptets' => true,
+                'pieteica_lietotajs_id' => (int) $kustiba->atbildigais_lietotajs_id,
+            ]);
+
+            $documentRef = '[NORAKSTISHANA:' . $norakstishana->norakstishana_id . ']';
+            $existingNotes = trim((string) $kustiba->piezimes);
+
+            if (strpos($existingNotes, $documentRef) === false) {
+                $kustiba->piezimes = trim($existingNotes . ' ' . $documentRef);
+                $kustiba->save();
+            }
         }
     }
 
@@ -395,15 +448,16 @@ class NorakstishanaController extends Controller
         }
 
         $inventars = $norakstishana->inventars;
+        $atbildigaisLietotajsId = (int) ($inventars->atbildigais_id ?? $norakstishana->pieteica_lietotajs_id ?? 0);
 
-        if (! $inventars || empty($inventars->atbildigais_id)) {
+        if (! $inventars || $atbildigaisLietotajsId <= 0) {
             return false;
         }
 
         InventaraKustiba::query()->create([
             'datums' => optional($norakstishana->norDatums)->toDateString() ?? Carbon::today()->toDateString(),
             'inventars_id' => $norakstishana->inventara_id,
-            'atbildigais_lietotajs_id' => (int) $inventars->atbildigais_id,
+            'atbildigais_lietotajs_id' => $atbildigaisLietotajsId,
             'Jatbildigais_lietotajs_id' => 0,
             'kustibas_veids_id' => (int) $norakstisanaVeidsId,
             'veca_telpa_id' => $inventars->telpas_id,
