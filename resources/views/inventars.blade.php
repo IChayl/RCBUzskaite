@@ -124,6 +124,17 @@
                                 <div class="actions">
                                     <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->inventars_id }}">Dzēst</a>
                                     <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm">Rediģēt</a>
+                                    <select class="form-control quick-action-select" style="min-width: 170px; display: inline-block;" aria-label="Izvēlieties darbību">
+                                        <option value="">Izvēlies darbību</option>
+                                        @foreach($kustibasVeidiQuickActions as $kv)
+                                            @php($isNorakstisana = str_contains(mb_strtolower($kv->nosaukums, 'UTF-8'), 'norakst'))
+                                            @if(! $isNorakstisana)
+                                                <option value="{{ route('inventara_kustiba.create', ['inventars_id' => $item->inventars_id, 'kustibas_veids_id' => $kv->kustibas_veids_id]) }}">Kustība: {{ $kv->nosaukums }}</option>
+                                            @endif
+                                        @endforeach
+                                        <option value="{{ route('norakstishana.create', ['inventara_id' => $item->inventars_id]) }}">Norakstīšana</option>
+                                    </select>
+                                    <a href="#" class="bloom-button sm quick-action-go">Atvērt</a>
                                 </div>
                             </td>
                             @endif
@@ -157,6 +168,21 @@
                 if (confirm('Vai vēlaties dzēst šo ierakstu ?')) {
                     window.location.href = `/inventars/${id}/delete`;
                 }
+            });
+        });
+
+        // Ātrā pāreja uz kustības vai norakstīšanas izveidi izvēlētajam inventāram.
+        document.querySelectorAll('.quick-action-go').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const actionsWrap = this.closest('.actions');
+                const select = actionsWrap ? actionsWrap.querySelector('.quick-action-select') : null;
+                if (!select || !select.value) {
+                    alert('Lūdzu izvēlieties darbību.');
+                    return;
+                }
+
+                window.location.href = select.value;
             });
         });
     });

@@ -16,12 +16,13 @@
     <!-- Jauna norakstīšanas izveides forma -->
     <form method="POST" action="{{ route('norakstishana.store') }}" novalidate>
         @csrf
+        @php($selectedInventaraId = old('inventara_id', request('inventara_id')))
         <div class="mb-3">
             <label for="inventara_id" class="form-label">Inventars</label>
             <select class="form-control" id="inventara_id" name="inventara_id" required>
                 <option value="">-- Izvēlieties inventāru --</option>
                 @foreach($inventari as $inv)
-                    <option value="{{ $inv->inventars_id }}" {{ old('inventara_id') == $inv->inventars_id ? 'selected' : '' }}>
+                    <option value="{{ $inv->inventars_id }}" {{ (string) $selectedInventaraId === (string) $inv->inventars_id ? 'selected' : '' }}>
                         {{ $inv->nosaukums }} (Inv. Nr.: {{ $inv->inventara_numurs ?? '-' }})
                     </option>
                 @endforeach

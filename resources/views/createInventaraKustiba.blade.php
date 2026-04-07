@@ -16,6 +16,8 @@
     <!-- Jaunas kustības izveides forma -->
     <form method="POST" action="{{ route('inventara_kustiba.store') }}" novalidate>
         @csrf
+        @php($selectedInventarsId = old('inventars_id', request('inventars_id')))
+        @php($selectedKustibasVeidsId = old('kustibas_veids_id', request('kustibas_veids_id')))
         @php($today = now()->toDateString())
         <div class="mb-3">
             <label for="datums" class="form-label">Datums</label>
@@ -27,7 +29,7 @@
             <select class="form-control" id="inventars_id" name="inventars_id" required>
                 <option value="">-- Izvēlieties inventāru --</option>
                 @foreach($inventari as $inv)
-                    <option style="color: #0F1931;" value="{{ $inv->inventars_id }}" data-current-telpa-id="{{ $inv->telpas_id ?? '' }}" data-current-atbildigais-id="{{ $inv->atbildigais_id ?? '' }}">{{ $inv->nosaukums }} (Inv. Nr.: {{ $inv->inventara_numurs ?? '-' }})</option>
+                    <option style="color: #0F1931;" value="{{ $inv->inventars_id }}" data-current-telpa-id="{{ $inv->telpas_id ?? '' }}" data-current-atbildigais-id="{{ $inv->atbildigais_id ?? '' }}" {{ (string) $selectedInventarsId === (string) $inv->inventars_id ? 'selected' : '' }}>{{ $inv->nosaukums }} (Inv. Nr.: {{ $inv->inventara_numurs ?? '-' }})</option>
                 @endforeach
             </select>
         </div>
@@ -38,7 +40,7 @@
                 @foreach($kustibasVeidi as $kv)
                     @php($isNorakstisana = str_contains(mb_strtolower($kv->nosaukums, 'UTF-8'), 'norakst'))
                     @if(! $isNorakstisana)
-                        <option value="{{ $kv->kustibas_veids_id }}">{{ $kv->nosaukums }}</option>
+                        <option value="{{ $kv->kustibas_veids_id }}" {{ (string) $selectedKustibasVeidsId === (string) $kv->kustibas_veids_id ? 'selected' : '' }}>{{ $kv->nosaukums }}</option>
                     @endif
                 @endforeach
             </select>

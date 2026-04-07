@@ -11,6 +11,7 @@ use App\Http\Controllers\Concerns\HandlesSafeDelete;
 use App\Http\Controllers\Concerns\NormalizesDateRanges;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use App\Models\KustibasVeidi;
 
 // Kontrolieris inventāra ierakstu sarakstam, izveidei, labošanai un dzēšanai.
 class InventarsController extends Controller
@@ -145,6 +146,7 @@ class InventarsController extends Controller
         $kategorijas = KategorijaModel::orderBy('nosaukums')->get();
         $telpas = Telpa::orderBy('nosaukums')->get();
         $lietotaji = Lietotajs::orderBy('lietotajvards')->get();
+        $kustibasVeidiQuickActions = KustibasVeidi::orderBy('nosaukums')->get();
 
         // Nosūtām datus uz skatu
         return view('inventars', compact(
@@ -156,6 +158,7 @@ class InventarsController extends Controller
             'kategorijas',
             'telpas',
             'lietotaji',
+            'kustibasVeidiQuickActions',
             'filterKategorija',
             'filterTelpa',
             'filterAtbildigais',
