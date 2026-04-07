@@ -82,14 +82,17 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const id = this.getAttribute('data-id');
+                // Darbinieka dzēšana notiek tikai pēc modalā dialoga apstiprinājuma.
                 window.appConfirm('Vai vēlaties dzēst šo ierakstu?', {
                     title: 'Dzēšanas apstiprinājums',
                     acceptText: 'Dzēst',
                     cancelText: 'Atcelt'
                 }).then((accepted) => {
                     if (!accepted) {
+                        // Atteikuma gadījumā izpildi neturpinām.
                         return;
                     }
+                    // Apstiprinot darbību, pāradresējam uz dzēšanas maršrutu.
                     window.location.href = `/lietotajs/${id}/delete`;
                 });
             });

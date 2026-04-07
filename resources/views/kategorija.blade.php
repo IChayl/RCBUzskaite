@@ -103,14 +103,17 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const id = this.getAttribute('data-id');
+                // Apstiprinājuma dialogs palīdz izvairīties no nejaušas dzēšanas.
                 window.appConfirm('Vai vēlaties dzēst šo ierakstu?', {
                     title: 'Dzēšanas apstiprinājums',
                     acceptText: 'Dzēst',
                     cancelText: 'Atcelt'
                 }).then((accepted) => {
                     if (!accepted) {
+                        // Lietotājs atteicās — maršrutu neizsaucam.
                         return;
                     }
+                    // Dzēšanu veic backend maršruts pēc apstiprinājuma.
                     window.location.href = `/kategorija/${id}/delete`;
                 });
             });

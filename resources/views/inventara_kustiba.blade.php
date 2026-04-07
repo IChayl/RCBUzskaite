@@ -155,14 +155,17 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const id = this.getAttribute('data-id');
+                // Izmantojam kopējo projekta apstiprinājuma modālo logu.
                 window.appConfirm('Vai vēlaties dzēst šo ierakstu?', {
                     title: 'Dzēšanas apstiprinājums',
                     acceptText: 'Dzēst',
                     cancelText: 'Atcelt'
                 }).then((accepted) => {
                     if (!accepted) {
+                        // Ja apstiprinājums netiek dots, darbību pārtraucam.
                         return;
                     }
+                    // Tikai pēc apstiprinājuma izsaucam dzēšanas maršrutu.
                     window.location.href = `/inventara_kustiba/${id}/delete`;
                 });
             });

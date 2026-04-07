@@ -219,14 +219,17 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const id = this.getAttribute('data-id');
+                // Dzēšanai izmantojam vienoto projekta apstiprinājuma dialogu.
                 window.appConfirm('Vai vēlaties dzēst šo ierakstu?', {
                     title: 'Dzēšanas apstiprinājums',
                     acceptText: 'Dzēst',
                     cancelText: 'Atcelt'
                 }).then((accepted) => {
                     if (!accepted) {
+                        // Lietotājs izvēlējās atcelt dzēšanu.
                         return;
                     }
+                    // Apstiprināta dzēšana: pārejam uz backend maršrutu.
                     window.location.href = `/norakstishana/${id}/delete`;
                 });
             });
@@ -235,14 +238,17 @@
         document.querySelectorAll('.cancel-request-form').forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
+                // Atsevišķs apstiprinājums pieteikuma atcelšanai.
                 window.appConfirm('Vai tiešām vēlaties atcelt šo pieteikumu?', {
                     title: 'Atcelšanas apstiprinājums',
                     acceptText: 'Atcelt pieteikumu',
                     cancelText: 'Atgriezties'
                 }).then((accepted) => {
                     if (!accepted) {
+                        // Formu neiesniedzam, ja lietotājs pārdomāja.
                         return;
                     }
+                    // Iesniedzam tieši to pašu formu tikai pēc apstiprinājuma.
                     form.submit();
                 });
             });

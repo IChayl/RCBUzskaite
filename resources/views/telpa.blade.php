@@ -104,14 +104,17 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const id = this.getAttribute('data-id');
+                // Pirms telpas dzēšanas prasa skaidru lietotāja apstiprinājumu.
                 window.appConfirm('Vai vēlaties dzēst šo ierakstu?', {
                     title: 'Dzēšanas apstiprinājums',
                     acceptText: 'Dzēst',
                     cancelText: 'Atcelt'
                 }).then((accepted) => {
                     if (!accepted) {
+                        // Ja nav apstiprināts, lapas stāvokli nemainām.
                         return;
                     }
+                    // Apstiprināta darbība: virzāmies uz servera dzēšanas maršrutu.
                     window.location.href = `/telpa/${id}/delete`;
                 });
             });

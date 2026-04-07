@@ -164,14 +164,17 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const id = this.getAttribute('data-id');
+                // Atveram projekta stila dialogu (nevis browser confirm).
                 window.appConfirm('Vai vēlaties dzēst šo ierakstu?', {
                     title: 'Dzēšanas apstiprinājums',
                     acceptText: 'Dzēst',
                     cancelText: 'Atcelt'
                 }).then((accepted) => {
                     if (!accepted) {
+                        // Lietotājs atteica dzēšanu — neko nedarām.
                         return;
                     }
+                    // Pēc apstiprinājuma pārejam uz servera dzēšanas maršrutu.
                     window.location.href = `/inventars/${id}/delete`;
                 });
             });
@@ -181,9 +184,11 @@
         document.querySelectorAll('.quick-action-select').forEach(select => {
             select.addEventListener('change', function() {
                 if (!this.value) {
+                    // Ja izvēlēta tukšā opcija, nekur nepārejam.
                     return;
                 }
 
+                // Ātrās darbības izvēle uzreiz atver attiecīgo formu/maršrutu.
                 window.location.href = this.value;
             });
         });

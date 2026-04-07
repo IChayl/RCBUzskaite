@@ -104,14 +104,17 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const id = this.getAttribute('data-id');
+                // Vienota projekta apstiprināšana pirms neatgriezeniskas darbības.
                 window.appConfirm('Vai vēlaties dzēst šo ierakstu?', {
                     title: 'Dzēšanas apstiprinājums',
                     acceptText: 'Dzēst',
                     cancelText: 'Atcelt'
                 }).then((accepted) => {
                     if (!accepted) {
+                        // Atteikums: saglabājam esošo stāvokli bez izmaiņām.
                         return;
                     }
+                    // Apstiprinājuma gadījumā pāradresējam uz dzēšanas URL.
                     window.location.href = `/kustibas_veidi/${id}/delete`;
                 });
             });
