@@ -17,6 +17,7 @@
     <form method="POST" action="{{ route('norakstishana.store') }}" novalidate>
         @csrf
         @php($selectedInventaraId = old('inventara_id', request('inventara_id')))
+        @php($defaultNorDatums = old('norDatums', now()->toDateString()))
         <div class="mb-3">
             <label for="inventara_id" class="form-label">Inventars</label>
             <select class="form-control" id="inventara_id" name="inventara_id" required>
@@ -30,7 +31,7 @@
         </div>
         <div class="mb-3">
             <label for="norDatums" class="form-label">Norakstīšanas datums</label>
-            <input type="date" class="form-control" id="norDatums" name="norDatums" required lang="lv" value="{{ old('norDatums') }}">
+            <input type="date" class="form-control" id="norDatums" name="norDatums" required lang="lv" value="{{ $defaultNorDatums }}">
         </div>
         <div class="mb-3">
             <label for="iemesls" class="form-label">Iemesls</label>
