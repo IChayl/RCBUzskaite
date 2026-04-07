@@ -20,6 +20,8 @@
             <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'all']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'all' ? 'box-shadow: 0 0 0 1px rgba(226, 212, 187, 0.28), 0 7px 18px rgba(15, 25, 49, 0.22);' : '' }}">Viss inventārs</a>
             <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'written_off']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'written_off' ? 'box-shadow: 0 0 0 1px rgba(226, 212, 187, 0.28), 0 7px 18px rgba(15, 25, 49, 0.22);' : '' }}">Tikai norakstītais</a>
             <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'active']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'active' ? 'box-shadow: 0 0 0 1px rgba(226, 212, 187, 0.28), 0 7px 18px rgba(15, 25, 49, 0.22);' : '' }}">Tikai nenorakstītais</a>
+            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'repair']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'repair' ? 'box-shadow: 0 0 0 1px rgba(226, 212, 187, 0.28), 0 7px 18px rgba(15, 25, 49, 0.22);' : '' }}">Remontā</a>
+            <a href="{{ request()->fullUrlWithQuery(['inventory_status' => 'in_use']) }}" class="bloom-button sm" style="{{ $inventoryStatus === 'in_use' ? 'box-shadow: 0 0 0 1px rgba(226, 212, 187, 0.28), 0 7px 18px rgba(15, 25, 49, 0.22);' : '' }}">Lietošanā</a>
         @else
 
         @endif

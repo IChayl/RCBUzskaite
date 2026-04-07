@@ -27,6 +27,7 @@ class InventarsController extends Controller
         $user = auth()->user();
         $inventoryStatus = $request->input('inventory_status', $user->admina_tiesibas ? 'active' : 'all');
         $inventoryScope = $request->input('inventory_scope', $user->admina_tiesibas ? 'all' : 'responsible');
+        $repairMovementTypeIds = $this->getRepairMovementTypeIds();
 
         // Meklēšanas teksta un kolonnas iestatījumi
         $q = trim($request->input('q', ''));
@@ -48,7 +49,7 @@ class InventarsController extends Controller
             $column = 'all';
         }
 
-        $allowedInventoryStatuses = ['active', 'written_off', 'all'];
+        $allowedInventoryStatuses = ['active', 'written_off', 'all', 'repair', 'in_use'];
         if (! in_array($inventoryStatus, $allowedInventoryStatuses, true)) {
             $inventoryStatus = 'active';
         }
@@ -88,6 +89,14 @@ class InventarsController extends Controller
             $query->withoutAcceptedNorakstishana();
         } elseif ($inventoryStatus === 'written_off') {
             $query->onlyAcceptedNorakstishana();
+        } elseif ($inventoryStatus === 'repair') {
+            // "Remontā" nozīmē: nav norakstīts un jaunākā kustība ir remonta tipa.
+            $query->withoutAcceptedNorakstishana();
+            $this->applyLatestMovementStatusFilter($query, $repairMovementTypeIds, true);
+        } elseif ($inventoryStatus === 'in_use') {
+            // "Lietošanā" nozīmē: nav norakstīts un jaunākā kustība nav remonta tipa.
+            $query->withoutAcceptedNorakstishana();
+            $this->applyLatestMovementStatusFilter($query, $repairMovementTypeIds, false);
         }
 
         // Meklēšana kolonnā vai visās kolonnās
@@ -339,5 +348,39 @@ class InventarsController extends Controller
         });
 
         return $inventari;
+    }
+
+    private function getRepairMovementTypeIds(): array
+    {
+        // Atrodam visus kustību veidus, kuru nosaukums norāda uz remontu.
+        return KustibasVeidi::query()
+            ->whereRaw('LOWER(nosaukums) like ?', ['%remont%'])
+            ->pluck('kustibas_veids_id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+    }
+
+    private function applyLatestMovementStatusFilter($query, array $repairMovementTypeIds, bool $mustBeRepair): void
+    {
+        if ($repairMovementTypeIds === []) {
+            if ($mustBeRepair) {
+                $query->whereRaw('1 = 0');
+            }
+
+            return;
+        }
+
+        $repairTypeIdList = implode(',', array_map('intval', $repairMovementTypeIds));
+        $latestMovementTypeSubquery = '(SELECT ik2.kustibas_veids_id FROM inventara_kustiba ik2 WHERE ik2.inventars_id = inventars.inventars_id ORDER BY ik2.datums DESC, ik2.kustiba_id DESC LIMIT 1)';
+
+        if ($mustBeRepair) {
+            $query->whereRaw($latestMovementTypeSubquery . ' IN (' . $repairTypeIdList . ')');
+            return;
+        }
+
+        $query->where(function ($statusQuery) use ($latestMovementTypeSubquery, $repairTypeIdList) {
+            $statusQuery->whereRaw($latestMovementTypeSubquery . ' IS NULL')
+                ->orWhereRaw($latestMovementTypeSubquery . ' NOT IN (' . $repairTypeIdList . ')');
+        });
     }
 }
