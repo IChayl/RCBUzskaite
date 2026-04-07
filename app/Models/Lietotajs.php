@@ -46,7 +46,7 @@ class Lietotajs extends Authenticatable
             return null;
         }
 
-        $rawPath = ltrim((string) $this->avatar, '/');
+        $rawPath = str_replace('\\', '/', ltrim((string) $this->avatar, '/'));
         $candidates = array_unique(array_filter([
             $rawPath,
             preg_replace('#^storage/#', '', $rawPath),
@@ -59,9 +59,9 @@ class Lietotajs extends Authenticatable
                 return $candidate;
             }
 
-            // Saderībai ar veciem datiem pārbaudām arī storage/public ceļu.
+            // Saderībai ar veciem datiem pārbaudām arī storage/app/public ceļu.
             if (Storage::disk('public')->exists($candidate)) {
-                return 'storage/' . ltrim($candidate, '/');
+                return ltrim($candidate, '/');
             }
         }
 

@@ -170,7 +170,16 @@ class LietotajsController extends Controller
             abort(404);
         }
 
-        return response()->file(public_path($avatarPath));
+        $publicFilePath = public_path($avatarPath);
+        if (is_file($publicFilePath)) {
+            return response()->file($publicFilePath);
+        }
+
+        if (Storage::disk('public')->exists($avatarPath)) {
+            return response()->file(Storage::disk('public')->path($avatarPath));
+        }
+
+        abort(404);
     }
 
     /**
