@@ -106,6 +106,7 @@
                             @php $dir = request('sort') === 'iegades_datums' && request('direction') === 'asc' ? 'desc' : 'asc'; @endphp
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'iegades_datums', 'direction' => $dir]) }}">Iegādes datums</a>
                         </th>
+                        <th>Statuss</th>
                         @if(Auth::user()->admina_tiesibas) <th>Darbības</th> @endif
                     </tr>
                 </thead>
@@ -119,6 +120,7 @@
                             <td>{{ optional($item->telpa)->nosaukums ?? ('ID: '.$item->telpas_id) }}</td>
                             <td>{{ optional($item->atbildigais)->pilnais_vards ?? ('ID: '.$item->atbildigais_id) }}</td>
                             <td>@lvDate($item->iegades_datums)</td>
+                            <td>{{ $item->statuss ?? 'Lietošanā' }}</td>
                             @if(Auth::user()->admina_tiesibas)
                             <td>
                                 <div class="actions actions--inventory">

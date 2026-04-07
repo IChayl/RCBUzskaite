@@ -12,6 +12,7 @@ use App\Http\Controllers\Concerns\NormalizesDateRanges;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Models\KustibasVeidi;
+use App\Models\InventaraKustiba;
 
 // Kontrolieris inventāra ierakstu sarakstam, izveidei, labošanai un dzēšanai.
 class InventarsController extends Controller
@@ -144,6 +145,9 @@ class InventarsController extends Controller
         // Print režīmā ļaujam ielādēt visus filtrētos ierakstus vienā lapā.
         $perPage = $request->boolean('print_all') ? 100000 : 7;
         $inventari = $query->paginate($perPage)->withQueryString();
+
+        // Pēc lapošanas aprēķinām cilvēkam saprotamu inventāra statusu katrai redzamajai rindai.
+        $inventari = $this->attachInventoryStatuses($inventari);
 
         $kategorijas = KategorijaModel::orderBy('nosaukums')->get();
         $telpas = Telpa::orderBy('nosaukums')->get();
@@ -283,5 +287,57 @@ class InventarsController extends Controller
         $this->deleteWithForeignKeyChecksDisabled('inventars', 'inventars_id', $id);
 
         return redirect('/inventars')->with('success', $this->buildDeleteMessage('Inventāra', $usedIn));
+    }
+
+    private function attachInventoryStatuses($inventari)
+    {
+        $inventoryIds = $inventari->getCollection()->pluck('inventars_id')->all();
+
+        if ($inventoryIds === []) {
+            return $inventari;
+        }
+
+        // Vienā pieprasījumā iegūstam visus akceptētos norakstīšanas ierakstus redzamajiem inventāriem.
+        $writtenOffIds = DB::table('Norakstishana')
+            ->whereIn('inventara_id', $inventoryIds)
+            ->where('akceptets', true)
+            ->pluck('inventara_id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+
+        // Vienā pieprasījumā paņemam kustību vēsturi, lai noteiktu jaunāko kustības tipu.
+        $latestMovementsByInventory = InventaraKustiba::query()
+            ->with('kustibasVeids')
+            ->whereIn('inventars_id', $inventoryIds)
+            ->orderByDesc('datums')
+            ->orderByDesc('kustiba_id')
+            ->get()
+            ->groupBy('inventars_id')
+            ->map(function ($movements) {
+                return $movements->first();
+            });
+
+        $writtenOffLookup = array_fill_keys($writtenOffIds, true);
+
+        $inventari->getCollection()->transform(function ($inventars) use ($writtenOffLookup, $latestMovementsByInventory) {
+            // Prioritāte: norakstīts > remonts > lietošanā.
+            if (isset($writtenOffLookup[(int) $inventars->inventars_id])) {
+                $inventars->statuss = 'Norakstīts';
+                return $inventars;
+            }
+
+            $latestMovement = $latestMovementsByInventory->get((int) $inventars->inventars_id);
+            $movementName = mb_strtolower((string) optional(optional($latestMovement)->kustibasVeids)->nosaukums, 'UTF-8');
+
+            if (str_contains($movementName, 'remont')) {
+                $inventars->statuss = 'Remonts';
+                return $inventars;
+            }
+
+            $inventars->statuss = 'Lietošanā';
+            return $inventars;
+        });
+
+        return $inventari;
     }
 }
