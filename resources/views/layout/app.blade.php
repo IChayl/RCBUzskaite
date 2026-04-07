@@ -421,6 +421,9 @@
             align-items: center;
             gap: 6px;
         }
+        .print-options .print-pdf {
+            display: none;
+        }
         .confirm-overlay {
             position: fixed;
             inset: 0;
