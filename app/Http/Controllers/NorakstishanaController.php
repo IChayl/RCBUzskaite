@@ -24,6 +24,7 @@ class NorakstishanaController extends Controller
      */
     public function showAll(Request $request)
     {
+        // Pirms saraksta attēlošanas saskaņojam norakstīšanas un kustību tabulas.
         $this->syncAllExistingDataBetweenNorakstishanaAndKustibas();
 
         $user = auth()->user();
@@ -113,6 +114,7 @@ class NorakstishanaController extends Controller
             $query->orderBy($sort, $direction);
         }
 
+        // print_all režīmā ielādējam visu filtrēto kopu vienā lapā drukai.
         $perPage = $request->boolean('print_all') ? 100000 : 7;
         $norakstishanas = $query->paginate($perPage)->withQueryString();
 
@@ -157,11 +159,13 @@ class NorakstishanaController extends Controller
             'talaka_riciba' => 'required|string|max:50',
         ]);
 
+        // Ne-adminam atļaujam pieteikt tikai sev piesaistītu inventāru.
         $inventars = Inventar::findOrFail($data['inventara_id']);
         if (! $user->admina_tiesibas && (int) $inventars->atbildigais_id !== (int) $user->lietotajs_id) {
             abort(403, 'Jums nav tiesību pieteikt norakstīšanu šim inventāram.');
         }
 
+        // Aizsardzība pret atkārtotu norakstīšanu tam pašam inventāram.
         $this->ensureInventarIsNotAlreadyWrittenOff((int) $data['inventara_id']);
 
         $norakstishana = new Norakstishana();
@@ -175,6 +179,7 @@ class NorakstishanaController extends Controller
         $norakstishana->talaka_riciba = $data['talaka_riciba'];
         $norakstishana->save();
 
+        // Ja ieraksts uzreiz ir akceptēts, automātiski izveidojam atbilstošu kustību.
         if ($norakstishana->akceptets) {
             $this->createKustibaForAcceptedNorakstishana($norakstishana);
         }
@@ -247,6 +252,7 @@ class NorakstishanaController extends Controller
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
 
+        // Akceptēšanas brīdī uzreiz tiek veidota kustība auditam un izsekojamībai.
         $norakstishana = Norakstishana::findOrFail($id);
         $this->ensureInventarIsNotAlreadyWrittenOff((int) $norakstishana->inventara_id, (int) $norakstishana->norakstishana_id);
         $norakstishana->akceptets = true;
@@ -285,6 +291,8 @@ class NorakstishanaController extends Controller
         if (!auth()->user()->admina_tiesibas) {
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
+        // Pirms norakstīšanas dzēšanas noņemam arī saistītās kustības,
+        // lai fonā strādājošā sinhronizācija tās neatjaunotu.
         $norakstishana = Norakstishana::findOrFail($id);
         $this->deleteLinkedKustibasForNorakstishana($norakstishana);
         $this->deleteWithForeignKeyChecksDisabled('Norakstishana', 'norakstishana_id', $id);
@@ -294,13 +302,16 @@ class NorakstishanaController extends Controller
 
     private function deleteLinkedKustibasForNorakstishana(Norakstishana $norakstishana): void
     {
+        // Primārais sasaistes marķieris starp tabulām (ierakstīts kustības piezīmēs).
         $documentRef = '[NORAKSTISHANA:' . $norakstishana->norakstishana_id . ']';
 
+        // 1) Mēģinām atrast tieši sasaistītās kustības pēc marķiera.
         $linkedKustibaIds = InventaraKustiba::query()
             ->where('piezimes', 'like', '%' . $documentRef . '%')
             ->pluck('kustiba_id');
 
         if ($linkedKustibaIds->isEmpty()) {
+            // 2) Rezerves meklēšana vecākiem sinhronizētiem ierakstiem bez marķiera.
             $norakstisanaVeidsId = KustibasVeidi::query()
                 ->whereRaw('LOWER(nosaukums) like ?', ['%norakst%'])
                 ->value('kustibas_veids_id');
@@ -319,9 +330,11 @@ class NorakstishanaController extends Controller
         }
 
         if ($linkedKustibaIds->isEmpty()) {
+            // Ja saistīts ieraksts nav atrasts, dzēšam tikai pašu norakstīšanu.
             return;
         }
 
+        // Dzēšam saistītās kustības tajā pašā darbībā, lai sinhronizācija tās neatjaunotu.
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
         try {
             DB::table('inventara_kustiba')
@@ -360,13 +373,16 @@ class NorakstishanaController extends Controller
     private function buildAvailableInventarsQuery(Lietotajs $user, ?Norakstishana $currentNorakstishana = null)
     {
         return Inventar::query()
+            // Parastam lietotājam rādām tikai viņam atbildīgo inventāru.
             ->when(! $user->admina_tiesibas, function ($query) use ($user) {
                 $query->where('atbildigais_id', $user->lietotajs_id);
             })
             ->where(function ($query) use ($currentNorakstishana) {
+                // Jauns pieteikums: ļaujam tikai nenorakstītu inventāru.
                 $query->withoutAcceptedNorakstishana();
 
                 if ($currentNorakstishana) {
+                    // Rediģēšanā atļaujam saglabāt arī pašreiz izvēlēto inventāru.
                     $query->orWhere('inventars_id', $currentNorakstishana->inventara_id);
                 }
             });
@@ -391,6 +407,8 @@ class NorakstishanaController extends Controller
 
     private function syncAllExistingDataBetweenNorakstishanaAndKustibas(): void
     {
+        // Sinhronizācija tiek veikta abos virzienos.
+        // Trešais solis nodrošina konverģenci vienā lapas ielādē.
         $this->syncAcceptedNorakstishanaIntoKustibas();
         $this->syncNorakstisanaKustibasIntoAcceptedNorakstishana();
         $this->syncAcceptedNorakstishanaIntoKustibas();
@@ -398,6 +416,7 @@ class NorakstishanaController extends Controller
 
     private function syncAcceptedNorakstishanaIntoKustibas(): void
     {
+        // Visi akceptētie norakstīšanas ieraksti tiek pārnesti uz kustību tabulu.
         $acceptedNorakstishanas = Norakstishana::query()
             ->where('akceptets', true)
             ->orderBy('norakstishana_id')
@@ -410,6 +429,7 @@ class NorakstishanaController extends Controller
 
     private function syncNorakstisanaKustibasIntoAcceptedNorakstishana(): void
     {
+        // Atrodam kustības veida ID pēc nosaukuma, lai nebūtu hard-coded skaitļi.
         $norakstisanaVeidsId = KustibasVeidi::query()
             ->whereRaw('LOWER(nosaukums) like ?', ['%norakst%'])
             ->value('kustibas_veids_id');
@@ -424,6 +444,7 @@ class NorakstishanaController extends Controller
             ->get();
 
         foreach ($norakstisanaKustibas as $kustiba) {
+            // Ja inventāram jau ir akceptēta norakstīšana, dublikātu neveidojam.
             $alreadyHasAcceptedNorakstishana = Norakstishana::query()
                 ->where('inventara_id', (int) $kustiba->inventars_id)
                 ->where('akceptets', true)
@@ -447,6 +468,7 @@ class NorakstishanaController extends Controller
             $documentRef = '[NORAKSTISHANA:' . $norakstishana->norakstishana_id . ']';
             $existingNotes = trim((string) $kustiba->piezimes);
 
+            // Pievienojam atsauci atpakaļ kustības piezīmēs, lai vēlāk var droši dzēst abpusēji.
             if (strpos($existingNotes, $documentRef) === false) {
                 $kustiba->piezimes = trim($existingNotes . ' ' . $documentRef);
                 $kustiba->save();
@@ -456,6 +478,7 @@ class NorakstishanaController extends Controller
 
     private function createKustibaForAcceptedNorakstishana(Norakstishana $norakstishana): bool
     {
+        // Pārlādējam aktuālās saites no DB, lai strādātu ar svaigiem datiem.
         $norakstishana = $norakstishana->fresh(['inventars']);
 
         if (! $norakstishana || ! $norakstishana->akceptets) {
@@ -472,6 +495,7 @@ class NorakstishanaController extends Controller
 
         $documentRef = '[NORAKSTISHANA:' . $norakstishana->norakstishana_id . ']';
 
+        // Ja kustība ar šo dokumenta atsauci jau eksistē, jaunu neveidojam.
         $alreadyExists = InventaraKustiba::query()
             ->where('piezimes', 'like', '%' . $documentRef . '%')
             ->exists();
@@ -481,6 +505,7 @@ class NorakstishanaController extends Controller
         }
 
         $inventars = $norakstishana->inventars;
+        // Atbildīgais tiek paņemts no inventāra; rezerves variants ir pieteicējs.
         $atbildigaisLietotajsId = (int) ($inventars->atbildigais_id ?? $norakstishana->pieteica_lietotajs_id ?? 0);
 
         if (! $inventars || $atbildigaisLietotajsId <= 0) {

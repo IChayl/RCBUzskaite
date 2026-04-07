@@ -24,6 +24,8 @@ class InventaraKustibaController extends Controller
     public function showAllKustiba(Request $request)
 
     {
+        // Pirms saraksta ielādes pārliecināmies, ka inventāra aktuālais stāvoklis
+        // (telpa/atbildīgais) atbilst kustību vēsturei.
         $this->syncAllExistingDataBetweenKustibasAndInventars();
 
         $user = auth()->user();
@@ -122,6 +124,7 @@ class InventaraKustibaController extends Controller
             $query->orderBy($sort, $direction);
         }
 
+        // print_all režīmā ielādējam pilnu rezultātu kopu drukāšanai.
         $perPage = $request->boolean('print_all') ? 100000 : 7;
         $kustibas = $query->paginate($perPage)->withQueryString();
 
@@ -171,14 +174,18 @@ class InventaraKustibaController extends Controller
             'piezimes' => 'nullable|string|max:255',
         ]);
 
+        // Datumu veidošanas brīdī iestata sistēma, nevis lietotājs.
         $data['datums'] = now()->toDateString();
 
+        // Kustības veids "Norakstīšana" tiek ģenerēts automātiski no norakstīšanas plūsmas.
         if ($this->isNorakstisanaMovement($data['kustibas_veids_id'] ?? null)) {
             return back()->withInput()->withErrors([
                 'kustibas_veids_id' => 'Kustības veids "Norakstīšana" tiek pievienots automātiski un nav manuāli izvēlams.',
             ]);
         }
 
+        // Veco telpu un esošo atbildīgo vienmēr ņemam no inventāra kartītes,
+        // lai novērstu manuālas neatbilstības formā.
         $inventars = Inventar::findOrFail((int) $data['inventars_id']);
         $data['veca_telpa_id'] = $inventars->telpas_id;
         if (empty($inventars->atbildigais_id)) {
@@ -188,6 +195,7 @@ class InventaraKustibaController extends Controller
         }
         $data['atbildigais_lietotajs_id'] = (int) $inventars->atbildigais_id;
 
+        // Kustības tipa noteikšana ietekmē obligātos laukus un to validāciju.
         $isParvietosana = $this->isParvietosanaMovement($data['kustibas_veids_id']);
         $isNodosana = $this->isNodosanaMovement($data['kustibas_veids_id']);
 
@@ -213,6 +221,7 @@ class InventaraKustibaController extends Controller
             $data['Jatbildigais_lietotajs_id'] = 0;
         }
 
+        // Ja kustības tips neprasa jauno telpu, to notīrām konsekventam datu modelim.
         if (! $isParvietosana) {
             $data['jauna_telpa_id'] = null;
         }
@@ -228,6 +237,8 @@ class InventaraKustibaController extends Controller
         $i->piezimes = $data['piezimes'] ?? null;
         $i->save();
 
+        // Pēc kustības saglabāšanas atjaunojam inventāra stāvokli,
+        // lai saraksti rāda aktuālo telpu/atbildīgo.
         if ($isNodosana) {
             $inventars->atbildigais_id = $data['Jatbildigais_lietotajs_id'];
         }
@@ -371,6 +382,8 @@ class InventaraKustibaController extends Controller
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
 
+        // Dzēšot norakstīšanas kustību, dzēšam arī saistīto norakstīšanu,
+        // lai tā netiktu atjaunota ar sinhronizāciju.
         $kustiba = InventaraKustiba::findOrFail($id);
         $this->deleteLinkedNorakstishanaForKustiba($kustiba);
         $this->deleteWithForeignKeyChecksDisabled('inventara_kustiba', 'kustiba_id', $id);
@@ -380,6 +393,7 @@ class InventaraKustibaController extends Controller
 
     private function deleteLinkedNorakstishanaForKustiba(InventaraKustiba $kustiba): void
     {
+        // Saistītu norakstīšanu dzēšam tikai tad, ja dzēstā kustība ir norakstīšanas tipa.
         if (! $this->isNorakstisanaMovement($kustiba->kustibas_veids_id)) {
             return;
         }
@@ -387,11 +401,13 @@ class InventaraKustibaController extends Controller
         $linkedNorakstishanaIds = collect();
         $notes = (string) ($kustiba->piezimes ?? '');
 
+        // 1) Primārā sasaite: no piezīmēm izlasām [NORAKSTISHANA:id].
         if (preg_match('/\[NORAKSTISHANA:(\d+)\]/', $notes, $matches) === 1) {
             $linkedNorakstishanaIds = collect([(int) $matches[1]]);
         }
 
         if ($linkedNorakstishanaIds->isEmpty()) {
+            // 2) Rezerves sasaite vecākiem sinhronizētiem ierakstiem.
             $linkedNorakstishanaIds = Norakstishana::query()
                 ->where('inventara_id', (int) $kustiba->inventars_id)
                 ->where('akceptets', true)
@@ -404,9 +420,11 @@ class InventaraKustibaController extends Controller
         }
 
         if ($linkedNorakstishanaIds->isEmpty()) {
+            // Ja tiešu saistību neatrodam, dzēšam tikai kustību.
             return;
         }
 
+        // Dzēšam saistīto norakstīšanu, lai sinhronizācija to neatjaunotu.
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
         try {
             DB::table('Norakstishana')
@@ -419,6 +437,8 @@ class InventaraKustibaController extends Controller
 
     private function syncAllExistingDataBetweenKustibasAndInventars(): void
     {
+        // Vēsturiskā sinhronizācija: atjaunojam inventāra aktuālo stāvokli no kustību žurnāla.
+        // Sakārtojam pēc datuma un ID, lai piemērošanas secība būtu stabila.
         $kustibas = InventaraKustiba::query()
             ->orderBy('datums')
             ->orderBy('kustiba_id')
@@ -435,6 +455,7 @@ class InventaraKustibaController extends Controller
             $isParvietosana = $this->isParvietosanaMovement($kustiba->kustibas_veids_id);
             $needsSave = false;
 
+            // Nodošana maina atbildīgo darbinieku.
             if ($isNodosana && ! empty($kustiba->Jatbildigais_lietotajs_id)) {
                 $newAtbildigais = (int) $kustiba->Jatbildigais_lietotajs_id;
                 if ($newAtbildigais > 0 && (int) $inventars->atbildigais_id !== $newAtbildigais) {
@@ -443,6 +464,7 @@ class InventaraKustibaController extends Controller
                 }
             }
 
+            // Pārvietošana maina inventāra telpu.
             if ($isParvietosana && ! empty($kustiba->jauna_telpa_id)) {
                 $newTelpa = (int) $kustiba->jauna_telpa_id;
                 if ($newTelpa > 0 && (int) $inventars->telpas_id !== $newTelpa) {

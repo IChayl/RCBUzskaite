@@ -1766,6 +1766,7 @@
             };
 
             const initDatePickers = () => {
+                // Inicializē visus datuma laukus ar latviešu lokalizāciju.
                 if (!window.flatpickr) return;
 
                 const lvLocale = (window.flatpickr.l10ns && window.flatpickr.l10ns.lv)
@@ -1773,6 +1774,7 @@
                     : 'lv';
 
                 document.querySelectorAll('input[type="date"], input[data-datepicker="lv"]').forEach((input) => {
+                    // Neradām otro flatpickr instanci, ja lauks jau ir inicializēts.
                     if (input.dataset.fpInitialized === '1') return;
 
                     const currentValue = input.value;
@@ -1795,6 +1797,7 @@
             const normalize = (str) => (str || '').toString().trim().toLowerCase();
 
             const applyFilter = (table, query, noResultsEl) => {
+                // Klienta puses teksta filtrēšana tikai redzamajai tabulai.
                 const rows = Array.from(table.tBodies[0].rows);
                 const matched = rows.filter(row => {
                     const text = Array.from(row.cells)
@@ -1814,6 +1817,7 @@
             };
 
             const sortTable = (table, columnIndex, asc) => {
+                // Klienta puses kārtošana pēc izvēlētās kolonnas.
                 const tbody = table.tBodies[0];
                 const rows = Array.from(tbody.rows);
                 const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
@@ -1829,6 +1833,7 @@
             };
 
             const initTableControls = (container) => {
+                // Pieslēdz meklēšanu un klikšķa kārtošanu vienas tabulas vadīklām.
                 const table = container.querySelector('table.data-table');
                 if (!table) return;
 
@@ -1865,6 +1870,7 @@
             };
 
             const initDateRangeFilters = () => {
+                // Nodrošina, ka datumu intervālos "līdz" nekad nav agrāks par "no".
                 const normalizeDateValue = (value) => {
                     const trimmed = (value || '').trim();
                     return /^\d{4}-\d{2}-\d{2}$/.test(trimmed) ? trimmed : '';
@@ -1890,6 +1896,7 @@
                 };
 
                 const bindRange = (form, fromInput, toInput) => {
+                    // Pārbaude notiek gan ievades brīdī, gan pirms formas iesniegšanas.
                     const validate = () => {
                         const fromValue = normalizeDateValue(fromInput.value);
                         const toValue = normalizeDateValue(toInput.value);
@@ -1938,9 +1945,11 @@
             const nativePrint = window.print.bind(window);
             const printGroupState = new WeakMap();
             const printLimitState = new WeakMap();
+            // Karogs, kas pēc drukas dialoga aizvēršanas atgriež URL uz paginēto skatu.
             let shouldResetPrintAllAfterDialog = false;
 
             const initAppConfirm = () => {
+                // Universāls projekta apstiprinājuma dialogs (aizvieto browser confirm()).
                 const overlay = document.getElementById('confirm-overlay');
                 const title = document.getElementById('confirm-title');
                 const message = document.getElementById('confirm-message');
@@ -1955,6 +1964,7 @@
                 let resolver = null;
 
                 const close = (accepted) => {
+                    // Aizveram dialogu un atgriežam lietotāja izvēli Promise izsaucējam.
                     overlay.classList.remove('is-visible');
                     overlay.setAttribute('aria-hidden', 'true');
                     if (resolver) {
@@ -1980,6 +1990,7 @@
                 });
 
                 window.appConfirm = (text, options = {}) => {
+                    // Dinamiski ielādējam virsrakstu/pogas, lai dialogu var lietot dažādiem scenārijiem.
                     title.textContent = options.title || 'Apstiprināt darbību';
                     message.textContent = text || 'Vai tiešām vēlaties turpināt?';
                     acceptBtn.textContent = options.acceptText || 'Apstiprināt';
@@ -1996,6 +2007,7 @@
             };
 
             const getPrintOptions = () => {
+                // Nolasa lietotāja izvēles no drukas izvēlnes.
                 const container = document.querySelector('.print-options');
                 if (!container) {
                     return {
@@ -2015,6 +2027,7 @@
             };
 
             const applyPrintRowLimit = () => {
+                // Drukas režīmā varam paslēpt daļu redzamo rindu, ja norādīts limits.
                 const options = getPrintOptions();
                 if (!options.limit) {
                     return;
@@ -2044,6 +2057,7 @@
             };
 
             const restorePrintRowLimit = () => {
+                // Pēc drukas atjaunojam visas iepriekš paslēptās rindas.
                 document.querySelectorAll('table.data-table').forEach((table) => {
                     const rows = printLimitState.get(table);
                     if (!rows || rows.length === 0) return;
@@ -2082,6 +2096,7 @@
             };
 
             const preparePrintGroups = () => {
+                // Grupēšanu pielietojam tikai tad, ja lietotājs to ir atzīmējis drukas izvēlnē.
                 const options = getPrintOptions();
                 if (!options.group) {
                     return;
@@ -2126,6 +2141,7 @@
                         const groupValue = resolveGroupValue(getPrintableText(row, columnIndex), mode);
                         if (groupValue !== currentGroup) {
                             if (currentGroup !== null) {
+                                // Starp grupām pievienojam atstarpi labākai lasāmībai drukā.
                                 const separatorRow = document.createElement('tr');
                                 separatorRow.className = 'print-group-separator';
 
@@ -2142,6 +2158,7 @@
 
                             const groupCell = document.createElement('td');
                             groupCell.colSpan = columnCount;
+                            // Grupas virsraksts ar ierakstu skaitu ātrākai orientācijai.
                             groupCell.textContent = `${label}: ${groupValue} (${groupCounts[groupValue] || 0} ieraksti)`;
 
                             groupRow.appendChild(groupCell);
@@ -2157,6 +2174,7 @@
             };
 
             const restorePrintGroups = () => {
+                // Pēc drukas atgriežam tabulas sākotnējo rindu secību un noņemam grupēšanas rindas.
                 document.querySelectorAll('table[data-print-group-column]').forEach((table) => {
                     const state = printGroupState.get(table);
                     if (!state) return;
@@ -2171,6 +2189,7 @@
             };
 
             const initPrintControls = () => {
+                // Pie visām drukas pogām piesaistām vienotu projekta drukas izvēlni.
                 const triggers = Array.from(document.querySelectorAll('a[onclick*="window.print"], button[onclick*="window.print"], .js-print-trigger'));
 
                 triggers.forEach((trigger) => {
@@ -2228,6 +2247,7 @@
 
                             const printAllPagesInput = options.querySelector('.print-all-pages-toggle');
                             if (printAllPagesInput && printAllPagesInput.checked && !new URL(window.location.href).searchParams.has('print_all')) {
+                                // Pilnās drukas scenārijs: atveram jaunu tabu ar visiem lapojuma datiem.
                                 const printUrl = new URL(window.location.href);
                                 printUrl.searchParams.set('print_all', '1');
                                 printUrl.searchParams.set('print_autorun', '1');
@@ -2250,11 +2270,13 @@
             };
 
             const preparePrintView = () => {
+                // Vienā solī sagatavojam drukai gan rindu limitu, gan grupēšanu.
                 applyPrintRowLimit();
                 preparePrintGroups();
             };
 
             const restorePrintView = () => {
+                // Atgriežam UI stāvokli pēc drukas (grupas, limiti, atvērti paneļi).
                 restorePrintGroups();
                 restorePrintRowLimit();
                 document.querySelectorAll('.print-options.is-visible').forEach((panel) => {
@@ -2263,6 +2285,7 @@
             };
 
             const cleanupPrintAllMode = () => {
+                // Pēc drukas dialoga aizvēršanas atgriežamies no print_all režīma uz parasto pagināciju.
                 if (!shouldResetPrintAllAfterDialog) {
                     return;
                 }
@@ -2291,6 +2314,8 @@
             });
 
             window.addEventListener('focus', () => {
+                // Dažos pārlūkos afterprint var nenostrādāt uzticami,
+                // tādēļ papildus pārbaudām stāvokli, kad logs atgūst fokusu.
                 if (!shouldResetPrintAllAfterDialog) {
                     return;
                 }
@@ -2301,6 +2326,7 @@
             });
 
             const initAutoPrintFromQuery = () => {
+                // Ja URL satur print_autorun=1, automātiski startējam drukas dialogu.
                 const url = new URL(window.location.href);
                 if (url.searchParams.get('print_autorun') !== '1') {
                     return;
