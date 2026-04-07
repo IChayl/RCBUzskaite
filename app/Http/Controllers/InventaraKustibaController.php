@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\InventaraKustiba;
 use App\Models\Inventar;
 use App\Models\KustibasVeidi;
+use App\Models\Norakstishana;
 use App\Models\Lietotajs;
 use App\Models\Telpa;
 use App\Http\Controllers\Concerns\HandlesSafeDelete;
@@ -369,9 +370,51 @@ class InventaraKustibaController extends Controller
         if (!auth()->user()->admina_tiesibas) {
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
+
+        $kustiba = InventaraKustiba::findOrFail($id);
+        $this->deleteLinkedNorakstishanaForKustiba($kustiba);
         $this->deleteWithForeignKeyChecksDisabled('inventara_kustiba', 'kustiba_id', $id);
 
         return redirect('/inventara_kustiba')->with('success', $this->buildDeleteMessage('Inventāra kustības', []));
+    }
+
+    private function deleteLinkedNorakstishanaForKustiba(InventaraKustiba $kustiba): void
+    {
+        if (! $this->isNorakstisanaMovement($kustiba->kustibas_veids_id)) {
+            return;
+        }
+
+        $linkedNorakstishanaIds = collect();
+        $notes = (string) ($kustiba->piezimes ?? '');
+
+        if (preg_match('/\[NORAKSTISHANA:(\d+)\]/', $notes, $matches) === 1) {
+            $linkedNorakstishanaIds = collect([(int) $matches[1]]);
+        }
+
+        if ($linkedNorakstishanaIds->isEmpty()) {
+            $linkedNorakstishanaIds = Norakstishana::query()
+                ->where('inventara_id', (int) $kustiba->inventars_id)
+                ->where('akceptets', true)
+                ->whereDate('norDatums', $kustiba->datums)
+                ->where(function ($query) {
+                    $query->where('iemesls', 'Sinhronizēts no kustības')
+                        ->orWhere('iemesls', 'like', 'Sinhronizēts no kustības%');
+                })
+                ->pluck('norakstishana_id');
+        }
+
+        if ($linkedNorakstishanaIds->isEmpty()) {
+            return;
+        }
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        try {
+            DB::table('Norakstishana')
+                ->whereIn('norakstishana_id', $linkedNorakstishanaIds->all())
+                ->delete();
+        } finally {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        }
     }
 
     private function syncAllExistingDataBetweenKustibasAndInventars(): void

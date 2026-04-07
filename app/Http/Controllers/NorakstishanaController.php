@@ -286,18 +286,50 @@ class NorakstishanaController extends Controller
             abort(403, 'Ir nepieciešamas administratora tiesības.');
         }
         $norakstishana = Norakstishana::findOrFail($id);
+        $this->deleteLinkedKustibasForNorakstishana($norakstishana);
         $this->deleteWithForeignKeyChecksDisabled('Norakstishana', 'norakstishana_id', $id);
 
-        if ($norakstishana->akceptets) {
-            DB::table('Norakstishana')
-                ->where('inventara_id', $norakstishana->inventara_id)
-                ->update([
-                    'akceptets' => false,
-                    'apstiprinashanas_dat' => null,
-                ]);
+        return redirect('/norakstishana')->with('success', $this->buildDeleteMessage('Norakstīšanas', []));
+    }
+
+    private function deleteLinkedKustibasForNorakstishana(Norakstishana $norakstishana): void
+    {
+        $documentRef = '[NORAKSTISHANA:' . $norakstishana->norakstishana_id . ']';
+
+        $linkedKustibaIds = InventaraKustiba::query()
+            ->where('piezimes', 'like', '%' . $documentRef . '%')
+            ->pluck('kustiba_id');
+
+        if ($linkedKustibaIds->isEmpty()) {
+            $norakstisanaVeidsId = KustibasVeidi::query()
+                ->whereRaw('LOWER(nosaukums) like ?', ['%norakst%'])
+                ->value('kustibas_veids_id');
+
+            if (!empty($norakstisanaVeidsId)) {
+                $linkedKustibaIds = InventaraKustiba::query()
+                    ->where('inventars_id', (int) $norakstishana->inventara_id)
+                    ->where('kustibas_veids_id', (int) $norakstisanaVeidsId)
+                    ->whereDate('datums', optional($norakstishana->norDatums)->toDateString() ?? Carbon::today()->toDateString())
+                    ->where(function ($query) {
+                        $query->where('piezimes', 'like', 'Automātiski izveidots no norakstīšanas pieteikuma.%')
+                            ->orWhere('piezimes', 'like', 'Sinhronizēts no kustības%');
+                    })
+                    ->pluck('kustiba_id');
+            }
         }
 
-        return redirect('/norakstishana')->with('success', $this->buildDeleteMessage('Norakstīšanas', []));
+        if ($linkedKustibaIds->isEmpty()) {
+            return;
+        }
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        try {
+            DB::table('inventara_kustiba')
+                ->whereIn('kustiba_id', $linkedKustibaIds->all())
+                ->delete();
+        } finally {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        }
     }
 
     /**
