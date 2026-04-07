@@ -1703,6 +1703,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/lv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
         (function(){
@@ -2074,6 +2075,8 @@
             };
 
             const getPrintableText = (row, columnIndex) => {
+                // Droši iegūstam drukājamo teksta vērtību no kolonnas,
+                // neatkarīgi no tā, vai šūnā ir plain text vai iekšējie elementi.
                 const cell = row.cells[columnIndex];
                 if (!cell) return '-';
 
@@ -2087,6 +2090,8 @@
             };
 
             const resolveGroupValue = (value, mode) => {
+                // Grupēšanas režīms "initial" izmanto tikai pirmo burtu,
+                // citos režīmos grupējam pēc pilnās vērtības.
                 if (mode === 'initial') {
                     const firstLetter = (value || '').trim().charAt(0).toUpperCase();
                     return firstLetter || '#';
@@ -2103,6 +2108,7 @@
                 }
 
                 document.querySelectorAll('table[data-print-group-column]').forEach((table) => {
+                    // Ja tabula jau sagatavota drukai, otro reizi to nepārkārtojam.
                     if (printGroupState.has(table)) return;
 
                     const tbody = table.tBodies[0];
@@ -2125,12 +2131,15 @@
                     const columnCount = table.querySelectorAll('thead th').length || visibleRows[0].cells.length || 1;
 
                     const sortedVisibleRows = [...visibleRows].sort((rowA, rowB) => {
+                        // Pirms grupēšanas sakārtojam rindas pēc grupas vērtības,
+                        // lai katra grupa izdrukātos vienā blokā.
                         const valueA = resolveGroupValue(getPrintableText(rowA, columnIndex), mode);
                         const valueB = resolveGroupValue(getPrintableText(rowB, columnIndex), mode);
                         return valueA.localeCompare(valueB, 'lv', { numeric: true, sensitivity: 'base' });
                     });
 
                     const groupCounts = sortedVisibleRows.reduce((accumulator, row) => {
+                        // Aprēķinām, cik ierakstu ir katrā grupā (virsraksta skaitam).
                         const groupValue = resolveGroupValue(getPrintableText(row, columnIndex), mode);
                         accumulator[groupValue] = (accumulator[groupValue] || 0) + 1;
                         return accumulator;
@@ -2202,6 +2211,7 @@
 
                     const container = trigger.parentElement;
                     if (!container || container.querySelector('.print-options')) {
+                        // Ja izvēlne jau eksistē, poga tikai atver/aizver esošo paneli.
                         trigger.addEventListener('click', (event) => {
                             event.preventDefault();
                             const existingOptions = container ? container.querySelector('.print-options') : null;
@@ -2214,6 +2224,7 @@
 
                     const options = document.createElement('span');
                     options.className = 'print-options';
+                    // Drukas izvēlne tiek ģenerēta dinamiski, lai nebūtu jādublē HTML katrā lapā.
                     options.innerHTML = `
                         <span class="print-options-title">Drukāšanas izvēlne:</span>
                         <label>Rindu skaits
@@ -2229,6 +2240,7 @@
                         </label>
                         <span class="print-actions">
                             <button type="button" class="bloom-button sm print-confirm">Drukāt</button>
+                            <button type="button" class="bloom-button sm print-pdf">Lejupielādēt PDF</button>
                             <button type="button" class="bloom-button sm print-cancel">Aizvērt</button>
                         </span>
                     `;
@@ -2237,6 +2249,7 @@
 
                     trigger.addEventListener('click', (event) => {
                         event.preventDefault();
+                        // Poga "Printēt" vispirms atver izvēlni, nevis uzreiz drukā.
                         options.classList.toggle('is-visible');
                     });
 
@@ -2255,7 +2268,68 @@
                                 return;
                             }
 
+                            // Standarta scenārijā drukājam pašreizējo lapu/tabulu.
                             window.print();
+                        });
+                    }
+
+                    const printPdfBtn = options.querySelector('.print-pdf');
+                    if (printPdfBtn) {
+                        printPdfBtn.addEventListener('click', async (event) => {
+                            event.preventDefault();
+
+                            // PDF eksports notiek pilnībā projekta pusē bez pārlūka print dialoga.
+                            if (typeof window.html2pdf !== 'function') {
+                                window.appConfirm('PDF eksporta bibliotēku neizdevās ielādēt. Vai turpināt ar parasto drukāšanu?', {
+                                    title: 'PDF eksports nav pieejams',
+                                    acceptText: 'Turpināt drukāt',
+                                    cancelText: 'Atcelt'
+                                }).then((accepted) => {
+                                    if (accepted) {
+                                        window.print();
+                                    }
+                                });
+                                return;
+                            }
+
+                            preparePrintView();
+
+                            try {
+                                const source = document.querySelector('main .card-surface');
+                                if (!source) {
+                                    restorePrintView();
+                                    return;
+                                }
+
+                                // Strādājam ar klonu, lai neizjauktu aktīvās lapas DOM stāvokli.
+                                const exportRoot = document.createElement('div');
+                                exportRoot.style.background = '#ffffff';
+                                exportRoot.style.color = '#000000';
+                                exportRoot.style.padding = '12px';
+                                exportRoot.style.width = '100%';
+
+                                const cloned = source.cloneNode(true);
+                                cloned.querySelectorAll('.print-options, .confirm-overlay, .auth-links, .pagination, #flash-message, #flash-error').forEach((node) => node.remove());
+                                exportRoot.appendChild(cloned);
+
+                                const now = new Date();
+                                const datePart = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+                                await window.html2pdf()
+                                    .set({
+                                        margin: [10, 10, 10, 10],
+                                        filename: `RCB-atskaite-${datePart}.pdf`,
+                                        image: { type: 'jpeg', quality: 0.96 },
+                                        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+                                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                                        pagebreak: { mode: ['css', 'legacy'] },
+                                    })
+                                    .from(exportRoot)
+                                    .save();
+                            } finally {
+                                restorePrintView();
+                                options.classList.remove('is-visible');
+                            }
                         });
                     }
 
@@ -2303,6 +2377,8 @@
             };
 
             window.print = () => {
+                // Pārrakstām window.print, lai pirms sistēmas dialoga vienmēr
+                // izpildītos mūsu sagatavošanas loģika (grupēšana/limiti).
                 preparePrintView();
                 nativePrint();
             };
@@ -2332,6 +2408,7 @@
                     return;
                 }
 
+                // Atceramies, vai pēc dialoga aizvēršanas jāatgriežas uz paginēto URL.
                 shouldResetPrintAllAfterDialog = url.searchParams.get('print_all') === '1';
                 url.searchParams.delete('print_autorun');
                 window.history.replaceState({}, '', url.toString());
