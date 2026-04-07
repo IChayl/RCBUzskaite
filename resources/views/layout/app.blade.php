@@ -223,9 +223,10 @@
         .table-wrap {
             width: 100%;
             max-width: 100%;
+            overflow-x: auto;
         }
         .table-wrap--fit {
-            overflow-x: hidden;
+            overflow-x: auto;
         }
         .movement-table {
             table-layout: fixed;
@@ -235,8 +236,9 @@
             padding: 12px 14px;
             border-bottom: 1px solid var(--table-border);
             vertical-align: top;
-            overflow-wrap: anywhere;
-            word-break: break-word;
+            white-space: nowrap;
+            overflow-wrap: normal;
+            word-break: normal;
         }
         .data-table th {
             font-weight: 600;
@@ -246,7 +248,7 @@
         }
         .movement-table th,
         .movement-table td {
-            white-space: normal;
+            white-space: nowrap;
         }
         .print-group-row {
             display: none;
@@ -260,9 +262,10 @@
         }
         .data-table .actions {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             gap: 10px;
             align-items: center;
+            white-space: nowrap;
         }
 
         /* Meklēšanas un kārtošanas vadīklas */
