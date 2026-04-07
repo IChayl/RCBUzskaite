@@ -104,9 +104,16 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const id = this.getAttribute('data-id');
-                if (confirm('Vai vēlaties dzēst šo ierakstu ?')) {
+                window.appConfirm('Vai vēlaties dzēst šo ierakstu?', {
+                    title: 'Dzēšanas apstiprinājums',
+                    acceptText: 'Dzēst',
+                    cancelText: 'Atcelt'
+                }).then((accepted) => {
+                    if (!accepted) {
+                        return;
+                    }
                     window.location.href = `/telpa/${id}/delete`;
-                }
+                });
             });
         });
     });

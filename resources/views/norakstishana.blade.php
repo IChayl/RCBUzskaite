@@ -80,7 +80,7 @@
                                     @csrf
                                     <button type="submit" class="bloom-button sm">Akceptēt pieteikumu</button>
                                 </form>
-                                <form method="POST" action="{{ route('norakstishana.cancel', $pendingItem->norakstishana_id) }}" style="margin:0;" onsubmit="return confirm('Vai tiešām vēlaties atcelt šo pieteikumu?');">
+                                <form method="POST" action="{{ route('norakstishana.cancel', $pendingItem->norakstishana_id) }}" style="margin:0;" class="cancel-request-form">
                                     @csrf
                                     <button type="submit" class="bloom-button sm" style="background:#5a1b1b; border-color:#7d2d2d;">Atcelt pieteikumu</button>
                                 </form>
@@ -178,7 +178,7 @@
                                             @csrf
                                             <button type="submit" class="bloom-button sm">Akceptēt</button>
                                         </form>
-                                        <form method="POST" action="{{ route('norakstishana.cancel', $item->norakstishana_id) }}" style="display:inline;" onsubmit="return confirm('Vai tiešām vēlaties atcelt šo pieteikumu?');">
+                                        <form method="POST" action="{{ route('norakstishana.cancel', $item->norakstishana_id) }}" style="display:inline;" class="cancel-request-form">
                                             @csrf
                                             <button type="submit" class="bloom-button sm" style="background:#5a1b1b; border-color:#7d2d2d;">Atcelt pieteikumu</button>
                                         </form>
@@ -219,9 +219,32 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const id = this.getAttribute('data-id');
-                if (confirm('Vai vēlaties dzēst šo ierakstu ?')) {
+                window.appConfirm('Vai vēlaties dzēst šo ierakstu?', {
+                    title: 'Dzēšanas apstiprinājums',
+                    acceptText: 'Dzēst',
+                    cancelText: 'Atcelt'
+                }).then((accepted) => {
+                    if (!accepted) {
+                        return;
+                    }
                     window.location.href = `/norakstishana/${id}/delete`;
-                }
+                });
+            });
+        });
+
+        document.querySelectorAll('.cancel-request-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                window.appConfirm('Vai tiešām vēlaties atcelt šo pieteikumu?', {
+                    title: 'Atcelšanas apstiprinājums',
+                    acceptText: 'Atcelt pieteikumu',
+                    cancelText: 'Atgriezties'
+                }).then((accepted) => {
+                    if (!accepted) {
+                        return;
+                    }
+                    form.submit();
+                });
             });
         });
     });

@@ -421,6 +421,58 @@
             align-items: center;
             gap: 6px;
         }
+        .confirm-overlay {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            z-index: 1200;
+            background: rgba(15, 25, 49, 0.55);
+            backdrop-filter: blur(4px);
+        }
+        .confirm-overlay.is-visible {
+            display: flex;
+        }
+        .confirm-dialog {
+            width: min(460px, 100%);
+            border-radius: 18px;
+            border: 1px solid var(--surface-border);
+            background: var(--surface-bg-soft);
+            box-shadow: 0 18px 42px rgba(15, 25, 49, 0.45);
+            padding: 18px;
+            color: var(--text-main);
+        }
+        .confirm-title {
+            margin: 0 0 8px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .confirm-message {
+            margin: 0;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+        .confirm-actions {
+            margin-top: 16px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        html[data-theme="light"] .confirm-overlay {
+            background: rgba(12, 35, 95, 0.36);
+        }
+        html[data-theme="light"] .confirm-dialog {
+            background: #ffffff;
+            border-color: rgba(26, 82, 176, 0.24);
+            box-shadow: 0 16px 38px rgba(26, 82, 176, 0.22);
+        }
+        html[data-theme="light"] .confirm-title,
+        html[data-theme="light"] .confirm-message {
+            color: #091828;
+        }
         html[data-theme="light"] .print-options {
             background: rgba(255, 255, 255, 0.98);
             border-color: rgba(26, 82, 176, 0.24);
@@ -1190,6 +1242,10 @@
                 display: block !important;
             }
 
+            .confirm-overlay {
+                display: none !important;
+            }
+
             /* ── Layout wrappers ── */
             main {
                 padding: 0 !important;
@@ -1634,6 +1690,17 @@
         @include('inc.footer')
     </footer>
 
+    <div class="confirm-overlay" id="confirm-overlay" aria-hidden="true">
+        <div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+            <h3 class="confirm-title" id="confirm-title">Apstiprināt darbību</h3>
+            <p class="confirm-message" id="confirm-message">Vai tiešām vēlaties turpināt?</p>
+            <div class="confirm-actions">
+                <button type="button" class="bloom-button sm" id="confirm-cancel">Atcelt</button>
+                <button type="button" class="bloom-button sm" id="confirm-accept">Apstiprināt</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/lv.js"></script>
 
@@ -1872,6 +1939,61 @@
             const printGroupState = new WeakMap();
             const printLimitState = new WeakMap();
             let shouldResetPrintAllAfterDialog = false;
+
+            const initAppConfirm = () => {
+                const overlay = document.getElementById('confirm-overlay');
+                const title = document.getElementById('confirm-title');
+                const message = document.getElementById('confirm-message');
+                const cancelBtn = document.getElementById('confirm-cancel');
+                const acceptBtn = document.getElementById('confirm-accept');
+
+                if (!overlay || !title || !message || !cancelBtn || !acceptBtn) {
+                    window.appConfirm = (text) => Promise.resolve(window.confirm(text || 'Vai tiešām vēlaties turpināt?'));
+                    return;
+                }
+
+                let resolver = null;
+
+                const close = (accepted) => {
+                    overlay.classList.remove('is-visible');
+                    overlay.setAttribute('aria-hidden', 'true');
+                    if (resolver) {
+                        resolver(accepted);
+                        resolver = null;
+                    }
+                };
+
+                acceptBtn.addEventListener('click', () => close(true));
+                cancelBtn.addEventListener('click', () => close(false));
+                overlay.addEventListener('click', (event) => {
+                    if (event.target === overlay) {
+                        close(false);
+                    }
+                });
+
+                document.addEventListener('keydown', (event) => {
+                    if (!overlay.classList.contains('is-visible')) return;
+                    if (event.key === 'Escape') {
+                        event.preventDefault();
+                        close(false);
+                    }
+                });
+
+                window.appConfirm = (text, options = {}) => {
+                    title.textContent = options.title || 'Apstiprināt darbību';
+                    message.textContent = text || 'Vai tiešām vēlaties turpināt?';
+                    acceptBtn.textContent = options.acceptText || 'Apstiprināt';
+                    cancelBtn.textContent = options.cancelText || 'Atcelt';
+
+                    overlay.classList.add('is-visible');
+                    overlay.setAttribute('aria-hidden', 'false');
+                    setTimeout(() => acceptBtn.focus(), 0);
+
+                    return new Promise((resolve) => {
+                        resolver = resolve;
+                    });
+                };
+            };
 
             const getPrintOptions = () => {
                 const container = document.querySelector('.print-options');
@@ -2195,6 +2317,7 @@
 
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', () => {
+                    initAppConfirm();
                     initThemeToggle();
                     initDatePickers();
                     initAllTableControls();
@@ -2203,6 +2326,7 @@
                     initAutoPrintFromQuery();
                 });
             } else {
+                initAppConfirm();
                 initThemeToggle();
                 initDatePickers();
                 initAllTableControls();
