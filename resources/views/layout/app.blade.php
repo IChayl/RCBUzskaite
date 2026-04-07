@@ -289,6 +289,19 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        .data-table .actions--inventory {
+            gap: 4px;
+        }
+        .data-table .actions--inventory .bloom-button,
+        .data-table .actions--inventory select {
+            padding: 0.32rem 0.46rem;
+            font-size: 0.74rem;
+            max-width: 90px;
+        }
+        .data-table .actions--inventory .quick-action-select {
+            min-width: 90px !important;
+            width: 90px;
+        }
 
         /* Meklēšanas un kārtošanas vadīklas */
         .table-controls {

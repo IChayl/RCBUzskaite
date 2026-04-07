@@ -121,11 +121,11 @@
                             <td>@lvDate($item->iegades_datums)</td>
                             @if(Auth::user()->admina_tiesibas)
                             <td>
-                                <div class="actions">
+                                <div class="actions actions--inventory">
                                     <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->inventars_id }}">Dzēst</a>
-                                    <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm">Rediģēt</a>
+                                    <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm">Red.</a>
                                     <select class="form-control quick-action-select bloom-button sm" style="min-width: 170px; display: inline-block;" aria-label="Izvēlieties darbību">
-                                        <option value="">Izvēlies darbību</option>
+                                        <option value="">Darbība</option>
                                         @foreach($kustibasVeidiQuickActions as $kv)
                                             @php($isNorakstisana = str_contains(mb_strtolower($kv->nosaukums, 'UTF-8'), 'norakst'))
                                             @if(! $isNorakstisana)
