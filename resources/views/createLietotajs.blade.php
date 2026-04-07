@@ -46,10 +46,6 @@
                     <option value="Bibliotekārs" {{ old('amats') == 'Bibliotekārs' ? 'selected' : '' }}>Bibliotekārs</option>
                 </select>
         </div>
-        <div class="mb-3">
-            <label for="avatar" class="form-label">Profila attēls</label>
-            <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">
-        </div>
         <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" value="1" id="admina_tiesibas" name="admina_tiesibas">
             <label class="form-check-label" for="admina_tiesibas">Admina tiesības</label>

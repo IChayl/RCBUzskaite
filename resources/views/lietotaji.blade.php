@@ -31,7 +31,6 @@
             <table class="data-table" data-print-group-column="5" data-print-group-label="Amats">
                 <thead>
                     <tr>
-                        <th>Avatar</th>
                         <th>Vārds</th>
                         <th>Uzvārds</th>
                         <th>E-pasts</th>
@@ -46,13 +45,6 @@
                 <tbody>
                     @foreach ($lietotaji as $item)
                         <tr>
-                            <td>
-                                @if($item->hasAvatarFile())
-                                    <img src="{{ route('lietotajs.avatar', $item->lietotajs_id) }}" alt="Avatar" style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;">
-                                @else
-                                    -
-                                @endif
-                            </td>
                             <td>{{ $item->vards ?? '-' }}</td>
                             <td>{{ $item->uzvards ?? '-' }}</td>
                             <td>{{ $item->epasts ?? '-' }}</td>

@@ -51,7 +51,6 @@ class LietotajsController extends Controller
         }
         $req->validate([
             'parole' => 'required|string|max:255',
-            'avatar' => 'nullable|image|max:2048',
             'vards' => 'nullable|string|max:50',
             'uzvards' => 'nullable|string|max:50',
             'epasts' => ['required', 'email', 'max:100', Rule::unique('lietotajs', 'epasts')],
@@ -69,20 +68,6 @@ class LietotajsController extends Controller
         $u->telefons = $req->input('telefons');
         $u->amats = $req->input('amats');
         $u->aktivs = 1;
-
-        // Ja augšupielādēts attēls, saglabā to projekta mapē public/avatars.
-        if ($req->hasFile('avatar')) {
-            $avatarDirectory = public_path('avatars');
-            if (! is_dir($avatarDirectory)) {
-                mkdir($avatarDirectory, 0775, true);
-            }
-
-            $extension = strtolower((string) $req->file('avatar')->getClientOriginalExtension());
-            $fileName = uniqid('avatar_', true) . ($extension !== '' ? '.' . $extension : '');
-            $req->file('avatar')->move($avatarDirectory, $fileName);
-            $path = 'avatars/' . $fileName;
-            $u->avatar = $path;
-        }
 
         $u->save();
         return redirect()->to('/lietotajs')->with('success','Ieraksts pievienots');
@@ -119,7 +104,6 @@ class LietotajsController extends Controller
         }
         $req->validate([
             'parole' => 'required|string|max:255',
-            'avatar' => 'nullable|image|max:2048',
             'vards' => 'nullable|string|max:50',
             'uzvards' => 'nullable|string|max:50',
             'epasts' => ['required', 'email', 'max:100', Rule::unique('lietotajs', 'epasts')->ignore($id, 'lietotajs_id')],
@@ -139,20 +123,6 @@ class LietotajsController extends Controller
             'telefons' => $req->input('telefons'),
             'amats' => $req->input('amats'),
         ];
-
-        // Ja pievienots jauns avatar attēls, aizvieto ceļu ar jauno failu public/avatars mapē.
-        if ($req->hasFile('avatar')) {
-            $avatarDirectory = public_path('avatars');
-            if (! is_dir($avatarDirectory)) {
-                mkdir($avatarDirectory, 0775, true);
-            }
-
-            $extension = strtolower((string) $req->file('avatar')->getClientOriginalExtension());
-            $fileName = uniqid('avatar_', true) . ($extension !== '' ? '.' . $extension : '');
-            $req->file('avatar')->move($avatarDirectory, $fileName);
-            $path = 'avatars/' . $fileName;
-            $data['avatar'] = $path;
-        }
 
         DB::table('lietotajs')->where('lietotajs_id',$id)->update($data);
         return redirect()->to('/lietotajs')->with('success','Ieraksts atjaunināts');

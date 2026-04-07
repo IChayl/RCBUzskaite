@@ -46,14 +46,6 @@
                     <option value="Bibliotekārs" {{ (old('amats', $lietotajs->amats ?? '')=='Bibliotekārs') ? 'selected' : '' }}>Bibliotekārs</option>
                 </select>
         </div>
-        <div class="mb-3">
-            <label for="avatar" class="form-label">Profila attēls</label>
-            <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*">
-            <!-- Ja attēls jau ir, parāda priekšskatījumu -->
-            @if($lietotajs->hasAvatarFile())
-                <img src="{{ route('lietotajs.avatar', $lietotajs->lietotajs_id) }}" alt="Profila attēls" style="max-width: 120px; margin-top: 10px; border-radius: 12px; border: 1px solid rgba(226, 212, 187, 0.2);">
-            @endif
-        </div>
         <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" value="1" id="admina_tiesibas" name="admina_tiesibas" {{ $lietotajs->admina_tiesibas ? 'checked' : '' }}>
             <label class="form-check-label" for="admina_tiesibas">Admina tiesības</label>
