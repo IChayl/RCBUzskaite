@@ -1375,9 +1375,9 @@
                 page-break-inside: avoid;
             }
 
-            /* Hide last column (Darbības / actions) */
-            .data-table td:last-child,
-            .data-table th:last-child {
+            /* Hide last column (Darbības / actions), but keep print group rows visible */
+            .data-table thead th:last-child,
+            .data-table tbody tr:not(.print-group-row):not(.print-group-separator) td:last-child {
                 display: none !important;
             }
 
