@@ -23,6 +23,8 @@ class InventaraKustibaController extends Controller
     public function showAllKustiba(Request $request)
 
     {
+        $this->syncAllExistingDataBetweenKustibasAndInventars();
+
         $user = auth()->user();
     // Meklēšanas teksts un izvēlētā kolonna (vai "all" līdz meklēšanai visur)
         $q = trim($request->input('q', ''));
@@ -226,6 +228,13 @@ class InventaraKustibaController extends Controller
 
         if ($isNodosana) {
             $inventars->atbildigais_id = $data['Jatbildigais_lietotajs_id'];
+        }
+
+        if ($isParvietosana && ! empty($data['jauna_telpa_id'])) {
+            $inventars->telpas_id = $data['jauna_telpa_id'];
+        }
+
+        if ($isNodosana || $isParvietosana) {
             $inventars->save();
         }
 
@@ -338,6 +347,13 @@ class InventaraKustibaController extends Controller
 
         if ($isNodosana) {
             $inventars->atbildigais_id = $data['Jatbildigais_lietotajs_id'];
+        }
+
+        if ($isParvietosana && ! empty($data['jauna_telpa_id'])) {
+            $inventars->telpas_id = $data['jauna_telpa_id'];
+        }
+
+        if ($isNodosana || $isParvietosana) {
             $inventars->save();
         }
 
@@ -355,6 +371,46 @@ class InventaraKustibaController extends Controller
         $this->deleteWithForeignKeyChecksDisabled('inventara_kustiba', 'kustiba_id', $id);
 
         return redirect('/inventara_kustiba')->with('success', $this->buildDeleteMessage('Inventāra kustības', []));
+    }
+
+    private function syncAllExistingDataBetweenKustibasAndInventars(): void
+    {
+        $kustibas = InventaraKustiba::query()
+            ->orderBy('datums')
+            ->orderBy('kustiba_id')
+            ->get();
+
+        foreach ($kustibas as $kustiba) {
+            $inventars = Inventar::find($kustiba->inventars_id);
+
+            if (! $inventars) {
+                continue;
+            }
+
+            $isNodosana = $this->isNodosanaMovement($kustiba->kustibas_veids_id);
+            $isParvietosana = $this->isParvietosanaMovement($kustiba->kustibas_veids_id);
+            $needsSave = false;
+
+            if ($isNodosana && ! empty($kustiba->Jatbildigais_lietotajs_id)) {
+                $newAtbildigais = (int) $kustiba->Jatbildigais_lietotajs_id;
+                if ($newAtbildigais > 0 && (int) $inventars->atbildigais_id !== $newAtbildigais) {
+                    $inventars->atbildigais_id = $newAtbildigais;
+                    $needsSave = true;
+                }
+            }
+
+            if ($isParvietosana && ! empty($kustiba->jauna_telpa_id)) {
+                $newTelpa = (int) $kustiba->jauna_telpa_id;
+                if ($newTelpa > 0 && (int) $inventars->telpas_id !== $newTelpa) {
+                    $inventars->telpas_id = $newTelpa;
+                    $needsSave = true;
+                }
+            }
+
+            if ($needsSave) {
+                $inventars->save();
+            }
+        }
     }
 
     private function isParvietosanaMovement($kustibasVeidsId): bool
