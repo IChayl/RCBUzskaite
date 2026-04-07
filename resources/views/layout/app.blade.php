@@ -207,6 +207,24 @@
                 0 0 18px rgba(45, 65, 89, 0.2);
         }
 
+        html[data-theme="light"] .bloom-button {
+            box-shadow:
+                0 3px 10px rgba(12, 35, 95, 0.22),
+                0 0 6px rgba(30, 91, 198, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.22);
+        }
+        html[data-theme="light"] .bloom-button:hover {
+            box-shadow:
+                0 7px 18px rgba(12, 35, 95, 0.28),
+                0 0 12px rgba(30, 91, 198, 0.16),
+                inset 0 1px 0 rgba(255, 255, 255, 0.26);
+        }
+        html[data-theme="light"] .bloom-button:active {
+            box-shadow:
+                0 4px 12px rgba(12, 35, 95, 0.22),
+                0 0 8px rgba(30, 91, 198, 0.13);
+        }
+
         /* Neliels palīgstils */
         .spaced{
             gap: .75rem;
