@@ -113,7 +113,8 @@ class NorakstishanaController extends Controller
             $query->orderBy($sort, $direction);
         }
 
-        $norakstishanas = $query->paginate(7)->withQueryString();
+        $perPage = $request->boolean('print_all') ? 100000 : 7;
+        $norakstishanas = $query->paginate($perPage)->withQueryString();
 
         return view('norakstishana', compact(
             'norakstishanas',

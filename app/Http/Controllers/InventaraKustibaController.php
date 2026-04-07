@@ -121,7 +121,8 @@ class InventaraKustibaController extends Controller
             $query->orderBy($sort, $direction);
         }
 
-        $kustibas = $query->paginate(7)->withQueryString();
+        $perPage = $request->boolean('print_all') ? 100000 : 7;
+        $kustibas = $query->paginate($perPage)->withQueryString();
 
         $kustibasVeidiFiltram = KustibasVeidi::orderBy('nosaukums')->get();
         $lietotajiFiltram = Lietotajs::orderBy('lietotajvards')->get();

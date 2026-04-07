@@ -140,8 +140,10 @@ class InventarsController extends Controller
             $query->orderBy($sort, $direction);
         }
 
-        // Paginācija ar querystring, lai saglabātu meklēšanas un kārtošanas parametrus
-        $inventari = $query->paginate(7)->withQueryString();
+        // Paginācija ar querystring, lai saglabātu meklēšanas un kārtošanas parametrus.
+        // Print režīmā ļaujam ielādēt visus filtrētos ierakstus vienā lapā.
+        $perPage = $request->boolean('print_all') ? 100000 : 7;
+        $inventari = $query->paginate($perPage)->withQueryString();
 
         $kategorijas = KategorijaModel::orderBy('nosaukums')->get();
         $telpas = Telpa::orderBy('nosaukums')->get();

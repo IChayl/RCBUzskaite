@@ -2062,6 +2062,10 @@
                             <input type="checkbox" class="print-group-toggle" checked>
                             Grupēt
                         </label>
+                        <label>
+                            <input type="checkbox" class="print-all-pages-toggle">
+                            Visi lapojumi
+                        </label>
                         <span class="print-actions">
                             <button type="button" class="bloom-button sm print-confirm">Drukāt</button>
                             <button type="button" class="bloom-button sm print-cancel">Aizvērt</button>
@@ -2079,6 +2083,16 @@
                     if (printConfirmBtn) {
                         printConfirmBtn.addEventListener('click', (event) => {
                             event.preventDefault();
+
+                            const printAllPagesInput = options.querySelector('.print-all-pages-toggle');
+                            if (printAllPagesInput && printAllPagesInput.checked && !new URL(window.location.href).searchParams.has('print_all')) {
+                                const printUrl = new URL(window.location.href);
+                                printUrl.searchParams.set('print_all', '1');
+                                printUrl.searchParams.set('print_autorun', '1');
+                                window.open(printUrl.toString(), '_blank');
+                                return;
+                            }
+
                             window.print();
                         });
                     }
@@ -2114,6 +2128,20 @@
             window.addEventListener('beforeprint', preparePrintView);
             window.addEventListener('afterprint', restorePrintView);
 
+            const initAutoPrintFromQuery = () => {
+                const url = new URL(window.location.href);
+                if (url.searchParams.get('print_autorun') !== '1') {
+                    return;
+                }
+
+                url.searchParams.delete('print_autorun');
+                window.history.replaceState({}, '', url.toString());
+
+                setTimeout(() => {
+                    window.print();
+                }, 120);
+            };
+
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', () => {
                     initThemeToggle();
@@ -2121,6 +2149,7 @@
                     initAllTableControls();
                     initDateRangeFilters();
                     initPrintControls();
+                    initAutoPrintFromQuery();
                 });
             } else {
                 initThemeToggle();
@@ -2128,6 +2157,7 @@
                 initAllTableControls();
                 initDateRangeFilters();
                 initPrintControls();
+                initAutoPrintFromQuery();
             }
         })();
     </script>
