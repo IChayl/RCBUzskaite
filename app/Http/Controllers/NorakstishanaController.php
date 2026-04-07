@@ -390,11 +390,11 @@ class NorakstishanaController extends Controller
             'datums' => optional($norakstishana->norDatums)->toDateString() ?? Carbon::today()->toDateString(),
             'inventars_id' => $norakstishana->inventara_id,
             'atbildigais_lietotajs_id' => (int) $inventars->atbildigais_id,
+            'Jatbildigais_lietotajs_id' => 0,
             'kustibas_veids_id' => (int) $norakstisanaVeidsId,
             'veca_telpa_id' => $inventars->telpas_id,
             'jauna_telpa_id' => null,
             'piezimes' => 'Automātiski izveidots no norakstīšanas pieteikuma. ' . $documentRef,
-            
         ]);
     }
 }
