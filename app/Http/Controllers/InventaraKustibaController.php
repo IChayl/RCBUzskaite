@@ -18,6 +18,12 @@ class InventaraKustibaController extends Controller
 {
     use HandlesSafeDelete;
     use NormalizesDateRanges;
+
+    /**
+     * @var array<int, string|null>
+     */
+    private array $movementTypeNames = [];
+
     /**
      * Parāda kustību sarakstu ar filtrēšanu, kārtošanu un lapošanu.
      */
@@ -237,19 +243,7 @@ class InventaraKustibaController extends Controller
         $i->piezimes = $data['piezimes'] ?? null;
         $i->save();
 
-        // Pēc kustības saglabāšanas atjaunojam inventāra stāvokli,
-        // lai saraksti rāda aktuālo telpu/atbildīgo.
-        if ($isNodosana) {
-            $inventars->atbildigais_id = $data['Jatbildigais_lietotajs_id'];
-        }
-
-        if ($isParvietosana && ! empty($data['jauna_telpa_id'])) {
-            $inventars->telpas_id = $data['jauna_telpa_id'];
-        }
-
-        if ($isNodosana || $isParvietosana) {
-            $inventars->save();
-        }
+        $this->syncInventarsStateFromKustibas([(int) $data['inventars_id']]);
 
         return redirect()->to('/inventara_kustiba')->with('success','Ieraksts pievienots');
     }
@@ -299,6 +293,10 @@ class InventaraKustibaController extends Controller
         ]);
 
         $existingKustiba = InventaraKustiba::findOrFail($id);
+        $affectedInventars = array_values(array_unique([
+            (int) $existingKustiba->inventars_id,
+            (int) $data['inventars_id'],
+        ]));
 
         if (
             $this->isNorakstisanaMovement($data['kustibas_veids_id'] ?? null)
@@ -358,17 +356,7 @@ class InventaraKustibaController extends Controller
             'piezimes' => $data['piezimes'] ?? null,
         ]);
 
-        if ($isNodosana) {
-            $inventars->atbildigais_id = $data['Jatbildigais_lietotajs_id'];
-        }
-
-        if ($isParvietosana && ! empty($data['jauna_telpa_id'])) {
-            $inventars->telpas_id = $data['jauna_telpa_id'];
-        }
-
-        if ($isNodosana || $isParvietosana) {
-            $inventars->save();
-        }
+        $this->syncInventarsStateFromKustibas($affectedInventars);
 
         return redirect()->to('/inventara_kustiba')->with('success','Ieraksts atjaunināts');
     }
@@ -385,8 +373,17 @@ class InventaraKustibaController extends Controller
         // Dzēšot norakstīšanas kustību, dzēšam arī saistīto norakstīšanu,
         // lai tā netiktu atjaunota ar sinhronizāciju.
         $kustiba = InventaraKustiba::findOrFail($id);
+        $inventarsId = (int) $kustiba->inventars_id;
+        $fallbackStates = [
+            $inventarsId => [
+                'telpas_id' => $kustiba->veca_telpa_id !== null ? (int) $kustiba->veca_telpa_id : null,
+                'atbildigais_id' => ! empty($kustiba->atbildigais_lietotajs_id) ? (int) $kustiba->atbildigais_lietotajs_id : null,
+            ],
+        ];
+
         $this->deleteLinkedNorakstishanaForKustiba($kustiba);
         $this->deleteWithForeignKeyChecksDisabled('inventara_kustiba', 'kustiba_id', $id);
+        $this->syncInventarsStateFromKustibas([$inventarsId], $fallbackStates);
 
         return redirect('/inventara_kustiba')->with('success', $this->buildDeleteMessage('Inventāra kustības', []));
     }
@@ -425,58 +422,117 @@ class InventaraKustibaController extends Controller
         }
 
         // Dzēšam saistīto norakstīšanu, lai sinhronizācija to neatjaunotu.
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        [$disableStatement, $enableStatement] = $this->getForeignKeyCheckStatements();
+
+        if ($disableStatement !== null) {
+            DB::statement($disableStatement);
+        }
+
         try {
             DB::table('Norakstishana')
                 ->whereIn('norakstishana_id', $linkedNorakstishanaIds->all())
                 ->delete();
         } finally {
-            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+            if ($enableStatement !== null) {
+                DB::statement($enableStatement);
+            }
         }
     }
 
     private function syncAllExistingDataBetweenKustibasAndInventars(): void
     {
-        // Vēsturiskā sinhronizācija: atjaunojam inventāra aktuālo stāvokli no kustību žurnāla.
-        // Sakārtojam pēc datuma un ID, lai piemērošanas secība būtu stabila.
-        $kustibas = InventaraKustiba::query()
+        $this->syncInventarsStateFromKustibas();
+    }
+
+    /**
+     * @param array<int, int> $inventarsIds
+     * @param array<int, array{telpas_id:int|null,atbildigais_id:int|null}> $fallbackStates
+     */
+    private function syncInventarsStateFromKustibas(array $inventarsIds = [], array $fallbackStates = []): void
+    {
+        $inventarsIds = array_values(array_unique(array_filter(array_map('intval', $inventarsIds), static fn (int $id): bool => $id > 0)));
+
+        $inventariQuery = Inventar::query();
+        if ($inventarsIds !== []) {
+            $inventariQuery->whereIn('inventars_id', $inventarsIds);
+        }
+
+        $inventari = $inventariQuery->get()->keyBy('inventars_id');
+        if ($inventari->isEmpty()) {
+            return;
+        }
+
+        $kustibasByInventars = InventaraKustiba::query()
+            ->whereIn('inventars_id', $inventari->keys()->all())
+            ->orderBy('inventars_id')
             ->orderBy('datums')
             ->orderBy('kustiba_id')
-            ->get();
+            ->get()
+            ->groupBy('inventars_id');
 
-        foreach ($kustibas as $kustiba) {
-            $inventars = Inventar::find($kustiba->inventars_id);
+        foreach ($inventari as $inventarsId => $inventars) {
+            $inventaraKustibas = $kustibasByInventars->get($inventarsId, collect());
+            $targetTelpaId = $inventars->telpas_id;
+            $targetAtbildigaisId = $inventars->atbildigais_id;
 
-            if (! $inventars) {
-                continue;
-            }
+            if ($inventaraKustibas->isNotEmpty()) {
+                $firstKustiba = $inventaraKustibas->first();
 
-            $isNodosana = $this->isNodosanaMovement($kustiba->kustibas_veids_id);
-            $isParvietosana = $this->isParvietosanaMovement($kustiba->kustibas_veids_id);
-            $needsSave = false;
+                if (! empty($firstKustiba->veca_telpa_id)) {
+                    $targetTelpaId = (int) $firstKustiba->veca_telpa_id;
+                }
 
-            // Nodošana maina atbildīgo darbinieku.
-            if ($isNodosana && ! empty($kustiba->Jatbildigais_lietotajs_id)) {
-                $newAtbildigais = (int) $kustiba->Jatbildigais_lietotajs_id;
-                if ($newAtbildigais > 0 && (int) $inventars->atbildigais_id !== $newAtbildigais) {
-                    $inventars->atbildigais_id = $newAtbildigais;
-                    $needsSave = true;
+                $initialAtbildigaisId = (int) ($firstKustiba->atbildigais_lietotajs_id ?? 0);
+                if ($initialAtbildigaisId > 0) {
+                    $targetAtbildigaisId = $initialAtbildigaisId;
+                }
+
+                foreach ($inventaraKustibas as $kustiba) {
+                    if ($this->isParvietosanaMovement($kustiba->kustibas_veids_id) && ! empty($kustiba->jauna_telpa_id)) {
+                        $targetTelpaId = (int) $kustiba->jauna_telpa_id;
+                    }
+
+                    if ($this->isNodosanaMovement($kustiba->kustibas_veids_id) && ! empty($kustiba->Jatbildigais_lietotajs_id)) {
+                        $newAtbildigaisId = (int) $kustiba->Jatbildigais_lietotajs_id;
+                        if ($newAtbildigaisId > 0) {
+                            $targetAtbildigaisId = $newAtbildigaisId;
+                        }
+                    }
+                }
+            } elseif (array_key_exists((int) $inventarsId, $fallbackStates)) {
+                $fallbackState = $fallbackStates[(int) $inventarsId];
+
+                if (array_key_exists('telpas_id', $fallbackState) && $fallbackState['telpas_id'] !== null) {
+                    $targetTelpaId = (int) $fallbackState['telpas_id'];
+                }
+
+                if (array_key_exists('atbildigais_id', $fallbackState)) {
+                    $targetAtbildigaisId = $fallbackState['atbildigais_id'] !== null
+                        ? (int) $fallbackState['atbildigais_id']
+                        : null;
                 }
             }
 
-            // Pārvietošana maina inventāra telpu.
-            if ($isParvietosana && ! empty($kustiba->jauna_telpa_id)) {
-                $newTelpa = (int) $kustiba->jauna_telpa_id;
-                if ($newTelpa > 0 && (int) $inventars->telpas_id !== $newTelpa) {
-                    $inventars->telpas_id = $newTelpa;
-                    $needsSave = true;
-                }
-            }
-
-            if ($needsSave) {
+            if (
+                (int) $inventars->telpas_id !== (int) $targetTelpaId
+                || $this->normalizeNullableId($inventars->atbildigais_id) !== $this->normalizeNullableId($targetAtbildigaisId)
+            ) {
+                $inventars->telpas_id = $targetTelpaId;
+                $inventars->atbildigais_id = $targetAtbildigaisId;
                 $inventars->save();
             }
         }
+    }
+
+    private function normalizeNullableId($value): ?int
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        $normalized = (int) $value;
+
+        return $normalized > 0 ? $normalized : null;
     }
 
     private function isParvietosanaMovement($kustibasVeidsId): bool
@@ -485,15 +541,11 @@ class InventaraKustibaController extends Controller
             return false;
         }
 
-        $nosaukums = KustibasVeidi::query()
-            ->where('kustibas_veids_id', $kustibasVeidsId)
-            ->value('nosaukums');
+        $normalized = $this->getMovementTypeName($kustibasVeidsId);
 
-        if (! is_string($nosaukums)) {
+        if ($normalized === null) {
             return false;
         }
-
-        $normalized = mb_strtolower($nosaukums, 'UTF-8');
 
         return str_contains($normalized, 'pārvietošan') || str_contains($normalized, 'parvietosan');
     }
@@ -504,15 +556,11 @@ class InventaraKustibaController extends Controller
             return false;
         }
 
-        $nosaukums = KustibasVeidi::query()
-            ->where('kustibas_veids_id', $kustibasVeidsId)
-            ->value('nosaukums');
+        $normalized = $this->getMovementTypeName($kustibasVeidsId);
 
-        if (! is_string($nosaukums)) {
+        if ($normalized === null) {
             return false;
         }
-
-        $normalized = mb_strtolower($nosaukums, 'UTF-8');
 
         return str_contains($normalized, 'norakst');
     }
@@ -523,16 +571,33 @@ class InventaraKustibaController extends Controller
             return false;
         }
 
-        $nosaukums = KustibasVeidi::query()
-            ->where('kustibas_veids_id', $kustibasVeidsId)
-            ->value('nosaukums');
+        $normalized = $this->getMovementTypeName($kustibasVeidsId);
 
-        if (! is_string($nosaukums)) {
+        if ($normalized === null) {
             return false;
         }
 
-        $normalized = mb_strtolower($nosaukums, 'UTF-8');
-
         return str_contains($normalized, 'nodo');
+    }
+
+    private function getMovementTypeName($kustibasVeidsId): ?string
+    {
+        if (empty($kustibasVeidsId)) {
+            return null;
+        }
+
+        $kustibasVeidsId = (int) $kustibasVeidsId;
+
+        if (! array_key_exists($kustibasVeidsId, $this->movementTypeNames)) {
+            $nosaukums = KustibasVeidi::query()
+                ->where('kustibas_veids_id', $kustibasVeidsId)
+                ->value('nosaukums');
+
+            $this->movementTypeNames[$kustibasVeidsId] = is_string($nosaukums)
+                ? mb_strtolower($nosaukums, 'UTF-8')
+                : null;
+        }
+
+        return $this->movementTypeNames[$kustibasVeidsId];
     }
 }

@@ -34,13 +34,31 @@ trait HandlesSafeDelete
      */
     protected function deleteWithForeignKeyChecksDisabled(string $table, string $primaryKey, int|string $id): void
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        [$disableStatement, $enableStatement] = $this->getForeignKeyCheckStatements();
+
+        if ($disableStatement !== null) {
+            DB::statement($disableStatement);
+        }
 
         try {
             DB::table($table)->where($primaryKey, $id)->delete();
         } finally {
-            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+            if ($enableStatement !== null) {
+                DB::statement($enableStatement);
+            }
         }
+    }
+
+    /**
+     * @return array{0:string|null,1:string|null}
+     */
+    protected function getForeignKeyCheckStatements(): array
+    {
+        return match (DB::getDriverName()) {
+            'mysql' => ['SET FOREIGN_KEY_CHECKS=0', 'SET FOREIGN_KEY_CHECKS=1'],
+            'sqlite' => ['PRAGMA foreign_keys = OFF', 'PRAGMA foreign_keys = ON'],
+            default => [null, null],
+        };
     }
 
     /**
