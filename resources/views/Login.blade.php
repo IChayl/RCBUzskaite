@@ -248,9 +248,6 @@
 
                 <button type="submit" class="btn btn-bloom w-100">Pieteikties</button>
 
-                Admins: janis@rcb.lv | Parole: 12345
-                <br>
-                Lietotājs: test@rcb.lv | Parole: 12345
 
             </form>
 
