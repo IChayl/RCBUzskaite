@@ -245,10 +245,10 @@
             overflow-x: auto;
         }
         .table-wrap--fit {
-            overflow-x: hidden;
+            overflow-x: auto;
         }
         .movement-table {
-            table-layout: fixed;
+            table-layout: auto;
         }
         .data-table th,
         .data-table td {
@@ -274,7 +274,9 @@
         }
         .movement-table th,
         .movement-table td {
-            white-space: nowrap;
+            white-space: normal;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
         .print-group-row {
             display: none;
