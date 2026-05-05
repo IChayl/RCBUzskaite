@@ -235,14 +235,15 @@
         /* Tabulas stils sarakstu lapām */
         .data-table {
             width: 100%;
+            min-width: 1200px;
             border-collapse: collapse;
             color: var(--accent);
-            table-layout: fixed;
+            table-layout: auto;
         }
         .table-wrap {
             width: 100%;
             max-width: 100%;
-            overflow-x: hidden;
+            overflow-x: auto;
         }
         .table-wrap--fit {
             overflow-x: hidden;
@@ -255,11 +256,11 @@
             padding: 12px 14px;
             border-bottom: 1px solid var(--table-border);
             vertical-align: top;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            overflow-wrap: normal;
-            word-break: normal;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
         .data-table th:last-child,
         .data-table td:last-child {
