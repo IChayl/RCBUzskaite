@@ -256,16 +256,15 @@
             border-bottom: 1px solid var(--table-border);
             vertical-align: top;
             white-space: normal;
-            overflow: visible;
-            text-overflow: clip;
-            overflow-wrap: break-word;
+            overflow-wrap: anywhere;
             word-break: break-word;
+            line-height: 1.4;
         }
         .data-table th:last-child,
         .data-table td:last-child {
             width: 230px;
-            overflow: visible;
-            text-overflow: clip;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
         .data-table th {
             font-weight: 600;
