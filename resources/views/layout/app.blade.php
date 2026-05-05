@@ -235,7 +235,7 @@
         /* Tabulas stils sarakstu lapām */
         .data-table {
             width: 100%;
-            min-width: 1200px;
+            min-width: 1400px;
             border-collapse: collapse;
             color: var(--accent);
             table-layout: auto;
