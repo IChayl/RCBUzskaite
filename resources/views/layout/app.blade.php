@@ -163,7 +163,7 @@
         .card-surface{
             border: 1px solid var(--surface-border);
             border-radius: 18px;
-            padding: 1.5rem;
+            padding: 3rem;
             box-shadow: 0 8px 30px rgba(15, 25, 49, 0.35), inset 0 1px 0 rgba(45, 65, 89, 0.2);
             backdrop-filter: blur(6px) saturate(120%);
             background: var(--surface-bg);
@@ -237,12 +237,12 @@
             width: 100%;
             border-collapse: collapse;
             color: var(--accent);
-            table-layout: fixed;
+            table-layout: auto;
         }
         .table-wrap {
             width: 100%;
             max-width: 100%;
-            overflow-x: hidden;
+            overflow-x: auto;
         }
         .table-wrap--fit {
             overflow-x: hidden;
@@ -255,11 +255,11 @@
             padding: 12px 14px;
             border-bottom: 1px solid var(--table-border);
             vertical-align: top;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            overflow-wrap: normal;
-            word-break: normal;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
         .data-table th:last-child,
         .data-table td:last-child {
