@@ -5,7 +5,7 @@
 
  <div class="auth-links">
         @if(Auth::user()->admina_tiesibas)
-            <a href="/kategorija/create">Jauna kategorija</a>
+            <a href="/kategorija/create" class="bloom-button sm icon-button" title="Jauna kategorija" aria-label="Jauna kategorija"><i class="fas fa-plus" aria-hidden="true"></i><span class="sr-only">Jauna kategorija</span></a>
         @endif
         <a type="button" class="auth-links" onclick="window.print()" title="Printēt dokumentu"><i class="fas fa-print"></i> Printēt</a>
     </div>
@@ -70,10 +70,8 @@
                             <td>{{ $item->apraksts ?? '-' }}</td>
                                @if(Auth::user()->admina_tiesibas)   <td>
                              <div class="actions">
-                                 
-                                        <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->kategorija_id }}">Dzēst</a>
-                                        <a href="/kategorija/{{ $item->kategorija_id }}/edit" class="bloom-button sm">Rediģēt</a>
-                                   
+                                        <a href="#" class="bloom-button sm icon-button delete-btn" data-id="{{ $item->kategorija_id }}" title="Dzēst" aria-label="Dzēst"><i class="fas fa-trash" aria-hidden="true"></i><span class="sr-only">Dzēst</span></a>
+                                        <a href="/kategorija/{{ $item->kategorija_id }}/edit" class="bloom-button sm icon-button" title="Rediģēt" aria-label="Rediģēt"><i class="fas fa-edit" aria-hidden="true"></i><span class="sr-only">Rediģēt</span></a>
                                 </div>
                             </td> @endif
                         </tr>

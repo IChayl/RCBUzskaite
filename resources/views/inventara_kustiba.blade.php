@@ -5,7 +5,7 @@
     
  <div class="auth-links">
         @if(Auth::user()->admina_tiesibas)
-            <a href="/inventara_kustiba/create">Jauna inventāra kustība</a>
+            <a href="/inventara_kustiba/create" class="bloom-button sm icon-button" title="Jauna inventāra kustība" aria-label="Jauna inventāra kustība"><i class="fas fa-plus" aria-hidden="true"></i><span class="sr-only">Jauna inventāra kustība</span></a>
         @endif
         <a type="button" class="auth-links" onclick="window.print()" title="Printēt dokumentu"><i class="fas fa-print"></i> Printēt</a>
     </div>
@@ -122,10 +122,8 @@
                             <td>{{ $item->Jatbildigais_lietotajs_id && $item->Jatbildigais_lietotajs_id != 0 ? (optional($item->jaunaisAtbildigais)->pilnais_vards ?? ('ID: '.$item->Jatbildigais_lietotajs_id)) : 'Atbildīgais netika mainīts' }}</td>
                                  @if(Auth::user()->admina_tiesibas)  <td>
                                 <div class="actions">
-                             
-                                        <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->kustiba_id }}">Dzēst</a>
-                                        <a href="/inventara_kustiba/{{ $item->kustiba_id }}/edit" class="bloom-button sm">Rediģēt</a>
-                                   
+                                        <a href="#" class="bloom-button sm icon-button delete-btn" data-id="{{ $item->kustiba_id }}" title="Dzēst" aria-label="Dzēst"><i class="fas fa-trash" aria-hidden="true"></i><span class="sr-only">Dzēst</span></a>
+                                        <a href="/inventara_kustiba/{{ $item->kustiba_id }}/edit" class="bloom-button sm icon-button" title="Rediģēt" aria-label="Rediģēt"><i class="fas fa-edit" aria-hidden="true"></i><span class="sr-only">Rediģēt</span></a>
                                 </div>
                             </td> @endif
                         </tr>

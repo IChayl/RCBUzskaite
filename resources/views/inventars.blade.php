@@ -5,7 +5,7 @@
 
     <div class="auth-links">
         @if(Auth::user()->admina_tiesibas)
-            <a href="/inventars/create">Jauns inventārs</a>
+            <a href="/inventars/create" class="bloom-button sm icon-button" title="Jauns inventārs" aria-label="Jauns inventārs"><i class="fas fa-plus" aria-hidden="true"></i><span class="sr-only">Jauns inventārs</span></a>
         @endif
         <a type="button" class="auth-links" onclick="window.print()" title="Printēt dokumentu"><i class="fas fa-print"></i> Printēt</a>
     </div>
@@ -126,8 +126,8 @@
                             @if(Auth::user()->admina_tiesibas)
                             <td>
                                 <div class="actions actions--inventory">
-                                    <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->inventars_id }}">Dzēst</a>
-                                    <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm">Rediģēt</a>
+                                    <a href="#" class="bloom-button sm icon-button delete-btn" data-id="{{ $item->inventars_id }}" title="Dzēst" aria-label="Dzēst"><i class="fas fa-trash" aria-hidden="true"></i><span class="sr-only">Dzēst</span></a>
+                                    <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm icon-button" title="Rediģēt" aria-label="Rediģēt"><i class="fas fa-edit" aria-hidden="true"></i><span class="sr-only">Rediģēt</span></a>
                                     <select class="form-control quick-action-select bloom-button sm" style="min-width: 170px; display: inline-block;" aria-label="Izvēlieties darbību">
                                         <option value="">Darbība</option>
                                         @foreach($kustibasVeidiQuickActions as $kv)

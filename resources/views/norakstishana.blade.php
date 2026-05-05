@@ -5,9 +5,9 @@
 
     <div class="auth-links">
         @if(Auth::user()->admina_tiesibas)
-        <a href="/norakstishana/create">Norakstīt inventāru</a>
+        <a href="/norakstishana/create" class="bloom-button sm icon-button" title="Norakstīt inventāru" aria-label="Norakstīt inventāru"><i class="fas fa-plus" aria-hidden="true"></i><span class="sr-only">Norakstīt inventāru</span></a>
         @else
-        <a href="/norakstishana/create">Pieteikt inventāra norakstīšanu</a> 
+        <a href="/norakstishana/create" class="bloom-button sm icon-button" title="Pieteikt inventāra norakstīšanu" aria-label="Pieteikt inventāra norakstīšanu"><i class="fas fa-plus" aria-hidden="true"></i><span class="sr-only">Pieteikt inventāra norakstīšanu</span></a> 
         @endif
 
         <a type="button" class="auth-links" onclick="window.print()" title="Printēt dokumentu"><i class="fas fa-print"></i> Printēt</a>
@@ -172,7 +172,6 @@
                             <td>{{ $item->akceptets ? 'Jā' : 'Nē' }}</td>
                                @if(Auth::user()->admina_tiesibas) <td>
                                 <div class="actions">
-                                 
                                     @if(!$item->akceptets)
                                         <form method="POST" action="{{ route('norakstishana.accept', $item->norakstishana_id) }}" style="display:inline;">
                                             @csrf
@@ -183,8 +182,8 @@
                                             <button type="submit" class="bloom-button sm" style="background:#5a1b1b; border-color:#7d2d2d;">Atcelt pieteikumu</button>
                                         </form>
                                     @endif
-                                        <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->norakstishana_id }}">Dzēst</a>
-                                        <a href="/norakstishana/{{ $item->norakstishana_id }}/edit" class="bloom-button sm">Rediģēt</a>
+                                        <a href="#" class="bloom-button sm icon-button delete-btn" data-id="{{ $item->norakstishana_id }}" title="Dzēst" aria-label="Dzēst"><i class="fas fa-trash" aria-hidden="true"></i><span class="sr-only">Dzēst</span></a>
+                                        <a href="/norakstishana/{{ $item->norakstishana_id }}/edit" class="bloom-button sm icon-button" title="Rediģēt" aria-label="Rediģēt"><i class="fas fa-edit" aria-hidden="true"></i><span class="sr-only">Rediģēt</span></a>
                                 </div>
                             </td>@endif
                         </tr>

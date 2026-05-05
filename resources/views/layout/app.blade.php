@@ -307,6 +307,29 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        .icon-button {
+            width: 34px;
+            min-width: 34px;
+            height: 34px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icon-button i {
+            font-size: 0.95rem;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
         .data-table .actions--inventory {
             gap: 4px;
         }

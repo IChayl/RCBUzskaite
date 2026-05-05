@@ -5,7 +5,7 @@
 
  <div class="auth-links">
         @if(Auth::user()->admina_tiesibas)
-            <a href="/telpa/create">Jauna telpa</a>
+            <a href="/telpa/create" class="bloom-button sm icon-button" title="Jauna telpa" aria-label="Jauna telpa"><i class="fas fa-plus" aria-hidden="true"></i><span class="sr-only">Jauna telpa</span></a>
         @endif
         <a type="button" class="auth-links" onclick="window.print()" title="Printēt dokumentu"><i class="fas fa-print"></i> Printēt</a>
     </div>
@@ -70,10 +70,8 @@
                             <td>{{ $item->numurs ?? '-' }}</td>
                            @if(Auth::user()->admina_tiesibas) <td>
                                 <div class="actions">
-                                    
-                                        <a href="#" class="bloom-button sm delete-btn" data-id="{{ $item->telpas_id }}">Dzēst</a>
-                                        <a href="/telpa/{{ $item->telpas_id }}/edit" class="bloom-button sm">Rediģēt</a>
-                                   
+                                        <a href="#" class="bloom-button sm icon-button delete-btn" data-id="{{ $item->telpas_id }}" title="Dzēst" aria-label="Dzēst"><i class="fas fa-trash" aria-hidden="true"></i><span class="sr-only">Dzēst</span></a>
+                                        <a href="/telpa/{{ $item->telpas_id }}/edit" class="bloom-button sm icon-button" title="Rediģēt" aria-label="Rediģēt"><i class="fas fa-edit" aria-hidden="true"></i><span class="sr-only">Rediģēt</span></a>
                                 </div>
                             </td> @endif
                         </tr>
