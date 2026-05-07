@@ -11,6 +11,10 @@ use App\Models\Telpa;
 // Modelis inventāra kustību ierakstiem.
 class InventaraKustiba extends Model
 {
+    protected $table = 'inventara_kustiba';
+    protected $primaryKey = 'kustiba_id';
+    public $timestamps = false;
+
     protected $casts = [
         'apstiprinats' => 'boolean',
     ];
