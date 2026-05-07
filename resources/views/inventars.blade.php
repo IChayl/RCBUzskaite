@@ -109,7 +109,7 @@
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'iegades_datums', 'direction' => $dir]) }}">Iegādes datums</a>
                         </th>
                         <th>Statuss</th>
-                        @if(Auth::user()->admina_tiesibas) <th>Darbības</th> @endif
+                        <th>Darbības</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -123,11 +123,12 @@
                             <td>{{ optional($item->atbildigais)->pilnais_vards ?? ('ID: '.$item->atbildigais_id) }}</td>
                             <td>@lvDate($item->iegades_datums)</td>
                             <td>{{ $item->statuss ?? 'Lietošanā' }}</td>
-                            @if(Auth::user()->admina_tiesibas)
                             <td>
                                 <div class="actions actions--inventory">
-                                    <a href="#" class="bloom-button sm icon-button delete-btn" data-id="{{ $item->inventars_id }}" title="Dzēst" aria-label="Dzēst"><i class="fas fa-trash" aria-hidden="true"></i><span class="sr-only">Dzēst</span></a>
-                                    <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm icon-button" title="Rediģēt" aria-label="Rediģēt"><i class="fas fa-edit" aria-hidden="true"></i><span class="sr-only">Rediģēt</span></a>
+                                    @if(Auth::user()->admina_tiesibas)
+                                        <a href="#" class="bloom-button sm icon-button delete-btn" data-id="{{ $item->inventars_id }}" title="Dzēst" aria-label="Dzēst"><i class="fas fa-trash" aria-hidden="true"></i><span class="sr-only">Dzēst</span></a>
+                                        <a href="/inventars/{{ $item->inventars_id }}/edit" class="bloom-button sm icon-button" title="Rediģēt" aria-label="Rediģēt"><i class="fas fa-edit" aria-hidden="true"></i><span class="sr-only">Rediģēt</span></a>
+                                    @endif
                                     <select class="form-control quick-action-select bloom-button sm" style="min-width: 170px; display: inline-block;" aria-label="Izvēlieties darbību">
                                         <option value="">Darbība</option>
                                         @foreach($kustibasVeidiQuickActions as $kv)
@@ -140,7 +141,6 @@
                                     </select>
                                 </div>
                             </td>
-                            @endif
                         </tr>
                     @endforeach
                 </tbody>

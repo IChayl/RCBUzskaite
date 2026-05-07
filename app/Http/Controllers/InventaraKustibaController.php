@@ -241,6 +241,7 @@ class InventaraKustibaController extends Controller
         $i->veca_telpa_id = $data['veca_telpa_id'] ?? null;
         $i->jauna_telpa_id = $data['jauna_telpa_id'] ?? null;
         $i->piezimes = $data['piezimes'] ?? null;
+        $i->apstiprinats = Auth::user()->admina_tiesibas;
         $i->save();
 
         $this->syncInventarsStateFromKustibas([(int) $data['inventars_id']]);

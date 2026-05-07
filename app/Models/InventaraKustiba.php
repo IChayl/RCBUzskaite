@@ -11,12 +11,12 @@ use App\Models\Telpa;
 // Modelis inventāra kustību ierakstiem.
 class InventaraKustiba extends Model
 {
-    protected $table = 'inventara_kustiba';
-    protected $primaryKey = 'kustiba_id';
-    public $timestamps = false;
+    protected $casts = [
+        'apstiprinats' => 'boolean',
+    ];
 
     // Lauki, kuriem atļauta masveida aizpilde.
-    protected $fillable = ['datums', 'inventars_id', 'atbildigais_lietotajs_id', 'Jatbildigais_lietotajs_id', 'kustibas_veids_id', 'veca_telpa_id', 'jauna_telpa_id', 'piezimes'];
+    protected $fillable = ['datums', 'inventars_id', 'atbildigais_lietotajs_id', 'Jatbildigais_lietotajs_id', 'kustibas_veids_id', 'veca_telpa_id', 'jauna_telpa_id', 'piezimes', 'apstiprinats'];
 
     // Saite uz inventāru, kuram veikta kustība.
     public function inventars()

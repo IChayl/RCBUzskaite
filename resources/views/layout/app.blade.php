@@ -348,7 +348,7 @@
         /* Meklēšanas un kārtošanas vadīklas */
         .table-controls {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             align-items: center;
             gap: 8px;
             margin-bottom: 12px;
@@ -372,7 +372,7 @@
             font-size: 0.9rem;
         }
         .table-controls .table-search-input {
-            flex: 1 1 180px;
+            flex: 0 1 180px;
             min-width: 90px;
             width: auto;
             padding: 8px 10px;
@@ -554,7 +554,7 @@
             min-width: 78px;
         }
         .inventory-toolbar .inventory-search-input {
-            flex: 1 1 110px;
+            flex: 0 1 110px;
             min-width: 88px;
             padding: 7px 9px;
             font-size: 0.83rem;
