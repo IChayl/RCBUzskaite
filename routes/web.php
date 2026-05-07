@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/inventara_kustiba/{id}/edit', [InventaraKustibaController::class,'KustibaEdit'])->name('inventara_kustiba.edit');
     Route::post('/inventara_kustiba/{id}/editSubmit', [InventaraKustibaController::class,'editSubmit'])->name('inventara_kustiba.update');
     Route::get('/inventara_kustiba/{id}/delete', [InventaraKustibaController::class,'KustibaDelete'])->name('inventara_kustiba.delete');
+    Route::post('/inventara_kustiba/{id}/approve', [InventaraKustibaController::class,'approve'])->name('inventara_kustiba.approve');
 
     // Kustību veidu pārvaldības maršruti
     Route::get('/kustibas_veidi', [KustibasVeidiController::class,'showAll'])->name('kustibas_veidi.lapa');
