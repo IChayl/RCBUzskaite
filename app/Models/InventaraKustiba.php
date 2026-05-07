@@ -15,12 +15,8 @@ class InventaraKustiba extends Model
     protected $primaryKey = 'kustiba_id';
     public $timestamps = false;
 
-    protected $casts = [
-        'apstiprinats' => 'boolean',
-    ];
-
     // Lauki, kuriem atļauta masveida aizpilde.
-    protected $fillable = ['datums', 'inventars_id', 'atbildigais_lietotajs_id', 'Jatbildigais_lietotajs_id', 'kustibas_veids_id', 'veca_telpa_id', 'jauna_telpa_id', 'piezimes', 'apstiprinats'];
+    protected $fillable = ['datums', 'inventars_id', 'atbildigais_lietotajs_id', 'Jatbildigais_lietotajs_id', 'kustibas_veids_id', 'veca_telpa_id', 'jauna_telpa_id', 'piezimes'];
 
     // Saite uz inventāru, kuram veikta kustība.
     public function inventars()

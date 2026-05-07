@@ -241,7 +241,6 @@ class InventaraKustibaController extends Controller
         $i->veca_telpa_id = $data['veca_telpa_id'] ?? null;
         $i->jauna_telpa_id = $data['jauna_telpa_id'] ?? null;
         $i->piezimes = $data['piezimes'] ?? null;
-        $i->apstiprinats = Auth::user()->admina_tiesibas;
         $i->save();
 
         $this->syncInventarsStateFromKustibas([(int) $data['inventars_id']]);
@@ -465,7 +464,6 @@ class InventaraKustibaController extends Controller
 
         $kustibasByInventars = InventaraKustiba::query()
             ->whereIn('inventars_id', $inventari->keys()->all())
-            ->where('apstiprinats', true)
             ->orderBy('inventars_id')
             ->orderBy('datums')
             ->orderBy('kustiba_id')
@@ -601,23 +599,5 @@ class InventaraKustibaController extends Controller
         }
 
         return $this->movementTypeNames[$kustibasVeidsId];
-    }
-
-    /**
-     * Apstiprina kustības ierakstu (tikai administratoram).
-     */
-    public function approve(Request $req, $id)
-    {
-        if (!auth()->user()->admina_tiesibas) {
-            abort(403, 'Ir nepieciešamas administratora tiesības.');
-        }
-
-        $kustiba = InventaraKustiba::findOrFail($id);
-        $kustiba->apstiprinats = true;
-        $kustiba->save();
-
-        $this->syncInventarsStateFromKustibas([(int) $kustiba->inventars_id]);
-
-        return redirect()->to('/inventara_kustiba')->with('success','Kustība apstiprināta');
     }
 }

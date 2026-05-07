@@ -103,7 +103,6 @@
                             <a href="{{ request()->fullUrlWithQuery(['sort' => 'lietotajs', 'direction' => $dir]) }}">Atbildīgais</a>
                         </th>
                         <th>Jaunais atbildīgais</th>
-                        <th>Statuss</th>
                           @if(Auth::user()->admina_tiesibas) <th>Darbības</th> @endif
                     </tr>
                 </thead>
@@ -119,14 +118,10 @@
                             <td>{{ optional($item->jaunaTelpa)->nosaukums ?? 'Inventārs netika pārvietots' }}</td>
                             <td>{{ optional($item->lietotajs)->pilnais_vards ?? ('ID: '.$item->atbildigais_lietotajs_id) }}</td>
                             <td>{{ $item->Jatbildigais_lietotajs_id && $item->Jatbildigais_lietotajs_id != 0 ? (optional($item->jaunaisAtbildigais)->pilnais_vards ?? ('ID: '.$item->Jatbildigais_lietotajs_id)) : 'Atbildīgais netika mainīts' }}</td>
-                            <td>{{ $item->apstiprinats ? 'Apstiprināts' : 'Gaida apstiprinājumu' }}</td>
                                  @if(Auth::user()->admina_tiesibas)  <td>
                                 <div class="actions">
                                         <a href="#" class="bloom-button sm icon-button delete-btn" data-id="{{ $item->kustiba_id }}" title="Dzēst" aria-label="Dzēst"><i class="fas fa-trash" aria-hidden="true"></i><span class="sr-only">Dzēst</span></a>
                                         <a href="/inventara_kustiba/{{ $item->kustiba_id }}/edit" class="bloom-button sm icon-button" title="Rediģēt" aria-label="Rediģēt"><i class="fas fa-edit" aria-hidden="true"></i><span class="sr-only">Rediģēt</span></a>
-                                        @if(!$item->apstiprinats)
-                                        <a href="/inventara_kustiba/{{ $item->kustiba_id }}/approve" class="bloom-button sm icon-button" title="Apstiprināt" aria-label="Apstiprināt"><i class="fas fa-check" aria-hidden="true"></i><span class="sr-only">Apstiprināt</span></a>
-                                        @endif
                                 </div>
                             </td> @endif
                         </tr>
