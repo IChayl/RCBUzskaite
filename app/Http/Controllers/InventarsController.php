@@ -298,89 +298,89 @@ class InventarsController extends Controller
         return redirect('/inventars')->with('success', $this->buildDeleteMessage('Inventāra', $usedIn));
     }
 
-    private function attachInventoryStatuses($inventari)
-    {
-        $inventoryIds = $inventari->getCollection()->pluck('inventars_id')->all();
+        private function attachInventoryStatuses($inventari)
+        {
+            $inventoryIds = $inventari->getCollection()->pluck('inventars_id')->all();
 
-        if ($inventoryIds === []) {
+            if ($inventoryIds === []) {
+                return $inventari;
+            }
+
+            // Vienā pieprasījumā iegūstam visus akceptētos norakstīšanas ierakstus redzamajiem inventāriem.
+            $writtenOffIds = DB::table('Norakstishana')
+                ->whereIn('inventara_id', $inventoryIds)
+                ->where('akceptets', true)
+                ->pluck('inventara_id')
+                ->map(fn ($id) => (int) $id)
+                ->all();
+
+            // Vienā pieprasījumā paņemam kustību vēsturi, lai noteiktu jaunāko kustības tipu.
+            $latestMovementsByInventory = InventaraKustiba::query()
+                ->with('kustibasVeids')
+                ->whereIn('inventars_id', $inventoryIds)
+                ->orderByDesc('datums')
+                ->orderByDesc('kustiba_id')
+                ->get()
+                ->groupBy('inventars_id')
+                ->map(function ($movements) {
+                    return $movements->first();
+                });
+
+            $writtenOffLookup = array_fill_keys($writtenOffIds, true);
+
+            $inventari->getCollection()->transform(function ($inventars) use ($writtenOffLookup, $latestMovementsByInventory) {
+                // Prioritāte: norakstīts > remonts > lietošanā.
+                if (isset($writtenOffLookup[(int) $inventars->inventars_id])) {
+                    $inventars->statuss = 'Norakstīts';
+                    return $inventars;
+                }
+
+                $latestMovement = $latestMovementsByInventory->get((int) $inventars->inventars_id);
+                $movementName = mb_strtolower((string) optional(optional($latestMovement)->kustibasVeids)->nosaukums, 'UTF-8');
+
+                if (str_contains($movementName, 'remont')) {
+                    $inventars->statuss = 'Remonts';
+                    return $inventars;
+                }
+
+                $inventars->statuss = 'Lietošanā';
+                return $inventars;
+            });
+
             return $inventari;
         }
 
-        // Vienā pieprasījumā iegūstam visus akceptētos norakstīšanas ierakstus redzamajiem inventāriem.
-        $writtenOffIds = DB::table('Norakstishana')
-            ->whereIn('inventara_id', $inventoryIds)
-            ->where('akceptets', true)
-            ->pluck('inventara_id')
-            ->map(fn ($id) => (int) $id)
-            ->all();
+        private function getRepairMovementTypeIds(): array
+        {
+            // Atrodam visus kustību veidus, kuru nosaukums norāda uz remontu.
+            return KustibasVeidi::query()
+                ->whereRaw('LOWER(nosaukums) like ?', ['%remont%'])
+                ->pluck('kustibas_veids_id')
+                ->map(fn ($id) => (int) $id)
+                ->all();
+        }
 
-        // Vienā pieprasījumā paņemam kustību vēsturi, lai noteiktu jaunāko kustības tipu.
-        $latestMovementsByInventory = InventaraKustiba::query()
-            ->with('kustibasVeids')
-            ->whereIn('inventars_id', $inventoryIds)
-            ->orderByDesc('datums')
-            ->orderByDesc('kustiba_id')
-            ->get()
-            ->groupBy('inventars_id')
-            ->map(function ($movements) {
-                return $movements->first();
-            });
+        private function applyLatestMovementStatusFilter($query, array $repairMovementTypeIds, bool $mustBeRepair): void
+        {
+            if ($repairMovementTypeIds === []) {
+                if ($mustBeRepair) {
+                    $query->whereRaw('1 = 0');
+                }
 
-        $writtenOffLookup = array_fill_keys($writtenOffIds, true);
-
-        $inventari->getCollection()->transform(function ($inventars) use ($writtenOffLookup, $latestMovementsByInventory) {
-            // Prioritāte: norakstīts > remonts > lietošanā.
-            if (isset($writtenOffLookup[(int) $inventars->inventars_id])) {
-                $inventars->statuss = 'Norakstīts';
-                return $inventars;
+                return;
             }
 
-            $latestMovement = $latestMovementsByInventory->get((int) $inventars->inventars_id);
-            $movementName = mb_strtolower((string) optional(optional($latestMovement)->kustibasVeids)->nosaukums, 'UTF-8');
+            $repairTypeIdList = implode(',', array_map('intval', $repairMovementTypeIds));
+            $latestMovementTypeSubquery = '(SELECT ik2.kustibas_veids_id FROM inventara_kustiba ik2 WHERE ik2.inventars_id = inventars.inventars_id ORDER BY ik2.datums DESC, ik2.kustiba_id DESC LIMIT 1)';
 
-            if (str_contains($movementName, 'remont')) {
-                $inventars->statuss = 'Remonts';
-                return $inventars;
-            }
-
-            $inventars->statuss = 'Lietošanā';
-            return $inventars;
-        });
-
-        return $inventari;
-    }
-
-    private function getRepairMovementTypeIds(): array
-    {
-        // Atrodam visus kustību veidus, kuru nosaukums norāda uz remontu.
-        return KustibasVeidi::query()
-            ->whereRaw('LOWER(nosaukums) like ?', ['%remont%'])
-            ->pluck('kustibas_veids_id')
-            ->map(fn ($id) => (int) $id)
-            ->all();
-    }
-
-    private function applyLatestMovementStatusFilter($query, array $repairMovementTypeIds, bool $mustBeRepair): void
-    {
-        if ($repairMovementTypeIds === []) {
             if ($mustBeRepair) {
-                $query->whereRaw('1 = 0');
+                $query->whereRaw($latestMovementTypeSubquery . ' IN (' . $repairTypeIdList . ')');
+                return;
             }
 
-            return;
+            $query->where(function ($statusQuery) use ($latestMovementTypeSubquery, $repairTypeIdList) {
+                $statusQuery->whereRaw($latestMovementTypeSubquery . ' IS NULL')
+                    ->orWhereRaw($latestMovementTypeSubquery . ' NOT IN (' . $repairTypeIdList . ')');
+            });
         }
-
-        $repairTypeIdList = implode(',', array_map('intval', $repairMovementTypeIds));
-        $latestMovementTypeSubquery = '(SELECT ik2.kustibas_veids_id FROM inventara_kustiba ik2 WHERE ik2.inventars_id = inventars.inventars_id ORDER BY ik2.datums DESC, ik2.kustiba_id DESC LIMIT 1)';
-
-        if ($mustBeRepair) {
-            $query->whereRaw($latestMovementTypeSubquery . ' IN (' . $repairTypeIdList . ')');
-            return;
-        }
-
-        $query->where(function ($statusQuery) use ($latestMovementTypeSubquery, $repairTypeIdList) {
-            $statusQuery->whereRaw($latestMovementTypeSubquery . ' IS NULL')
-                ->orWhereRaw($latestMovementTypeSubquery . ' NOT IN (' . $repairTypeIdList . ')');
-        });
-    }
 }

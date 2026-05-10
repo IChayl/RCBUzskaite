@@ -12,7 +12,9 @@ class TelpaController extends Controller
 {
     use HandlesSafeDelete;
 
-    // Rāda visu telpu sarakstu.
+    /**
+     * Rāda visu telpu sarakstu.
+     */
     public function showAllTelpa(Request $request)
     {
         $q = trim($request->input('q', ''));
@@ -37,7 +39,9 @@ class TelpaController extends Controller
         return view('telpa', compact('telpas', 'sort', 'direction', 'q'));
     }
 
-    // Forma jaunas telpas izveidei.
+    /**
+     * Forma jaunas telpas izveidei.
+     */
     public function createTelpa()
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -47,7 +51,9 @@ class TelpaController extends Controller
         return view('createTelpa');
     }
 
-    // Saglabā jaunu telpas ierakstu.
+    /**
+     * Saglabā jaunu telpas ierakstu.
+     */
     public function TelpaSubmit(Request $req)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -76,7 +82,9 @@ class TelpaController extends Controller
         return redirect()->to('/telpa')->with('success', 'Ieraksts pievienots');
     }
 
-    // Parāda telpas detalizētu informāciju.
+    /**
+     * Parāda telpas detalizētu informāciju.
+     */
     public function TelpaDetails($id)
     {
         $t = Telpa::findOrFail($id);
@@ -84,7 +92,9 @@ class TelpaController extends Controller
         return view('detailsTelpa', ['telpa' => $t]);
     }
 
-    // Atver telpas rediģēšanas formu.
+    /**
+     * Atver telpas rediģēšanas formu.
+     */
     public function TelpaEdit($id)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -96,7 +106,9 @@ class TelpaController extends Controller
         return view('editTelpa', ['telpa' => $t]);
     }
 
-    // Saglabā telpas izmaiņas datubāzē.
+    /**
+     * Saglabā telpas izmaiņas datubāzē.
+     */
     public function editSubmit(Request $req, $id)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -124,7 +136,9 @@ class TelpaController extends Controller
         return redirect()->to('/telpa')->with('success', 'Ieraksts atjaunināts');
     }
 
-    // Dzēš telpas ierakstu.
+    /**
+     * Dzēš telpas ierakstu.
+     */
     public function TelpaDelete($id)
     {
         if (!auth()->user()->admina_tiesibas) {

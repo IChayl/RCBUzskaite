@@ -97,6 +97,9 @@ class KategorijaController extends Controller
         return view('detailsKategorija', ['kategorija' => $kategorija]);
     }
 
+    /**
+     * Atver kategorijas rediģēšanas formu (tikai administratoram).
+     */
     public function KatEdit($id)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -106,6 +109,9 @@ class KategorijaController extends Controller
         return view('editKategorija', ['kategorija' => $kategorija]);
     }
 
+    /**
+     * Saglabā kategorijas izmaiņas datubāzē.
+     */
     public function editSubmit(Request $dati, $id)
     {
         if (!auth()->user()->admina_tiesibas) {
@@ -126,7 +132,10 @@ class KategorijaController extends Controller
         return redirect()->to('/kategorija')->with('success', 'Ieraksts atjaunināts');
     }
 
-     public function KatDelete($id)
+    /**
+     * Dzēš kategorijas ierakstu (tikai administratoram).
+     */
+    public function KatDelete($id)
     {
         if (!auth()->user()->admina_tiesibas) {
             abort(403, 'Ir nepieciešamas administratora tiesības.');

@@ -190,8 +190,7 @@ class InventaraKustibaController extends Controller
             ]);
         }
 
-        // Veco telpu un esošo atbildīgo vienmēr ņemam no inventāra kartītes,
-        // lai novērstu manuālas neatbilstības formā.
+        // Datu sagatavošana un validācija pirms saglabāšanas
         $inventars = Inventar::findOrFail((int) $data['inventars_id']);
         $data['veca_telpa_id'] = $inventars->telpas_id;
         if (empty($inventars->atbildigais_id)) {
@@ -205,6 +204,7 @@ class InventaraKustibaController extends Controller
         $isParvietosana = $this->isParvietosanaMovement($data['kustibas_veids_id']);
         $isNodosana = $this->isNodosanaMovement($data['kustibas_veids_id']);
 
+        // Papildu validācija atkarībā no kustības tipa
         if ($isParvietosana && empty($data['jauna_telpa_id'])) {
             return back()->withInput()->withErrors([
                 'jauna_telpa_id' => 'Kustības veidam "Pārvietošana" ir obligāti jānorāda jaunā telpa.',
@@ -388,6 +388,10 @@ class InventaraKustibaController extends Controller
         return redirect('/inventara_kustiba')->with('success', $this->buildDeleteMessage('Inventāra kustības', []));
     }
 
+    /**
+     * Dzēš saistīto norakstīšanas ierakstu kustības dzēšanas laikā.
+     * Šī funkcija nodrošina, ka norakstīšanas kustības dzēšana neizraisa datu neatbilstības.
+     */
     private function deleteLinkedNorakstishanaForKustiba(InventaraKustiba $kustiba): void
     {
         // Saistītu norakstīšanu dzēšam tikai tad, ja dzēstā kustība ir norakstīšanas tipa.
@@ -405,6 +409,7 @@ class InventaraKustibaController extends Controller
 
         if ($linkedNorakstishanaIds->isEmpty()) {
             // 2) Rezerves sasaite vecākiem sinhronizētiem ierakstiem.
+            // Meklējam norakstīšanu ar tādu pašu inventāru, datumu un sinhronizācijas iemeslu.
             $linkedNorakstishanaIds = Norakstishana::query()
                 ->where('inventara_id', (int) $kustiba->inventars_id)
                 ->where('akceptets', true)
@@ -439,14 +444,21 @@ class InventaraKustibaController extends Controller
         }
     }
 
+    /**
+     * Sinhronizē visu esošo datu starp kustībām un inventāru.
+     * Šī funkcija tiek izsaukta pirms kustību saraksta rādīšanas, lai nodrošinātu datu konsekvenci.
+     */
     private function syncAllExistingDataBetweenKustibasAndInventars(): void
     {
         $this->syncInventarsStateFromKustibas();
     }
 
     /**
-     * @param array<int, int> $inventarsIds
-     * @param array<int, array{telpas_id:int|null,atbildigais_id:int|null}> $fallbackStates
+     * Sinhronizē inventāra stāvokli no kustību vēstures.
+     * Šī funkcija atjaunina inventāra telpu un atbildīgo, pamatojoties uz kustību ierakstiem.
+     *
+     * @param array<int, int> $inventarsIds Konkrētu inventāru ID masīvs sinhronizācijai (tukšs = visi)
+     * @param array<int, array{telpas_id:int|null,atbildigais_id:int|null}> $fallbackStates Rezerves stāvokļi dzēšanas gadījumiem
      */
     private function syncInventarsStateFromKustibas(array $inventarsIds = [], array $fallbackStates = []): void
     {
@@ -470,6 +482,7 @@ class InventaraKustibaController extends Controller
             ->get()
             ->groupBy('inventars_id');
 
+        // Apstrādājam katru inventāru, lai noteiktu tā pašreizējo stāvokli no kustību vēstures
         foreach ($inventari as $inventarsId => $inventars) {
             $inventaraKustibas = $kustibasByInventars->get($inventarsId, collect());
             $targetTelpaId = $inventars->telpas_id;
@@ -478,6 +491,7 @@ class InventaraKustibaController extends Controller
             if ($inventaraKustibas->isNotEmpty()) {
                 $firstKustiba = $inventaraKustibas->first();
 
+                // Iestata sākotnējo stāvokli no pirmās kustības
                 if (! empty($firstKustiba->veca_telpa_id)) {
                     $targetTelpaId = (int) $firstKustiba->veca_telpa_id;
                 }
@@ -487,6 +501,7 @@ class InventaraKustibaController extends Controller
                     $targetAtbildigaisId = $initialAtbildigaisId;
                 }
 
+                // Apstrādā visas kustības hronoloģiskā secībā, lai noteiktu galīgo stāvokli
                 foreach ($inventaraKustibas as $kustiba) {
                     if ($this->isParvietosanaMovement($kustiba->kustibas_veids_id) && ! empty($kustiba->jauna_telpa_id)) {
                         $targetTelpaId = (int) $kustiba->jauna_telpa_id;
@@ -500,6 +515,7 @@ class InventaraKustibaController extends Controller
                     }
                 }
             } elseif (array_key_exists((int) $inventarsId, $fallbackStates)) {
+                // Ja nav kustību, izmantojam rezerves stāvokļus (piemēram, pēc kustības dzēšanas)
                 $fallbackState = $fallbackStates[(int) $inventarsId];
 
                 if (array_key_exists('telpas_id', $fallbackState) && $fallbackState['telpas_id'] !== null) {
@@ -513,6 +529,7 @@ class InventaraKustibaController extends Controller
                 }
             }
 
+            // Saglabājam izmaiņas tikai tad, ja stāvoklis ir mainījies
             if (
                 (int) $inventars->telpas_id !== (int) $targetTelpaId
                 || $this->normalizeNullableId($inventars->atbildigais_id) !== $this->normalizeNullableId($targetAtbildigaisId)
@@ -524,6 +541,13 @@ class InventaraKustibaController extends Controller
         }
     }
 
+    /**
+     * Normalizē nulles vērtības ID laukos.
+     * Pārvērš tukšās vai nulles vērtības par null, lai nodrošinātu datu konsekvenci.
+     *
+     * @param mixed $value Vērtība normalizācijai
+     * @return int|null Normalizētā ID vērtība
+     */
     private function normalizeNullableId($value): ?int
     {
         if ($value === null || $value === '') {
@@ -535,6 +559,13 @@ class InventaraKustibaController extends Controller
         return $normalized > 0 ? $normalized : null;
     }
 
+    /**
+     * Pārbauda, vai kustības veids ir pārvietošana.
+     * Šī funkcija analizē kustības veida nosaukumu, lai noteiktu, vai tā ir telpu maiņa.
+     *
+     * @param int|null $kustibasVeidsId Kustības veida ID
+     * @return bool Vai kustība ir pārvietošana
+     */
     private function isParvietosanaMovement($kustibasVeidsId): bool
     {
         if (empty($kustibasVeidsId)) {
@@ -550,6 +581,13 @@ class InventaraKustibaController extends Controller
         return str_contains($normalized, 'pārvietošan') || str_contains($normalized, 'parvietosan');
     }
 
+    /**
+     * Pārbauda, vai kustības veids ir norakstīšana.
+     * Šī funkcija analizē kustības veida nosaukumu, lai noteiktu, vai tā ir inventāra norakstīšana.
+     *
+     * @param int|null $kustibasVeidsId Kustības veida ID
+     * @return bool Vai kustība ir norakstīšana
+     */
     private function isNorakstisanaMovement($kustibasVeidsId): bool
     {
         if (empty($kustibasVeidsId)) {
@@ -565,6 +603,13 @@ class InventaraKustibaController extends Controller
         return str_contains($normalized, 'norakst');
     }
 
+    /**
+     * Pārbauda, vai kustības veids ir nodošana.
+     * Šī funkcija analizē kustības veida nosaukumu, lai noteiktu, vai tā ir atbildīgā maiņa.
+     *
+     * @param int|null $kustibasVeidsId Kustības veida ID
+     * @return bool Vai kustība ir nodošana
+     */
     private function isNodosanaMovement($kustibasVeidsId): bool
     {
         if (empty($kustibasVeidsId)) {
@@ -580,6 +625,13 @@ class InventaraKustibaController extends Controller
         return str_contains($normalized, 'nodo');
     }
 
+    /**
+     * Iegūst kustības veida nosaukumu pēc ID.
+     * Šī funkcija kešē kustības veidu nosaukumus, lai uzlabotu veiktspēju.
+     *
+     * @param int|null $kustibasVeidsId Kustības veida ID
+     * @return string|null Kustības veida nosaukums mazajiem burtiem
+     */
     private function getMovementTypeName($kustibasVeidsId): ?string
     {
         if (empty($kustibasVeidsId)) {
