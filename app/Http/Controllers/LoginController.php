@@ -41,7 +41,7 @@ class LoginController extends Controller
         // Saglabā nelielu sesijas palīgu gadījumiem ārpus Auth izmantošanas.
         Session::put('user_name', $user->lietotajvards);
 
-        return redirect('/inventara_kustiba')->with('success', 'Pieteikšanās veiksmīga');
+        return redirect('/inventars')->with('success', 'Pieteikšanās veiksmīga');
     }
 
     /**
