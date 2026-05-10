@@ -583,3 +583,19 @@
 #41 /workspaces/RCBUzskaite/artisan(16): Illuminate\\Foundation\\Application->handleCommand()
 #42 {main}
 "} 
+[2026-05-10 10:12:53] local.ERROR: The "--compact" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--compact\" option does not exist. at /workspaces/RCBUzskaite/vendor/symfony/console/Input/ArgvInput.php:226)
+[stacktrace]
+#0 /workspaces/RCBUzskaite/vendor/symfony/console/Input/ArgvInput.php(155): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption()
+#1 /workspaces/RCBUzskaite/vendor/symfony/console/Input/ArgvInput.php(88): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption()
+#2 /workspaces/RCBUzskaite/vendor/symfony/console/Input/ArgvInput.php(77): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken()
+#3 /workspaces/RCBUzskaite/vendor/symfony/console/Input/Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 /workspaces/RCBUzskaite/vendor/symfony/console/Command/Command.php(295): Symfony\\Component\\Console\\Input\\Input->bind()
+#5 /workspaces/RCBUzskaite/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#6 /workspaces/RCBUzskaite/vendor/symfony/console/Application.php(1102): Illuminate\\Console\\Command->run()
+#7 /workspaces/RCBUzskaite/vendor/symfony/console/Application.php(356): Symfony\\Component\\Console\\Application->doRunCommand()
+#8 /workspaces/RCBUzskaite/vendor/symfony/console/Application.php(195): Symfony\\Component\\Console\\Application->doRun()
+#9 /workspaces/RCBUzskaite/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony\\Component\\Console\\Application->run()
+#10 /workspaces/RCBUzskaite/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate\\Foundation\\Console\\Kernel->handle()
+#11 /workspaces/RCBUzskaite/artisan(16): Illuminate\\Foundation\\Application->handleCommand()
+#12 {main}
+"} 

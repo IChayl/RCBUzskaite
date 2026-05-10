@@ -69,6 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/inventars/{id}/edit', [InventarsController::class,'InventarEdit'])->name('inventars.edit');
     Route::post('/inventars/{id}/editSubmit', [InventarsController::class,'editSubmit'])->name('inventars.update');
     Route::get('/inventars/{id}/delete', [InventarsController::class,'InventarDelete'])->name('inventars.delete');
+    Route::get('/inventars/{id}/receive-from-repair', [InventarsController::class,'receiveFromRepair'])->name('inventars.receive_from_repair');
 
     // Lietotāju pārvaldības maršruti
     Route::get('/lietotajs', [LietotajsController::class,'showAllLietotaji'])->name('lietotaji.lapa');

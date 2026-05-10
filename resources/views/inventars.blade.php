@@ -139,6 +139,9 @@
                                         @endforeach
                                         <option value="{{ route('norakstishana.create', ['inventara_id' => $item->inventars_id]) }}">Norakstīšana</option>
                                     </select>
+                                    @if($item->statuss === 'Remonts')
+                                        <a href="{{ route('inventars.receive_from_repair', ['id' => $item->inventars_id]) }}" class="bloom-button sm" style="margin-left: 6px;">Saņemt no remonta</a>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

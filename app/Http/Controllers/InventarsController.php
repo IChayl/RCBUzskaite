@@ -298,6 +298,65 @@ class InventarsController extends Controller
         return redirect('/inventars')->with('success', $this->buildDeleteMessage('Inventāra', $usedIn));
     }
 
+    /**
+     * Saņem inventāru no remonta un pārvieto to atpakaļ lietošanā.
+     */
+    public function receiveFromRepair($id)
+    {
+        $inventars = Inventar::findOrFail($id);
+
+        if (!auth()->user()->admina_tiesibas && (int) $inventars->atbildigais_id !== (int) auth()->user()->lietotajs_id) {
+            abort(403, 'Jums nav piekļuves šim inventāram.');
+        }
+
+        if (empty($inventars->atbildigais_id)) {
+            return redirect('/inventars')->with('error', 'Inventāram nav norādīts atbildīgais darbinieks.');
+        }
+
+        $latestMovement = InventaraKustiba::query()
+            ->where('inventars_id', $inventars->inventars_id)
+            ->orderByDesc('datums')
+            ->orderByDesc('kustiba_id')
+            ->first();
+
+        if (! $latestMovement || ! $this->isRepairMovement($latestMovement->kustibas_veids_id)) {
+            return redirect('/inventars')->with('error', 'Inventārs nav remontā.');
+        }
+
+        $returnMovementType = KustibasVeidi::firstOrCreate([
+            'nosaukums' => 'Saņemts no remonta',
+        ], [
+            'apraksts' => 'Automātiski izveidota kustība, lai inventāru pārvietotu no remonta uz lietošanu.',
+        ]);
+
+        InventaraKustiba::create([
+            'datums' => now()->toDateString(),
+            'inventars_id' => $inventars->inventars_id,
+            'kustibas_veids_id' => $returnMovementType->kustibas_veids_id,
+            'atbildigais_lietotajs_id' => $inventars->atbildigais_id,
+            'Jatbildigais_lietotajs_id' => 0,
+            'veca_telpa_id' => $inventars->telpas_id,
+            'jauna_telpa_id' => null,
+            'piezimes' => 'Saņemts no remonta',
+        ]);
+
+        return redirect('/inventars')->with('success', 'Inventārs saņemts no remonta un tagad ir lietošanā.');
+    }
+
+    private function isRepairMovement(?int $kustibasVeidsId): bool
+    {
+        if (empty($kustibasVeidsId)) {
+            return false;
+        }
+
+        $movementType = KustibasVeidi::find($kustibasVeidsId);
+        if (! $movementType) {
+            return false;
+        }
+
+        return str_contains(mb_strtolower($movementType->nosaukums, 'UTF-8'), 'remont');
+    }
+
         private function attachInventoryStatuses($inventari)
         {
             $inventoryIds = $inventari->getCollection()->pluck('inventars_id')->all();
